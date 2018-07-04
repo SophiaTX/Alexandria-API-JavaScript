@@ -41,8 +41,7 @@ Auth.generateKeys = function (name, password, roles) {
 		var pubBuf = point.getEncoded(toPubKey.compressed);
 		var checksum = hash.ripemd160(pubBuf);
 		var addy = Buffer.concat([pubBuf, checksum.slice(0, 4)]);
-		pubKeys[role] = config.get('address_prefix') + bs58.encode(addy);
-	});
+		pubKeys[role] = config.get('address_prefix') + bs58.encode(addy);});
 	return pubKeys;
 };
 
@@ -99,8 +98,8 @@ Auth.wifToPublic = function (privWif) {
 };
 
 Auth.isPubkey = function(pubkey, address_prefix) {
-	return PublicKey.fromString(pubkey, address_prefix) != null
-}
+	return PublicKey.fromString(pubkey, address_prefix) != null;
+};
 
 Auth.signTransaction = function (trx, keys) {
 	var signatures = [];
@@ -113,10 +112,10 @@ Auth.signTransaction = function (trx, keys) {
 
 	for (var key in keys) {
 		var sig = Signature.signBuffer(Buffer.concat([cid, buf]), keys[key]);
-		signatures.push(sig.toBuffer())
+		signatures.push(sig.toBuffer());
 	}
 
-	return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }))
+	return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
 
 module.exports = Auth;
