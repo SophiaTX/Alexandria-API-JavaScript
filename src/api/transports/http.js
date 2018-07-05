@@ -18,11 +18,12 @@ export function jsonRpc(uri, {method, id, params}) {
   return fetch(uri, {
     body: JSON.stringify(payload),
     method: 'post',
-    mode: 'cors',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
+      mode: 'cors',
+      headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+
+      },
   }).then(res => {
     if (!res.ok) {
       throw new Error(`HTTP ${ res.status }: ${ res.statusText }`);

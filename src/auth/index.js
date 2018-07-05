@@ -9,6 +9,7 @@ var bigi = require('bigi'),
 	KeyPrivate = require('./ecc/src/key_private'),
 	PublicKey = require('./ecc/src/key_public'),
   hash = require('./ecc/src/hash');
+  import {normalize} from "./ecc/src/brain_key";
 
 var Auth = {};
 var transaction = operations.transaction;
@@ -117,5 +118,14 @@ Auth.signTransaction = function (trx, keys) {
 
 	return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
+Auth.normalizeBrainKey=function(brain_key){
+	try{
+        var phrase=normalize(brain_key).toString();
+        return phrase;
+	}
+	catch (err) {
+		console.log(err);
+    }
 
+};
 module.exports = Auth;
