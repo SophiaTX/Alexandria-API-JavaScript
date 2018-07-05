@@ -35,7 +35,7 @@ export function jsonRpc(uri, {method, id, params}) {
     if (rpcRes.error) {
       throw new RPCError(rpcRes.error);
     }
-    return rpcRes.result
+    return rpcRes.result;
   });
 }
 
@@ -48,6 +48,6 @@ export default class HttpTransport extends Transport {
     const id = data.id || this.id++;
     const params = [api, data.method, data.params];
     jsonRpc(this.options.uri, {method: 'call', id, params})
-      .then(res => { callback(null, res) }, err => { callback(err) })
+      .then(res => { callback(null, res); }, err => { callback(err); });
   }
 }

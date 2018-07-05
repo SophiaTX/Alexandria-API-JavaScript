@@ -8,7 +8,7 @@ function ECSignature(r, s) {
   enforceType(BigInteger, s)
 
   this.r = r
-  this.s = s
+  this.s = s;
 }
 
 // Import operations
