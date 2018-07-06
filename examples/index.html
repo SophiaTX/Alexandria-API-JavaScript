@@ -9,14 +9,28 @@
 <script src="../dist/steem.min.js"></script>
 <script>
 
-steem.api.getConfig(function(err, response){
+steem.api.about(function(err, response){
   console.log(err, response);
 });
-steem.api.getAccounts(['ned', 'dan'], function(err, response){
+steem.api.info(function(err, response){
+    console.log(err, response);
+});
+steem.api.getBlock('1983',function(err, response){
+    console.log(err, response);
+});
+
+steem.api.getOpsInBlock('1983',true,function(err, response){
+    console.log(err, response);
+});
+
+steem.api.getAccount('sanjiv', function(err, response){
   console.log(err, response);
 });
-steem.api.getAccountCount(function(err, response){
-  console.log(err, response);
+steem.api.listWitnesses('initminer','10',function(err, response){
+    console.log(err, response);
+});
+steem.api.getWitness('initminer',function(err, response){
+    console.log(err, response);
 });
 console.log(steem.auth.generateKeys('sanjiv','abcde',['developer','Witness']));// generates seperate public key for each of the roles
 console.log(steem.utils.validateAccountName('dan home ace'));// validates account name if it can be set or not
@@ -27,19 +41,7 @@ console.log(steem.auth.wifToPublic('5JfiqkSiV34Y3odteTHULmtAovTw2j7cGUUWAkwVjra5
 console.log(steem.auth.wifIsValid('5JfiqkSiV34Y3odteTHULmtAovTw2j7cGUUWAkwVjra5jV1JkDy','SPH8PfevofxPTnEncTmBeuYGTmJEzuHRihUscHaNRkHtKXNA4EMj2'));//matches public key with private key returns boolean value
 console.log(steem.auth.normalizeBrainKey('DERRIDE BASCULE NIMBUS DOXA BURL AURALLY OER GOSSIPY BEHALE PINKER INVOKER YAULD HOYLE POTTY TITE WHUD'));
 
-steem.api.getFeedHistory(function(err,response){
-    console.log(err,response);
-});
-steem.api.getActiveWitnesses(function(err,response){
-    console.log(err,response);
-});
-steem.api.getChainProperties(function(err,response){
-    console.log(err,response);
-});
-console.log(steem.formatter.createSuggestedPassword());
-// steem.broadcast.accountCreate('5JfiqkSiV34Y3odteTHULmtAovTw2j7cGUUWAkwVjra5jV1JkDy', '1.000 STEEM', 'clayop', 'test', 'SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn', 'SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn', true, 'SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn', {}, function(err, result) {
-//     console.log(err, result);
-// });
+
 </script>
 
 </body>
