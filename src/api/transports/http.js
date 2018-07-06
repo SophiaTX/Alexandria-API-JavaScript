@@ -22,6 +22,8 @@ export function jsonRpc(uri, {method, id, params}) {
       headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
+          'Charset':'utf-8',
+
 
       },
   }).then(res => {

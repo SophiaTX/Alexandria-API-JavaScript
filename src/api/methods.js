@@ -45,7 +45,7 @@ export default [
     {
 
       "method": "get_account",
-      "params": ["names"]
+      "params": ["name"]
     },
 
     {
