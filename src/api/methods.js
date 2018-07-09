@@ -47,11 +47,29 @@ export default [
       "method": "get_account",
       "params": ["name"]
     },
-
     {
-
       "method": "get_transaction",
       "params": ["trxId"]
-    }
+    },
+    {
+        "method": "create_simple_transaction",
+        "params": ["tx"]
+    },
+    {
+        "method": "create_account",
+        "params": [
+            "creator",
+            "name_seed",
+            "json_meta",
+            "owner",
+            "active",
+            "memo_key"
+        ]
+    },
+    {
+        "method": "broadcast_transaction",
+        "params": ["tx"]
+    },
+
 
 ];

@@ -38,21 +38,6 @@ module.exports = [
     ]
   },
 
-
-  {
-    "roles": ["active", "owner"],
-    "operation": "account_create",
-    "params": [
-      "fee",
-      "creator",
-      "new_account_name",
-      "owner",
-      "active",
-      "posting",
-      "memo_key",
-      "json_metadata"
-    ]
-  },
   {
     "roles": ["active", "owner"],
     "operation": "account_update",

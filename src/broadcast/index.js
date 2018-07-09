@@ -20,9 +20,9 @@ const steemBroadcast = {};
  * Sign and broadcast transactions on the steem network
  */
 
-steemBroadcast.send = function steemBroadcast$send(tx, privKeys, callback) {
-  const resultP = steemBroadcast._prepareTransaction(tx)
-    .then((transaction) => {
+steemBroadcast.send = function steemBroadcast$send(tx, privKeys='5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV', callback) {
+    const resultP = steemBroadcast._prepareTransaction(tx)
+        .then((transaction) => {
       debug(
         'Signing transaction (transaction, transaction.operations)',
         transaction, transaction.operations
@@ -48,7 +48,8 @@ steemBroadcast.send = function steemBroadcast$send(tx, privKeys, callback) {
 };
 
 steemBroadcast._prepareTransaction = function steemBroadcast$_prepareTransaction(tx) {
-  const propertiesP = steemApi.getDynamicGlobalPropertiesAsync();
+
+  let propertiesP = steemApi.about();
   return propertiesP
     .then((properties) => {
       // Set defaults on the transaction
@@ -112,6 +113,10 @@ operations.forEach((operation) => {
       return steemBroadcast[`${operationName}With`](wif, options, callback);
     };
 });
+
+// steemBroadcast.createAcocuntTransaction=function createAcocuntTransaction(creator, name_seed, json_meta, owner, active, memo_key,private_key='5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'){
+// steemApi.createAccount(creator, name_seed, json_meta, owner, active, memo_key);
+// };
 
 const toString = obj => typeof obj === 'object' ? JSON.stringify(obj) : obj;
 broadcastHelpers(steemBroadcast);

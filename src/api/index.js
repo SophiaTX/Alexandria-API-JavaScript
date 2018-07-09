@@ -128,7 +128,10 @@ class Steem extends EventEmitter {
     stop() {
         return this.transport.stop();
     }
-
+    // createAccountTransaction( creator, name_seed, json_meta, owner, active, memo_key,callback){
+    //     var operation=this.('create_account',[creator,name_seed,json_meta,owner,active,memo_key],callback);
+    //     return this.call('create_simple_transaction',[operation.toString()],callback);
+    // }
     send(api, data, callback) {
         var cb = callback;
         if (this.__logger) {
@@ -243,6 +246,7 @@ class Steem extends EventEmitter {
         };
     }
 
+
     streamBlock(mode = 'head', callback) {
         if (typeof mode === 'function') {
             callback = mode;
@@ -325,7 +329,7 @@ class Steem extends EventEmitter {
                 const {
                     signed_transaction
                 } = ops;
-                // console.log('-- broadcastTransactionSynchronous -->', JSON.stringify(signed_transaction.toObject(trx), null, 2));
+                //console.log('-- broadcastTransactionSynchronous -->', JSON.stringify(signed_transaction.toObject(trx), null, 2));
                 // toObject converts objects into serializable types
                 const trObject = signed_transaction.toObject(trx);
                 const buf = signed_transaction.toBuffer(trx);

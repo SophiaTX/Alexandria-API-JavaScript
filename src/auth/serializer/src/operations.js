@@ -245,16 +245,16 @@ var authority = new Serializer(
 }
 );
 
-let account_create = new Serializer( 
-    "account_create", {
-    fee: asset,
+let create_account = new Serializer(
+    "create_account", {
     creator: string,
-    new_account_name: string,
+    name_seed: string,
+     json_metadata: string,
     owner: authority,
     active: authority,
     posting: authority,
-    memo_key: public_key,
-    json_metadata: string
+    memo_key: public_key
+
 }
 );
 
@@ -715,7 +715,7 @@ operation.st_operations = [
     limit_order_cancel,    
     feed_publish,    
     convert,    
-    account_create,    
+    create_account,
     account_update,    
     witness_update,    
     account_witness_vote,    
