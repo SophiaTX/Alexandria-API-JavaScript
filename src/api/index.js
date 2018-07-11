@@ -7,7 +7,7 @@ import {
     camelCase
 } from '../utils';
 import {
-    hash,Ecc
+    hash,Ecc, Signature
 } from '../auth/ecc';
 
 import {
@@ -380,20 +380,13 @@ class Steem extends EventEmitter {
                     if (err)
                         callback(err, null);
                     else {
-                        this.call('sign_digest', [response, private_key], (err, response) => {
-                            if (err)
-                                callback(err, null);
-                            else {
-                                console.log(response);
-                                this.call('add_signature', [transaction, '2010f768d59ed685ef8df7ff4e2295f36dc9e580c128d1bbaf28474dc0a6a3326a5a80a8f71a6d842941b4af9184c456caa7583bb81ed8c0b725232444f0186fc6'], (err, response) => {
-                                    if (err)
-                                        callback(err, null);
-                                    else {
-                                        this.call('broadcast_transaction', [response], callback);
-                                    }
-
-                                });
-                            }
+                        var signature=Signature.signHash(response, private_key).toHex();
+                        this.call('add_signature', [transaction, signature] , (err, response) => {
+                           if (err)
+                              callback(err, null);
+                           else {
+                              this.call('broadcast_transaction', [response], callback);
+                           };
                         });
                     }
                 });

@@ -9,16 +9,26 @@
 <script src="../dist/steem.min.js"></script>
 <script>
 
- // steem.api.createAccountTransaction('GN3Ug8ou6tiE4kWvyopJBJmZgcw','test130','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
- //     console.log(err,response);
- // });
-// steem.api.signDigest('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
-//     '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
-//     console.log(err,response);
-//     });
+   var tx;
+   steem.api.createAccountTransaction('GN3Ug8ou6tiE4kWvyopJBJmZgcw','test131','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV', function(err, response){
+      console.log(err+ " "+ response);
+      tx = response;
+      document.write("<br/>TX: "+tx);
+   });
+
+ /*  var digest; 
+   steem.api.getTransactionDigest(tx, function(err, response){
+      digest = response;
+      document.write("<br/>digest: "+digest);
+   })
+*/
+/*steem.api.signDigest('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
+    '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
+    console.log(err,response);
+});
 console.log(steem.auth.createSignature('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
     '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));
-
+*/
 // steem.api.about(function(err, response){
 //   console.log(err, response);
 // });
