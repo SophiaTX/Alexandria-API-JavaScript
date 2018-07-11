@@ -1,171 +1,315 @@
-var ecurve = require('ecurve');
-var Point = ecurve.Point;
-var secp256k1 = ecurve.getCurveByName('secp256k1');
-var BigInteger = require('bigi');
-var base58 = require('bs58');
-var assert = require('assert');
-var hash = require('./hash');
-var PublicKey = require('./key_public');
+const ecurve = require('ecurve');
+const Point = ecurve.Point;
+const secp256k1 = ecurve.getCurveByName('secp256k1');
+const BigInteger = require('bigi');
+const assert = require('assert');
 
-var G = secp256k1.G
-var n = secp256k1.n
+const hash = require('./hash');
+const PublicKey = require('./key_public');
+const keyUtils = require('./key_utils');
+const createHash = require('create-hash')
+const promiseAsync = require('./promise-async')
 
-class PrivateKey {
+const G = secp256k1.G
+const n = secp256k1.n
 
-    /**
-        @private see static functions
-        @param {BigInteger}
-    */
-    constructor(d) { this.d = d; }
+module.exports = PrivateKey;
 
-    static fromBuffer(buf) {
-        if (!Buffer.isBuffer(buf)) {
-            throw new Error("Expecting paramter to be a Buffer type");
-        }
-        if (32 !== buf.length) {
-            console.log(`WARN: Expecting 32 bytes, instead got ${buf.length}, stack trace:`, new Error().stack);
-        }
-        if (buf.length === 0) {
-            throw new Error("Empty buffer");
-        }
-        return new PrivateKey(BigInteger.fromBuffer(buf));
+/**
+  @typedef {string} wif - https://en.bitcoin.it/wiki/Wallet_import_format
+  @typedef {string} pubkey - EOSKey..
+  @typedef {ecurve.Point} Point
+*/
+
+/**
+  @param {BigInteger} d
+*/
+function PrivateKey(d) {
+    if(typeof d === 'string') {
+        return PrivateKey.fromString(d)
+    } else if(Buffer.isBuffer(d)) {
+        return PrivateKey.fromBuffer(d)
+    } else if(typeof d === 'object' && BigInteger.isBigInteger(d.d)) {
+        return PrivateKey(d.d)
     }
 
-    /** @arg {string} seed - any length string.  This is private, the same seed produces the same private key every time.  */
-    static fromSeed(seed) { // generate_private_key
-        if (!(typeof seed === 'string')) {
-            throw new Error('seed must be of type string');
-        }
-        return PrivateKey.fromBuffer(hash.sha256(seed));
+    if(!BigInteger.isBigInteger(d)) {
+        throw new TypeError('Invalid private key')
     }
 
-    static isWif(text) {
-        try {
-            this.fromWif(text)
-            return true
-        } catch(e) {
-            return false
-        }
+    /** @return {string} private key like PVT_K1_base58privatekey.. */
+    function toString() {
+      // todo, use PVT_K1_
+      // return 'PVT_K1_' + keyUtils.checkEncode(toBuffer(), 'K1')
+      return toWif()
     }
 
     /**
-        @throws {AssertError|Error} parsing key
-        @return {string} Wallet Import Format (still a secret, Not encrypted)
+        @return  {wif}
     */
-    static fromWif(_private_wif) {
-        var private_wif = new Buffer(base58.decode(_private_wif));
-        var version = private_wif.readUInt8(0);
-        assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`);
-        // checksum includes the version
-        var private_key = private_wif.slice(0, -4);
-        var checksum = private_wif.slice(-4);
-        var new_checksum = hash.sha256(private_key);
-        new_checksum = hash.sha256(new_checksum);
-        new_checksum = new_checksum.slice(0, 4);
-        if (checksum.toString() !== new_checksum.toString())
-            throw new Error('Invalid WIF key (checksum miss-match)')
-
-        private_key = private_key.slice(1);
-        return PrivateKey.fromBuffer(private_key);
-    }
-
-    toWif() {
-        var private_key = this.toBuffer();
+    function toWif() {
+        var private_key = toBuffer();
         // checksum includes the version
         private_key = Buffer.concat([new Buffer([0x80]), private_key]);
-        var checksum = hash.sha256(private_key);
-        checksum = hash.sha256(checksum);
-        checksum = checksum.slice(0, 4);
-        var private_wif = Buffer.concat([private_key, checksum]);
-        return base58.encode(private_wif);
+        return keyUtils.checkEncode(private_key, 'sha256x2')
     }
 
-    /** Alias for {@link toWif} */
-    toString() {
-        return this.toWif()
-    }
+    let public_key;
 
     /**
         @return {Point}
     */
-    toPublicKeyPoint() {
-        var Q;
-        return Q = secp256k1.G.multiply(this.d);
+    function toPublic() {
+        if (public_key) {
+            // cache
+            // S L O W in the browser
+            return public_key
+        }
+        const Q = secp256k1.G.multiply(d);
+        return public_key = PublicKey.fromPoint(Q);
     }
 
-    toPublic() {
-        if (this.public_key) { return this.public_key; }
-        return this.public_key = PublicKey.fromPoint(this.toPublicKeyPoint());
+    function toBuffer() {
+        return d.toBuffer(32);
     }
 
-    toBuffer() {
-        return this.d.toBuffer(32);
-    }
-
-    /** ECIES */
-    get_shared_secret(public_key) {
-        public_key = toPublic(public_key)
+    /**
+      ECIES
+      @arg {string|Object} pubkey wif, PublicKey object
+      @return {Buffer} 64 byte shared secret
+    */
+    function getSharedSecret(public_key) {
+        public_key = PublicKey(public_key)
         let KB = public_key.toUncompressed().toBuffer()
         let KBP = Point.fromAffine(
-            secp256k1,
-            BigInteger.fromBuffer( KB.slice( 1,33 )), // x
-            BigInteger.fromBuffer( KB.slice( 33,65 )) // y
+          secp256k1,
+          BigInteger.fromBuffer( KB.slice( 1,33 )), // x
+          BigInteger.fromBuffer( KB.slice( 33,65 )) // y
         )
-        let r = this.toBuffer()
+        let r = toBuffer()
         let P = KBP.multiply(BigInteger.fromBuffer(r))
         let S = P.affineX.toBuffer({size: 32})
         // SHA512 used in ECIES
         return hash.sha512(S)
     }
 
-    // /** ECIES (does not always match the Point.fromAffine version above) */
-    // get_shared_secret(public_key){
-    //     public_key = toPublic(public_key)
-    //     var P = public_key.Q.multiply( this.d );
+    // /** ECIES TODO unit test
+    //   @arg {string|Object} pubkey wif, PublicKey object
+    //   @return {Buffer} 64 byte shared secret
+    // */
+    // function getSharedSecret(public_key) {
+    //     public_key = PublicKey(public_key).toUncompressed()
+    //     var P = public_key.Q.multiply( d );
     //     var S = P.affineX.toBuffer({size: 32});
     //     // ECIES, adds an extra sha512
     //     return hash.sha512(S);
     // }
 
-    /** @throws {Error} - overflow of the key could not be derived */
-    child( offset ) {
-        offset = Buffer.concat([ this.toPublicKey().toBuffer(), offset ])
-        offset = hash.sha256( offset )
-        let c = BigInteger.fromBuffer(offset)
+    /**
+      @arg {string} name - child key name.
+      @return {PrivateKey}
 
-        if (c.compareTo(n) >= 0)
-            throw new Error("Child offset went out of bounds, try again")
-
-        let derived = this.d.add(c)//.mod(n)
-
-        if( derived.signum() === 0 )
-            throw new Error("Child offset derived to an invalid key, try again")
-
-        return new PrivateKey( derived )
+      @example activePrivate = masterPrivate.getChildKey('owner').getChildKey('active')
+      @example activePrivate.getChildKey('mycontract').getChildKey('myperm')
+    */
+    function getChildKey(name) {
+      // console.error('WARNING: getChildKey untested against eosd'); // no eosd impl yet
+      const index = createHash('sha256').update(toBuffer()).update(name).digest()
+      return PrivateKey(index)
     }
 
-    // toByteBuffer() {
-    //     var b = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN);
-    //     this.appendByteBuffer(b);
-    //     return b.copy(0, b.offset);
-    // }
-
-    static fromHex(hex) {
-        return PrivateKey.fromBuffer(new Buffer(hex, 'hex'));
+    function toHex() {
+        return toBuffer().toString('hex');
     }
 
-    toHex() {
-        return this.toBuffer().toString('hex');
+    return {
+        d,
+        toWif,
+        toString,
+        toPublic,
+        toBuffer,
+        getSharedSecret,
+        getChildKey
     }
-
-    toPublicKey() {
-        return this.toPublic()
-    }
-
-    /* </helper_functions> */
 }
 
-module.exports = PrivateKey;
+/** @private */
+function parseKey(privateStr) {
+  assert(typeof privateStr, 'string', 'privateStr')
+  const match = privateStr.match(/^PVT_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
 
-const toPublic = data => data == null ? data :
-    data.Q ? data : PublicKey.fromStringOrThrow(data)
+  if(match === null) {
+    // legacy WIF - checksum includes the version
+    const versionKey = keyUtils.checkDecode(privateStr, 'sha256x2')
+    const version = versionKey.readUInt8(0);
+    assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
+    const privateKey = PrivateKey.fromBuffer(versionKey.slice(1))
+    const keyType = 'K1'
+    const format = 'WIF'
+    return {privateKey, format, keyType}
+  }
+
+  assert(match.length === 3, 'Expecting private key like: PVT_K1_base58privateKey..')
+  const [, keyType, keyString] = match
+  assert.equal(keyType, 'K1', 'K1 private key expected')
+  const privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType))
+  return {privateKey, format: 'PVT', keyType}
+}
+
+PrivateKey.fromHex = function(hex) {
+    return PrivateKey.fromBuffer(new Buffer(hex, 'hex'));
+}
+
+PrivateKey.fromBuffer = function(buf) {
+    if (!Buffer.isBuffer(buf)) {
+        throw new Error("Expecting parameter to be a Buffer type");
+    }
+    if(buf.length === 33 && buf[32] === 1) {
+      // remove compression flag
+      buf = buf.slice(0, -1)
+    }
+    if (32 !== buf.length) {
+      throw new Error(`Expecting 32 bytes, instead got ${buf.length}`);
+    }
+    return PrivateKey(BigInteger.fromBuffer(buf));
+}
+
+/**
+    @arg {string} seed - any length string.  This is private, the same seed
+    produces the same private key every time.
+
+    @return {PrivateKey}
+*/
+PrivateKey.fromSeed = function(seed) { // generate_private_key
+    if (!(typeof seed === 'string')) {
+        throw new Error('seed must be of type string');
+    }
+    return PrivateKey.fromBuffer(hash.sha256(seed));
+}
+
+/**
+  @arg {wif} key
+  @return {boolean} true if key is in the Wallet Import Format
+*/
+PrivateKey.isWif = function(text) {
+    try {
+        assert(parseKey(text).format === 'WIF')
+        return true
+    } catch(e) {
+        return false
+    }
+}
+
+/**
+  @arg {wif|Buffer|PrivateKey} key
+  @return {boolean} true if key is convertable to a private key object.
+*/
+PrivateKey.isValid = function(key) {
+    try {
+        PrivateKey(key)
+        return true
+    } catch(e) {
+        return false
+    }
+}
+
+/** @deprecated */
+PrivateKey.fromWif = function(str) {
+    console.log('PrivateKey.fromWif is deprecated, please use PrivateKey.fromString');
+    return PrivateKey.fromString(str)
+}
+
+/**
+    @throws {AssertError|Error} parsing key
+    @arg {string} privateStr Eosio or Wallet Import Format (wif) -- a secret
+*/
+PrivateKey.fromString = function(privateStr) {
+    return parseKey(privateStr).privateKey
+}
+
+/**
+  Create a new random private key.
+
+  Call initialize() first to run some self-checking code and gather some CPU
+  entropy.
+
+  @arg {number} [cpuEntropyBits = 0] - additional CPU entropy, this already
+  happens once so it should not be needed again.
+
+  @return {Promise<PrivateKey>} - random private key
+*/
+PrivateKey.randomKey = function(cpuEntropyBits = 0) {
+  return PrivateKey.initialize().then(() => (
+    PrivateKey.fromBuffer(keyUtils.random32ByteBuffer({cpuEntropyBits}))
+  ))
+}
+
+/**
+  @return {Promise<PrivateKey>} for testing, does not require initialize().
+*/
+PrivateKey.unsafeRandomKey = function() {
+  return Promise.resolve(
+    PrivateKey.fromBuffer(keyUtils.random32ByteBuffer({safe: false}))
+  )
+}
+
+
+let initialized = false, unitTested = false
+
+/**
+  Run self-checking code and gather CPU entropy.
+
+  Initialization happens once even if called multiple times.
+
+  @return {Promise}
+*/
+function initialize() {
+  if(initialized) {
+    return
+  }
+
+  unitTest()
+  keyUtils.addEntropy(...keyUtils.cpuEntropy())
+  assert(keyUtils.entropyCount() >= 128, 'insufficient entropy')
+
+  initialized = true
+}
+
+PrivateKey.initialize = promiseAsync(initialize)
+
+/**
+  Unit test basic private and public key functionality.
+
+  @throws {AssertError}
+*/
+function unitTest() {
+  const pvt = PrivateKey(hash.sha256(''))
+
+  const pvtError = 'key comparison test failed on a known private key'
+  assert.equal(pvt.toWif(), '5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss', pvtError)
+  assert.equal(pvt.toString(), '5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss', pvtError)
+  // assert.equal(pvt.toString(), 'PVT_K1_2jH3nnhxhR3zPUcsKaWWZC9ZmZAnKm3GAnFD1xynGJE1Znuvjd', pvtError)
+
+  const pub = pvt.toPublic()
+  const pubError = 'pubkey string comparison test failed on a known public key'
+  assert.equal(pub.toString(), 'SPH859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM', pubError)
+  // assert.equal(pub.toString(), 'PUB_K1_859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2Ht7beeX', pubError)
+  // assert.equal(pub.toStringLegacy(), 'EOS859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM', pubError)
+
+  doesNotThrow(() => PrivateKey.fromString(pvt.toWif()), 'converting known wif from string')
+  doesNotThrow(() => PrivateKey.fromString(pvt.toString()), 'converting known pvt from string')
+  doesNotThrow(() => PublicKey.fromString(pub.toString()), 'converting known public key from string')
+  // doesNotThrow(() => PublicKey.fromString(pub.toStringLegacy()), 'converting known public key from string')
+
+  unitTested = true
+}
+
+/** @private */
+const doesNotThrow = (cb, msg) => {
+  try {
+    cb()
+  } catch(error) {
+    error.message = `${msg} ==> ${error.message}`
+    throw error
+  }
+}

@@ -7,8 +7,9 @@ import {
     camelCase
 } from '../utils';
 import {
-    hash
+    hash,Ecc
 } from '../auth/ecc';
+
 import {
     ops
 } from '../auth/serializer';
@@ -20,6 +21,7 @@ import {
 } from '@steemit/rpc-auth';
 
 class Steem extends EventEmitter {
+
     constructor(options = {}) {
         super(options);
         this._setTransport(options);
@@ -128,10 +130,7 @@ class Steem extends EventEmitter {
     stop() {
         return this.transport.stop();
     }
-    // createAccountTransaction( creator, name_seed, json_meta, owner, active, memo_key,callback){
-    //     var operation=this.('create_account',[creator,name_seed,json_meta,owner,active,memo_key],callback);
-    //     return this.call('create_simple_transaction',[operation.toString()],callback);
-    // }
+
     send(api, data, callback) {
         var cb = callback;
         if (this.__logger) {
@@ -316,7 +315,12 @@ class Steem extends EventEmitter {
 
         return release;
     }
-
+    test(alarm){
+        return alarm;
+    };
+    tester(){
+        return this.test('Hello World');
+    };
     broadcastTransactionSynchronousWith(options, callback) {
     const trx = options.trx;
     return this.send(
@@ -344,6 +348,60 @@ class Steem extends EventEmitter {
     );
 
     }
+
+    createAccountTransaction(creator,seed,private_key,callback){
+        return this.call('create_account',[creator,seed,'{}','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu',
+            'SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
+            }
+        });
+    }
+
+
+
+    startBroadcasting(transaction,private_key,callback) {
+        return this.call('about', [''], (err, response) => {
+            if (err)
+                callback(err, null);
+            else {
+                console.log(response.chain_id);
+                this.call('get_transaction_digest', [transaction, response.chain_id], (err, response) => {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.call('sign_digest', [response, private_key], (err, response) => {
+                            if (err)
+                                callback(err, null);
+                            else {
+                                console.log(response);
+                                this.call('add_signature', [transaction, '2010f768d59ed685ef8df7ff4e2295f36dc9e580c128d1bbaf28474dc0a6a3326a5a80a8f71a6d842941b4af9184c456caa7583bb81ed8c0b725232444f0186fc6'], (err, response) => {
+                                    if (err)
+                                        callback(err, null);
+                                    else {
+                                        this.call('broadcast_transaction', [response], callback);
+                                    }
+
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    }
+
 }
 
 // Export singleton instance

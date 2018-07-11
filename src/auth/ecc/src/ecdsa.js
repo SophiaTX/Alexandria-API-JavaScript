@@ -91,7 +91,7 @@ function sign(curve, hash, d, nonce) {
     s = n.subtract(s)
   }
 
-  return new ECSignature(r, s)
+  return ECSignature(r, s)
 }
 
 function verifyRaw(curve, e, signature, Q) {
@@ -126,14 +126,14 @@ function verifyRaw(curve, e, signature, Q) {
   var v = xR.mod(n)
   
   // 1.4.8 If v = r, output "valid", and if v != r, output "invalid"
-  return v.equals(r);
+  return v.equals(r)
 }
 
 function verify(curve, hash, signature, Q) {
   // 1.4.2 H = Hash(M), already done by the user
   // 1.4.3 e = H
   var e = BigInteger.fromBuffer(hash)
-  return verifyRaw(curve, e, signature, Q);
+  return verifyRaw(curve, e, signature, Q)
 }
 
 /**
@@ -181,7 +181,7 @@ function recoverPubKey(curve, e, signature, i) {
   var Q = R.multiplyTwo(s, G, eNeg).multiply(rInv)
   curve.validate(Q)
 
-  return Q;
+  return Q
 }
 
 /**
@@ -201,7 +201,7 @@ function calcPubKeyRecoveryParam(curve, e, signature, Q) {
 
     // 1.6.2 Verify Q
     if (Qprime.equals(Q)) {
-      return i;
+      return i
     }
   }
 

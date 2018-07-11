@@ -49,7 +49,7 @@ steemBroadcast.send = function steemBroadcast$send(tx, privKeys='5JPwY3bwFgfsGtx
 
 steemBroadcast._prepareTransaction = function steemBroadcast$_prepareTransaction(tx) {
 
-  let propertiesP = steemApi.about();
+  const propertiesP = steemApi.getDynamicGlobalPropertiesAsync();
   return propertiesP
     .then((properties) => {
       // Set defaults on the transaction

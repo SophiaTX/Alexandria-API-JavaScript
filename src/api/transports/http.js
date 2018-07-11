@@ -17,11 +17,13 @@ export function jsonRpc(uri, {method, id, params}) {
   const payload = {id, jsonrpc: '2.0', method, params};
   return fetch(uri, {
     body: JSON.stringify(payload),
-    method: 'post',
+    method: 'POST',
+    mode:'CORS',
       headers: {
           Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
+
       },
+
   }).then(res => {
     if (!res.ok) {
       throw new Error(`HTTP ${ res.status }: ${ res.statusText }`);

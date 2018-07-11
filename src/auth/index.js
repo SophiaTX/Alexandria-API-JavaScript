@@ -10,6 +10,7 @@ var bigi = require('bigi'),
 	PublicKey = require('./ecc/src/key_public'),
   hash = require('./ecc/src/hash');
   import {normalize} from "./ecc/src/brain_key";
+  const signature = require('./ecc/src/signature');
 
 var Auth = {};
 var transaction = operations.transaction;
@@ -93,13 +94,16 @@ Auth.wifIsValid = function (privWif, pubWif) {
 };
 
 Auth.wifToPublic = function (privWif) {
-	var pubWif = KeyPrivate.fromWif(privWif);
+	var pubWif = KeyPrivate.fromString(privWif);
 	pubWif = pubWif.toPublic().toString();
 	return pubWif;
 };
 
 Auth.isPubkey = function(pubkey, address_prefix) {
 	return PublicKey.fromString(pubkey, address_prefix) != null;
+};
+Auth.createSignature=function(digest, privateKey){
+	 return signature.signHash(digest, privateKey).toHex();
 };
 
 Auth.signTransaction = function (trx, keys) {

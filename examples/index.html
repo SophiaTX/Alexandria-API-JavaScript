@@ -8,56 +8,50 @@
 
 <script src="../dist/steem.min.js"></script>
 <script>
-    steem.api.createAccount('initminer','test124','{}','SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz','SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz',
-        'SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz',function(err,response){
-            console.log(err, response);
-            steem.api.createSimpleTransaction(response,function (err,response) {
-                console.log(err,response);
-                    steem.api.broadcastTransaction(response,function (err,response) {
-                        console.log(err,response);
-                    });
 
-            });
-    });
+ // steem.api.createAccountTransaction('GN3Ug8ou6tiE4kWvyopJBJmZgcw','test130','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
+ //     console.log(err,response);
+ // });
+// steem.api.signDigest('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
+//     '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
+//     console.log(err,response);
+//     });
+console.log(steem.auth.createSignature('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
+    '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));
 
-    // steem.api.createAccountTransaction('initminer','test124','{}','SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz','SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz',
-    //     'SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz',function(err,response){
-    //         console.log(err, response);
-    // });
+// steem.api.about(function(err, response){
+//   console.log(err, response);
+// });
+// steem.api.info(function(err, response){
+//     console.log(err, response);
+// });
+// steem.api.getBlock('1983',function(err, response){
+//     console.log(err, response);
+// });
+//
+// steem.api.getOpsInBlock('1983',true,function(err, response){
+//     console.log(err, response);
+// });
 
-steem.api.about(function(err, response){
-  console.log(err, response);
-});
-steem.api.info(function(err, response){
-    console.log(err, response);
-});
-steem.api.getBlock('1983',function(err, response){
-    console.log(err, response);
-});
-
-steem.api.getOpsInBlock('1983',true,function(err, response){
-    console.log(err, response);
-});
-
-steem.api.getAccount('ArkTree1', function(err, response){
-  console.log(err, response);
-});
-
-steem.api.listWitnesses('initminer','10',function(err, response){
-    console.log(err, response);
-});
-steem.api.getWitness('initminer',function(err, response){
-    console.log(err, response);
-});
-console.log(steem.auth.generateKeys('sanjiv','abcde',['developer','Witness']));// generates separate public key for each of the roles
-console.log(steem.utils.validateAccountName('dan home ace'));// validates account name if it can be set or not
-console.log(steem.auth.getPrivateKeys('sanjiv','abcde',['developer','active']));// generates public key and private key pair
-console.log(steem.auth.isPubkey('SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','SPH'));//checks the format of Public key and decides if it is valid with prefix
-console.log(steem.auth.isWif('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));//checks the format of Private key and decides if it is valid
-console.log(steem.auth.wifToPublic('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));//returns public key on supplied Private key
-console.log(steem.auth.wifIsValid('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH6vh1vH3DTzFj2NUpZgpXfNACxUGsXThSpwVLXh9KaYAnJtrUpz'));//matches public key with private key returns boolean value
-console.log(steem.auth.normalizeBrainKey('DERRIDE BASCULE NIMBUS DOXA BURL AURALLY OER GOSSIPY BEHALE PINKER INVOKER YAULD HOYLE POTTY TITE WHUD'));
-
+// steem.api.getAccount('test129', function(err, response){
+//     console.log(err, response);
+// });
+//
+// steem.api.listWitnesses('initminer','10',function(err, response){
+//     console.log(err, response);
+// });
+// steem.api.getWitness('initminer',function(err, response){
+//     console.log(err, response);
+// });
+// console.log(steem.auth.generateKeys('sanjiv','abcde',['developer','Witness']));// generates separate public key for each of the roles
+// console.log(steem.utils.validateAccountName('dan home ace'));// validates account name if it can be set or not
+// console.log(steem.auth.getPrivateKeys('sanjiv','abcde',['developer','active']));// generates public key and private key pair
+// console.log(steem.auth.isPubkey('SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','SPH'));//checks the format of Public key and decides if it is valid with prefix
+// console.log(steem.auth.isWif('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));//checks the format of Private key and decides if it is valid
+// console.log(steem.auth.wifToPublic('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));//returns public key on supplied Private key
+// console.log(steem.auth.wifIsValid('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'));//matches public key with private key returns boolean value
+// console.log(steem.auth.normalizeBrainKey('DERRIDE BASCULE NIMBUS DOXA BURL AURALLY OER GOSSIPY BEHALE PINKER INVOKER YAULD HOYLE POTTY TITE WHUD'));
+//
 
 </script>
 

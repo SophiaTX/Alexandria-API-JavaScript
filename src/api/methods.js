@@ -56,6 +56,7 @@ export default [
         "params": ["tx"]
     },
     {
+
         "method": "create_account",
         "params": [
             "creator",
@@ -69,6 +70,24 @@ export default [
     {
         "method": "broadcast_transaction",
         "params": ["tx"]
+    },
+    {
+        "method": "get_transaction_digest",
+        "params": ["tx",
+            'chain_id',
+            ]
+    },
+    {
+        "method": "sign_digest",
+        "params": ["digest",
+            'private_key',
+            ]
+    },
+    {
+        "method": "add_signature",
+        "params": ["tx",
+            'sign',
+            ]
     },
 
 

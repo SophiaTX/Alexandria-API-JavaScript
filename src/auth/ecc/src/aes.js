@@ -1,16 +1,23 @@
-import secureRandom from 'secure-random';
-import ByteBuffer from 'bytebuffer';
-import crypto from 'browserify-aes';
-import assert from 'assert';
-import PublicKey from './key_public';
-import PrivateKey from './key_private';
-import hash from './hash';
+const randomBytes = require('randombytes')
+const ByteBuffer = require('bytebuffer')
+const crypto = require('browserify-aes')
+const assert = require('assert')
+const PublicKey = require('./key_public')
+const PrivateKey = require('./key_private')
+const hash = require('./hash')
 
 const Long = ByteBuffer.Long;
 
+module.exports = {
+  encrypt,
+  decrypt
+}
+
 /**
     Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
+
     @throws {Error|TypeError} - "Invalid Key, ..."
+
     @arg {PrivateKey} private_key - required and used for decryption
     @arg {PublicKey} public_key - required and used to calcualte the shared secret
     @arg {string} [nonce = uniqueNonce()] - assigned a random unique uint64
@@ -20,34 +27,38 @@ const Long = ByteBuffer.Long;
     @property {Buffer} message - Plain text message
     @property {number} checksum - shared secret checksum
 */
-export function encrypt(private_key, public_key, message, nonce = uniqueNonce()) {
+function encrypt(private_key, public_key, message, nonce = uniqueNonce()) {
     return crypt(private_key, public_key, nonce, message)
 }
 
 /**
     Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
+
     @arg {PrivateKey} private_key - required and used for decryption
     @arg {PublicKey} public_key - required and used to calcualte the shared secret
     @arg {string} nonce - random or unique uint64, provides entropy when re-using the same private/public keys.
     @arg {Buffer} message - Encrypted or plain text message
     @arg {number} checksum - shared secret checksum
+
     @throws {Error|TypeError} - "Invalid Key, ..."
+
     @return {Buffer} - message
 */
-export function decrypt(private_key, public_key, nonce, message, checksum) {
+function decrypt(private_key, public_key, nonce, message, checksum) {
     return crypt(private_key, public_key, nonce, message, checksum).message
 }
 
 /**
     @arg {Buffer} message - Encrypted or plain text message (see checksum)
     @arg {number} checksum - shared secret checksum (null to encrypt, non-null to decrypt)
+    @private
 */
 function crypt(private_key, public_key, nonce, message, checksum) {
-    private_key = toPrivateObj(private_key)
+    private_key = PrivateKey(private_key)
     if (!private_key)
         throw new TypeError('private_key is required')
 
-    public_key = toPublicObj(public_key)
+    public_key = PublicKey(public_key)
     if (!public_key)
         throw new TypeError('public_key is required')
 
@@ -63,7 +74,7 @@ function crypt(private_key, public_key, nonce, message, checksum) {
     if (checksum && typeof checksum !== 'number')
         throw new TypeError('checksum should be a number')
 
-    const S = private_key.get_shared_secret(public_key);
+    const S = private_key.getSharedSecret(public_key);
     let ebuf = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN)
     ebuf.writeUint64(nonce)
     ebuf.append(S.toString('binary'), 'binary')
@@ -72,7 +83,7 @@ function crypt(private_key, public_key, nonce, message, checksum) {
 
     // D E B U G
     // console.log('crypt', {
-    //     priv_to_pub: private_key.toPublicKey().toString(),
+    //     priv_to_pub: private_key.toPublic().toString(),
     //     pub: public_key.toString(),
     //     nonce: nonce.toString(),
     //     message: message.length,
@@ -101,7 +112,11 @@ function crypt(private_key, public_key, nonce, message, checksum) {
 }
 
 /** This method does not use a checksum, the returned data must be validated some other way.
-    @arg {string|Buffer} ciphertext - binary format
+
+    @arg {string|Buffer} message - ciphertext binary format
+    @arg {string<utf8>|Buffer} key - 256bit
+    @arg {string<utf8>|Buffer} iv - 128bit
+
     @return {Buffer}
 */
 function cryptoJsDecrypt(message, key, iv) {
@@ -114,8 +129,11 @@ function cryptoJsDecrypt(message, key, iv) {
 }
 
 /** This method does not use a checksum, the returned data must be validated some other way.
-    @arg {string|Buffer} plaintext - binary format
-    @return {Buffer} binary
+    @arg {string|Buffer} message - plaintext binary format
+    @arg {string<utf8>|Buffer} key - 256bit
+    @arg {string<utf8>|Buffer} iv - 128bit
+
+    @return {Buffer}
 */
 function cryptoJsEncrypt(message, key, iv) {
     assert(message, "Missing plain text")
@@ -130,7 +148,7 @@ function cryptoJsEncrypt(message, key, iv) {
 */
 function uniqueNonce() {
     if(unique_nonce_entropy === null) {
-        const b = secureRandom.randomUint8Array(2)
+        const b = new Uint8Array(randomBytes(2))
         unique_nonce_entropy = parseInt(b[0] << 8 | b[1], 10)
     }
     let long = Long.fromNumber(Date.now())
@@ -144,7 +162,5 @@ function uniqueNonce() {
 let unique_nonce_entropy = null
 // for(let i=1; i < 10; i++) key.uniqueNonce()
 
-const toPrivateObj = o => (o ? o.d ? o : PrivateKey.fromWif(o) : o/*null or undefined*/)
-const toPublicObj = o => (o ? o.Q ? o : PublicKey.fromString(o) : o/*null or undefined*/)
 const toLongObj = o => (o ? Long.isLong(o) ? o : Long.fromString(o) : o)
 const toBinaryBuffer = o => (o ? Buffer.isBuffer(o) ? o : new Buffer(o, 'binary') : o)
