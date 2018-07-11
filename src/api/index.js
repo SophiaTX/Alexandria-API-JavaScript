@@ -196,7 +196,6 @@ class Steem extends EventEmitter {
             uri: url
         });
     }
-
     startBroadcasting(transaction,private_key,callback) {
         return this.call('about', [''], (err, response) => {
             if (err)
@@ -257,7 +256,7 @@ class Steem extends EventEmitter {
         });
     }
     deleteAccountTransaction(account_name,private_key,callback){
-        return this.call('create_account',[account_name],(err,response)=>{
+        return this.call('delete_account',[account_name],(err,response)=>{
             if(err)
                 callback(err,null);
             else {
@@ -302,8 +301,6 @@ class Steem extends EventEmitter {
                         this.startBroadcasting(response,private_key,callback)
                     }
                 });
-
-
             }
         });
     }
@@ -319,8 +316,6 @@ class Steem extends EventEmitter {
                         this.startBroadcasting(response,private_key,callback)
                     }
                 });
-
-
             }
         });
     }
@@ -336,8 +331,6 @@ class Steem extends EventEmitter {
                         this.startBroadcasting(response,private_key,callback)
                     }
                 });
-
-
             }
         });
     }
