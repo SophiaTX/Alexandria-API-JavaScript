@@ -9,26 +9,10 @@
 <script src="../dist/steem.min.js"></script>
 <script>
 
-   var tx;
-   steem.api.createAccountTransaction('GN3Ug8ou6tiE4kWvyopJBJmZgcw','test131','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV', function(err, response){
-      console.log(err+ " "+ response);
-      tx = response;
-      document.write("<br/>TX: "+tx);
-   });
-
- /*  var digest; 
-   steem.api.getTransactionDigest(tx, function(err, response){
-      digest = response;
-      document.write("<br/>digest: "+digest);
-   })
-*/
-/*steem.api.signDigest('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
-    '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
-    console.log(err,response);
-});
-console.log(steem.auth.createSignature('4fc5c2f4c591bf1afcd04b5933e4371bffe698c61d1989e3503d448ddd567376',
-    '5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV'));
-*/
+ // steem.api.createAccountTransaction('GN3Ug8ou6tiE4kWvyopJBJmZgcw','test00346363355','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','{}','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu',
+ //     'SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu',function(err,response){
+ //     console.log(err,response);
+ // });
 // steem.api.about(function(err, response){
 //   console.log(err, response);
 // });
@@ -38,21 +22,42 @@ console.log(steem.auth.createSignature('4fc5c2f4c591bf1afcd04b5933e4371bffe698c6
 // steem.api.getBlock('1983',function(err, response){
 //     console.log(err, response);
 // });
-//
 // steem.api.getOpsInBlock('1983',true,function(err, response){
 //     console.log(err, response);
 // });
-
 // steem.api.getAccount('test129', function(err, response){
 //     console.log(err, response);
 // });
-//
 // steem.api.listWitnesses('initminer','10',function(err, response){
 //     console.log(err, response);
 // });
 // steem.api.getWitness('initminer',function(err, response){
 //     console.log(err, response);
 // });
+//  steem.api.getAccountNameFromSeed('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });
+//  steem.api.accountExist('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });
+//  steem.api.getAccountHistory('ArkTree1','10','9',function(err, response){
+//      console.log(err, response);
+//  });
+//  steem.api.getActiveAuthority('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });steem.api.getOwnerAuthority('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });
+//  steem.api.getAccountBalance('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });
+//  steem.api.getAccountNameFromSeed('test0000000001167767',function(err, response){
+//      console.log(err, response);
+// });
+//  steem.api.getVestingBalance('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });
+
 // console.log(steem.auth.generateKeys('sanjiv','abcde',['developer','Witness']));// generates separate public key for each of the roles
 // console.log(steem.utils.validateAccountName('dan home ace'));// validates account name if it can be set or not
 // console.log(steem.auth.getPrivateKeys('sanjiv','abcde',['developer','active']));// generates public key and private key pair

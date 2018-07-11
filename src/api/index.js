@@ -7,7 +7,7 @@ import {
     camelCase
 } from '../utils';
 import {
-    hash,Ecc, Signature
+    hash,Ecc
 } from '../auth/ecc';
 
 import {
@@ -19,7 +19,7 @@ import {
 import {
     sign as signRequest
 } from '@steemit/rpc-auth';
-
+const auth = require('../auth');
 class Steem extends EventEmitter {
 
     constructor(options = {}) {
@@ -197,161 +197,169 @@ class Steem extends EventEmitter {
         });
     }
 
-    streamBlockNumber(mode = 'head', callback, ts = 200) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-        let current = '';
-        let running = true;
+    startBroadcasting(transaction,private_key,callback) {
+        return this.call('about', [''], (err, response) => {
+            if (err)
+                callback(err, null);
+            else {
+                console.log(response.chain_id);
+                this.call('get_transaction_digest', [transaction, response.chain_id], (err, response) => {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        let sign=auth.createSignature(response,private_key);
 
-        const update = () => {
-            if (!running) return;
-
-            this.getDynamicGlobalPropertiesAsync().then(
-                result => {
-                    const blockId = mode === 'irreversible' ?
-                        result.last_irreversible_block_num :
-                        result.head_block_number;
-
-                    if (blockId !== current) {
-                        if (current) {
-                            for (let i = current; i < blockId; i++) {
-                                if (i !== current) {
-                                    callback(null, i);
-                                }
-                                current = i;
+                        this.call('add_signature', [transaction,sign], (err, response) => {
+                            if (err)
+                                callback(err, null);
+                            else {
+                                this.call('broadcast_transaction', [response], callback);
                             }
-                        } else {
-                            current = blockId;
-                            callback(null, blockId);
-                        }
+
+                        });
                     }
-
-                    Promise.delay(ts).then(() => {
-                        update();
-                    });
-                },
-                err => {
-                    callback(err);
-                },
-            );
-        };
-
-        update();
-
-        return () => {
-            running = false;
-        };
-    }
-
-
-    streamBlock(mode = 'head', callback) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-
-        let current = '';
-        let last = '';
-
-        const release = this.streamBlockNumber(mode, (err, id) => {
-            if (err) {
-                release();
-                callback(err);
-                return;
-            }
-
-            current = id;
-            if (current !== last) {
-                last = current;
-                this.getBlock(current, callback);
-            }
-        });
-
-        return release;
-    }
-
-    streamTransactions(mode = 'head', callback) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-
-        const release = this.streamBlock(mode, (err, result) => {
-            if (err) {
-                release();
-                callback(err);
-                return;
-            }
-
-            if (result && result.transactions) {
-                result.transactions.forEach(transaction => {
-                    callback(null, transaction);
                 });
             }
         });
-
-        return release;
     }
+    createAccountTransaction(creator,seed,private_key,json_meta, owner, active, memo_key,callback){
+        return this.call('create_account',[creator,seed, json_meta, owner, active, memo_key],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
 
-    streamOperations(mode = 'head', callback) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
 
-        const release = this.streamTransactions(mode, (err, transaction) => {
-            if (err) {
-                release();
-                callback(err);
-                return;
             }
-
-            transaction.operations.forEach(operation => {
-                callback(null, operation);
-            });
         });
-
-        return release;
     }
-    test(alarm){
-        return alarm;
-    };
-    tester(){
-        return this.test('Hello World');
-    };
-    broadcastTransactionSynchronousWith(options, callback) {
-    const trx = options.trx;
-    return this.send(
-        'network_broadcast_api', {
-            method: 'broadcast_transaction_synchronous',
-            params: [trx],
-        },
-        (err, result) => {
-            if (err) {
-                const {
-                    signed_transaction
-                } = ops;
-                //console.log('-- broadcastTransactionSynchronous -->', JSON.stringify(signed_transaction.toObject(trx), null, 2));
-                // toObject converts objects into serializable types
-                const trObject = signed_transaction.toObject(trx);
-                const buf = signed_transaction.toBuffer(trx);
-                err.digest = hash.sha256(buf).toString('hex');
-                err.transaction_id = buf.toString('hex');
-                err.transaction = JSON.stringify(trObject);
-                callback(err, '');
-            } else {
-                callback('', result);
+    updateAccountTransaction(account_name,private_key,json_meta,owner,active, memo_key,callback){
+        return this.call('update_account',[account_name, json_meta, owner, active, memo_key],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
             }
-        },
-    );
-
+        });
     }
+    deleteAccountTransaction(account_name,private_key,callback){
+        return this.call('create_account',[account_name],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
 
-    createAccountTransaction(creator,seed,private_key,callback){
-        return this.call('create_account',[creator,seed,'{}','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu',
-            'SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'],(err,response)=>{
+
+            }
+        });
+    }
+    transferTransaction(from, to, amount, memo,private_key,callback){
+        return this.call('transfer',[from, to, amount, memo],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
+            }
+        });
+    }
+    transferToVestingTransaction(from, to, amount,private_key,callback){
+        return this.call('transfer_to_vesting',[from, to, amount],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
+            }
+        });
+    }
+    setVotingProxyTransaction(account_to_modify, proxy,private_key,callback){
+        return this.call('set_voting_proxy',[account_to_modify, proxy],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
+            }
+        });
+    }
+    voteForWitnessTransaction(witness_to_vote_for, approve=true,private_key,callback){
+        return this.call('vote_for_witness',[witness_to_vote_for, approve],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
+            }
+        });
+    }
+    withdrawVestingTransaction(from,vesting_shares,private_key,callback){
+        return this.call('withdraw_vesting',[from,vesting_shares],(err,response)=>{
+            if(err)
+                callback(err,null);
+            else {
+                this.call('create_simple_transaction',[response],(err,response)=> {
+                    if (err)
+                        callback(err, null);
+                    else {
+                        this.startBroadcasting(response,private_key,callback)
+                    }
+                });
+
+
+            }
+        });
+    }
+    updateWitnessTransaction(witness_name, url, block_signing_key, props,private_key,callback){
+        return this.call('update_witness',[witness_name, url, block_signing_key, props],(err,response)=>{
             if(err)
                 callback(err,null);
             else {
@@ -370,32 +378,162 @@ class Steem extends EventEmitter {
 
 
 
-    startBroadcasting(transaction,private_key,callback) {
-        return this.call('about', [''], (err, response) => {
-            if (err)
-                callback(err, null);
-            else {
-                console.log(response.chain_id);
-                this.call('get_transaction_digest', [transaction, response.chain_id], (err, response) => {
-                    if (err)
-                        callback(err, null);
-                    else {
-                        var signature=Signature.signHash(response, private_key).toHex();
-                        this.call('add_signature', [transaction, signature] , (err, response) => {
-                           if (err)
-                              callback(err, null);
-                           else {
-                              this.call('broadcast_transaction', [response], callback);
-                           };
-                        });
-                    }
-                });
-            }
-        });
+    // streamBlockNumber(mode = 'head', callback, ts = 200) {
+    //     if (typeof mode === 'function') {
+    //         callback = mode;
+    //         mode = 'head';
+    //     }
+    //     let current = '';
+    //     let running = true;
+    //
+    //     const update = () => {
+    //         if (!running) return;
+    //
+    //         this.getDynamicGlobalPropertiesAsync().then(
+    //             result => {
+    //                 const blockId = mode === 'irreversible' ?
+    //                     result.last_irreversible_block_num :
+    //                     result.head_block_number;
+    //
+    //                 if (blockId !== current) {
+    //                     if (current) {
+    //                         for (let i = current; i < blockId; i++) {
+    //                             if (i !== current) {
+    //                                 callback(null, i);
+    //                             }
+    //                             current = i;
+    //                         }
+    //                     } else {
+    //                         current = blockId;
+    //                         callback(null, blockId);
+    //                     }
+    //                 }
+    //
+    //                 Promise.delay(ts).then(() => {
+    //                     update();
+    //                 });
+    //             },
+    //             err => {
+    //                 callback(err);
+    //             },
+    //         );
+    //     };
+    //
+    //     update();
+    //
+    //     return () => {
+    //         running = false;
+    //     };
+    // }
 
-    }
+
+    // streamBlock(mode = 'head', callback) {
+    //     if (typeof mode === 'function') {
+    //         callback = mode;
+    //         mode = 'head';
+    //     }
+    //
+    //     let current = '';
+    //     let last = '';
+    //
+    //     const release = this.streamBlockNumber(mode, (err, id) => {
+    //         if (err) {
+    //             release();
+    //             callback(err);
+    //             return;
+    //         }
+    //
+    //         current = id;
+    //         if (current !== last) {
+    //             last = current;
+    //             this.getBlock(current, callback);
+    //         }
+    //     });
+    //
+    //     return release;
+    // }
+
+    // streamTransactions(mode = 'head', callback) {
+    //     if (typeof mode === 'function') {
+    //         callback = mode;
+    //         mode = 'head';
+    //     }
+    //
+    //     const release = this.streamBlock(mode, (err, result) => {
+    //         if (err) {
+    //             release();
+    //             callback(err);
+    //             return;
+    //         }
+    //
+    //         if (result && result.transactions) {
+    //             result.transactions.forEach(transaction => {
+    //                 callback(null, transaction);
+    //             });
+    //         }
+    //     });
+    //
+    //     return release;
+    // }
+
+    // streamOperations(mode = 'head', callback) {
+    //     if (typeof mode === 'function') {
+    //         callback = mode;
+    //         mode = 'head';
+    //     }
+    //
+    //     const release = this.streamTransactions(mode, (err, transaction) => {
+    //         if (err) {
+    //             release();
+    //             callback(err);
+    //             return;
+    //         }
+    //
+    //         transaction.operations.forEach(operation => {
+    //             callback(null, operation);
+    //         });
+    //     });
+    //
+    //     return release;
+    // }
+    // test(alarm){
+    //     return alarm;
+    // };
+    // tester(){
+    //     return this.test('Hello World');
+    // };
+    // broadcastTransactionSynchronousWith(options, callback) {
+    // const trx = options.trx;
+    // return this.send(
+    //     'network_broadcast_api', {
+    //         method: 'broadcast_transaction_synchronous',
+    //         params: [trx],
+    //     },
+    //     (err, result) => {
+    //         if (err) {
+    //             const {
+    //                 signed_transaction
+    //             } = ops;
+    //             //console.log('-- broadcastTransactionSynchronous -->', JSON.stringify(signed_transaction.toObject(trx), null, 2));
+    //             // toObject converts objects into serializable types
+    //             const trObject = signed_transaction.toObject(trx);
+    //             const buf = signed_transaction.toBuffer(trx);
+    //             err.digest = hash.sha256(buf).toString('hex');
+    //             err.transaction_id = buf.toString('hex');
+    //             err.transaction = JSON.stringify(trObject);
+    //             callback(err, '');
+    //         } else {
+    //             callback('', result);
+    //         }
+    //     },
+    // );
+    //
+    // }
+
+
 
 }
+
 
 // Export singleton instance
 const steem = new Steem(config);

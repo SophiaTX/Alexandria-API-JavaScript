@@ -89,6 +89,94 @@ export default [
             'sign',
             ]
     },
+    {
+        "method": "get_account_name_from_seed",
+        "params": ["seed"]
+    },
+    {
+        "method": "account_exist",
+        "params": ["account_name"]
+    },{
+        "method": "get_account_history",
+        "params": ["account", "from", "limit"]
+    },{
+        "method": "get_active_authority",
+        "params": ["account_name"]
+    },{
+        "method": "get_owner_authority",
+        "params": ["account_name"]
+    },
+    {
+        "method": "get_memo_key",
+        "params": ["account_name"]
+    },
+    {
+        "method": "get_account_balance",
+        "params": ["account_name"]
+    },
+    {
+        "method": "get_vesting_balance",
+        "params": ["account_name"]
+    },
+    {
+        "method": "update_account",
+        "params": [
+       "account_name",
+       "json_meta",
+       "owner" ,
+        "active",
+        "memo"
+        ]
+    },{
+        "method": "delete_account",
+        "params": ["account_name"]
+    },{
+        "method": "transfer",
+        "params": [
+            "from",
+            "to",
+            "amount",
+            "memo"
+        ]
+    },{
 
+        "method": "transfer_to_vesting",
+        "params": [
+            "from",
+            "to",
+            "amount"
+        ]
+    },{
+
+    "method": "set_voting_proxy",
+        "params": [
+        "account_to_modify",
+        "proxy"
+    ]
+},{
+
+    "method": "vote_for_witness",
+        "account_to_vote": [
+        "witness_to_vote_for",
+        "approve=true"
+    ]
+},{
+
+    "method": "withdraw_vesting",
+        "params": [
+        "from",
+        "vesting_shares"
+    ]
+},{
+
+    "method": "update_witness",
+        "params": [
+        "witness_name",
+        "url",
+        "block_signing_key",
+        "props"
+
+    ]
+},
 
 ];
