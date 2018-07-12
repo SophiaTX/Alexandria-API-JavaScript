@@ -4,13 +4,13 @@ Alexandria.js API library for SophiaTX Blockchain
 Table of Contents
 =================
 
-[Install and Run](#Install and Run)
+[Install and Run](#Install)
 
 [Help](#Help)
 
 [Details](#Details)
 
-[Local Key Functions](#Local Key Functions)
+[Local Key Functions](#Keys)
 
 [Accounts](#Accounts)
 
@@ -20,8 +20,7 @@ Table of Contents
 
 [Voting](#Voting)
 
-
-#Install and Run
+#Install
 ```
 git clone https://github.com/SophiaTX/Alexandria.js.git
 npm install
@@ -96,7 +95,7 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
-  #Local Key Functions
+ #Keys
  generates separate public key for each of the roles
   ```js
  console.log(steem.auth.generateKeys(name,password));
@@ -129,7 +128,7 @@ Check if the account still exists
  ```js
  console.log(steem.auth.normalizeBrainKey(passphrase));
  ```
-# Accounts 
+#Accounts 
   Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  ```js
  steem.api.createAccountTransaction(witnessName,seed,witnessPrivateKey,json_meta, owner, active, memo_key,function(err,response){
