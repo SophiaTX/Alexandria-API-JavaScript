@@ -69,10 +69,8 @@ Auth.generateKeys = function (name, password) {
 
 Auth.getPrivateKeys = function (name, password) {
     var privKeys = {};
-
     privKeys['private'] = this.toWif(name, password);
     privKeys['public'] = this.wifToPublic(privKeys['private']);
-
     return privKeys;
 };
 // Auth.getPrivateKeys = function (name, password, roles = ['owner', 'active', 'posting', 'memo']) {
