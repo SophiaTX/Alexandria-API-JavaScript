@@ -21,12 +21,14 @@ Table of Contents
 [Voting](#Voting)
 
 #Install
+
 ```
 git clone https://github.com/SophiaTX/Alexandria.js.git
 npm install
 npm run build
 ```
 #Help
+
  Get the information about the blockchain
 ```js
 steem.api.about(function(err, response){
@@ -40,6 +42,7 @@ steem.api.info(function(err, response){
 });
 ```
 #Details
+
 Get details about the block using block_id
 ```js
 steem.api.getBlock(blockNumber,function(err, response){
@@ -96,6 +99,7 @@ Check if the account still exists
  });
  ```
  #Keys
+ 
  generates separate public key for each of the roles
   ```js
  console.log(steem.auth.generateKeys(name,password));
@@ -129,6 +133,7 @@ Check if the account still exists
  console.log(steem.auth.normalizeBrainKey(passphrase));
  ```
 #Accounts 
+
   Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  ```js
  steem.api.createAccountTransaction(witnessName,seed,witnessPrivateKey,json_meta, owner, active, memo_key,function(err,response){
@@ -154,6 +159,7 @@ Check if the account still exists
  });
  ```
  #Transaction
+ 
   Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
  ```js
  steem.api.transferTransaction(from, to, amount, memo,privateKey,function(err,response){
@@ -175,6 +181,7 @@ Check if the account still exists
  
  
 #Witness
+
 Get list of Witnesses or miners
 ```js
 steem.api.listWitnesses(startFromWitnessName,count,function(err, response){
@@ -188,6 +195,7 @@ steem.api.getWitness(witnessName,function(err, response){
 });
 ```
 #Voting
+
  Set a proxy account for doing votes on behalf of first account.
  ```js
  steem.api.setVotingProxyTransaction(accountToModify, proxy,privateKey,function(err,response){
