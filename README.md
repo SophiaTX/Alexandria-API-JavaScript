@@ -20,14 +20,15 @@ Table of Contents
 
 [Voting](#Voting)
 
-#Install
-
+Install
+=================
 ```
 git clone https://github.com/SophiaTX/Alexandria.js.git
 npm install
 npm run build
 ```
-#Help
+Help
+=================
 
  Get the information about the blockchain
 ```js
@@ -41,7 +42,8 @@ steem.api.info(function(err, response){
     console.log(err, response);
 });
 ```
-#Details
+Details
+=================
 
 Get details about the block using block_id
 ```js
@@ -98,7 +100,8 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
- #Keys
+ Keys
+ =================
  
  generates separate public key for each of the roles
   ```js
@@ -132,7 +135,8 @@ Check if the account still exists
  ```js
  console.log(steem.auth.normalizeBrainKey(passphrase));
  ```
-#Accounts 
+Accounts
+================= 
 
   Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  ```js
@@ -158,7 +162,8 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
- #Transaction
+ Transaction
+ =================
  
   Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
  ```js
@@ -180,7 +185,8 @@ Check if the account still exists
   ```
  
  
-#Witness
+Witness
+=================
 
 Get list of Witnesses or miners
 ```js
@@ -194,7 +200,8 @@ steem.api.getWitness(witnessName,function(err, response){
     console.log(err, response);
 });
 ```
-#Voting
+Voting
+=================
 
  Set a proxy account for doing votes on behalf of first account.
  ```js
