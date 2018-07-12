@@ -21,11 +21,8 @@ export function jsonRpc(uri, {method, id, params}) {
       headers: {
           Accept: 'application/json, text/plain, */*',
       },
-  }).then(res => {
-    if (!res.ok) {
-      throw new Error(`HTTP ${ res.status }: ${ res.statusText }`);
-    }
-    return res.json();
+  }).then(response=> {
+    return response.json();
   }).then(rpcRes => {
     if (rpcRes.id !== id) {
       throw new Error(`Invalid response id: ${ rpcRes.id }`);

@@ -73,6 +73,7 @@ Auth.getKeyPair = function (name, password) {
     privKeys['public'] = this.wifToPublic(privKeys['private']);
     return privKeys;
 };
+
 // Auth.getPrivateKeys = function (name, password, roles = ['owner', 'active', 'posting', 'memo']) {
 // 	var privKeys = {};
 // 	roles.forEach(function (role) {

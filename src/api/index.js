@@ -200,20 +200,30 @@ class Steem extends EventEmitter {
         try {
             return this.call('about', [''], (err, response) => {
                 if (err)
-                    callback(err, null);
+                    callback(err, '');
                 else {
-                    console.log(response.chain_id);
+                    console.log('Transaction is being generated on chain id:'+response.chain_id);
                     this.call('get_transaction_digest', [transaction, response.chain_id], (err, response) => {
                         if (err)
-                            callback(err, null);
+                            callback(err, '');
                         else {
                             let sign = auth.createSignature(response, private_key);
 
                             this.call('add_signature', [transaction, sign], (err, response) => {
                                 if (err)
-                                    callback(err, null);
+                                    callback(err, '');
                                 else {
-                                    this.call('broadcast_transaction', [response], callback);
+                                    this.call('broadcast_transaction', [response], (err,response)=>{
+                                        if(err)
+                                            console.log(err);
+
+                                        else
+                                        {
+                                            console.log('New transaction id is:'+response.transaction_id);
+                                            callback('',response);
+                                        }
+
+                                    });
                                 }
 
                             });
@@ -229,11 +239,11 @@ class Steem extends EventEmitter {
     createAccountTransaction(creator,seed,private_key,json_meta, owner, active, memo_key,callback){
         return this.call('create_account',[creator,seed, json_meta, owner, active, memo_key],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -263,11 +273,11 @@ class Steem extends EventEmitter {
     deleteAccountTransaction(account_name,private_key,callback){
         return this.call('delete_account',[account_name],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -280,11 +290,11 @@ class Steem extends EventEmitter {
     transferTransaction(from, to, amount, memo,private_key,callback){
         return this.call('transfer',[from, to, amount, memo],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -297,11 +307,11 @@ class Steem extends EventEmitter {
     transferToVestingTransaction(from, to, amount,private_key,callback){
         return this.call('transfer_to_vesting',[from, to, amount],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -312,11 +322,11 @@ class Steem extends EventEmitter {
     setVotingProxyTransaction(account_to_modify, proxy,private_key,callback){
         return this.call('set_voting_proxy',[account_to_modify, proxy],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -327,11 +337,11 @@ class Steem extends EventEmitter {
     voteForWitnessTransaction(witness_to_vote_for, approve=true,private_key,callback){
         return this.call('vote_for_witness',[witness_to_vote_for, approve],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -342,11 +352,11 @@ class Steem extends EventEmitter {
     withdrawVestingTransaction(from,vesting_shares,private_key,callback){
         return this.call('withdraw_vesting',[from,vesting_shares],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
@@ -359,11 +369,11 @@ class Steem extends EventEmitter {
     updateWitnessTransaction(witness_name, url, block_signing_key, props,private_key,callback){
         return this.call('update_witness',[witness_name, url, block_signing_key, props],(err,response)=>{
             if(err)
-                callback(err,null);
+                callback(err,'');
             else {
                 this.call('create_simple_transaction',[response],(err,response)=> {
                     if (err)
-                        callback(err, null);
+                        callback(err, '');
                     else {
                         this.startBroadcasting(response,private_key,callback)
                     }
