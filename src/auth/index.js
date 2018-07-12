@@ -47,7 +47,7 @@ Auth.verify = function (name, password, auths) {
 // 	return pubKeys;
 // };
 
-Auth.generateKeys = function (name, password) {
+Auth.generatePublicKey = function (name, password) {
         var seed = name + password;
         var brainKey = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
         var hashSha256 = hash.sha256(brainKey);
@@ -67,7 +67,7 @@ Auth.generateKeys = function (name, password) {
 	@arg {array} roles - defaults to standard Steem blockchain-level roles
 */
 
-Auth.getPrivateKeys = function (name, password) {
+Auth.getKeyPair = function (name, password) {
     var privKeys = {};
     privKeys['private'] = this.toWif(name, password);
     privKeys['public'] = this.wifToPublic(privKeys['private']);
