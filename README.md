@@ -4,21 +4,15 @@ Alexandria.js API library for SophiaTX Blockchain
 Table of Contents
 =================
 
-[Install and Run](#Install)
+- [Install](#install)
+- [Help](#help)
+- [Details](#details)
+- [Keys](#keys)
+- [Accounts](#accounts)
+- [Transaction](#transaction)
+- [Witness](#witness)
+- [Voting](#voting)
 
-[Help](#Help)
-
-[Details](#Details)
-
-[Local Key Functions](#Keys)
-
-[Accounts](#Accounts)
-
-[Transaction](#Transaction)
-
-[Witness](#Witness)
-
-[Voting](#Voting)
 
 Install
 =================
