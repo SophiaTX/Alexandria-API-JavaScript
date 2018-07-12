@@ -7,20 +7,11 @@ import {
     camelCase
 } from '../utils';
 import {
-    hash,Ecc
-} from '../auth/ecc';
-
-import {
-    ops
-} from '../auth/serializer';
-import {
     jsonRpc
 } from './transports/http';
-import {
-    sign as signRequest
-} from '@steemit/rpc-auth';
+
 const auth = require('../auth');
-class Steem extends EventEmitter {
+class Sophia extends EventEmitter {
 
     constructor(options = {}) {
         super(options);
@@ -196,6 +187,7 @@ class Steem extends EventEmitter {
             uri: url
         });
     }
+    //Broadcast transactions over the blockchain using users private key
     startBroadcasting(transaction,private_key,callback) {
         try {
             return this.call('about', [''], (err, response) => {
@@ -236,6 +228,7 @@ class Steem extends EventEmitter {
             console.log(ex);
         }
     }
+    //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
     createAccountTransaction(creator,seed,private_key,json_meta, owner, active, memo_key,callback){
         return this.call('create_account',[creator,seed, json_meta, owner, active, memo_key],(err,response)=>{
             if(err)
@@ -253,6 +246,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
     updateAccountTransaction(account_name,private_key,json_meta,owner,active, memo_key,callback){
         return this.call('update_account',[account_name, json_meta, owner, active, memo_key],(err,response)=>{
             if(err)
@@ -270,6 +264,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Delete account using user's PrivateKey
     deleteAccountTransaction(account_name,private_key,callback){
         return this.call('delete_account',[account_name],(err,response)=>{
             if(err)
@@ -287,6 +282,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
     transferTransaction(from, to, amount, memo,private_key,callback){
         return this.call('transfer',[from, to, amount, memo],(err,response)=>{
             if(err)
@@ -304,6 +300,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Transfer amount (in the form of "amount currencySymbol, 10.000 SPHTX") to Vesting.
     transferToVestingTransaction(from, to, amount,private_key,callback){
         return this.call('transfer_to_vesting',[from, to, amount],(err,response)=>{
             if(err)
@@ -319,6 +316,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Set a proxy account for doing votes on behalf of first account.
     setVotingProxyTransaction(account_to_modify, proxy,private_key,callback){
         return this.call('set_voting_proxy',[account_to_modify, proxy],(err,response)=>{
             if(err)
@@ -334,6 +332,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Vote for a witness using witness name and voter's PrivateKey
     voteForWitnessTransaction(witness_to_vote_for, approve=true,private_key,callback){
         return this.call('vote_for_witness',[witness_to_vote_for, approve],(err,response)=>{
             if(err)
@@ -349,6 +348,7 @@ class Steem extends EventEmitter {
             }
         });
     }
+    //Withdraw amount (in the form of "amount currencySymbol, 10.000 SPHTX") from Vesting in fractions.
     withdrawVestingTransaction(from,vesting_shares,private_key,callback){
         return this.call('withdraw_vesting',[from,vesting_shares],(err,response)=>{
             if(err)
@@ -366,8 +366,15 @@ class Steem extends EventEmitter {
             }
         });
     }
-    updateWitnessTransaction(witness_name, url, block_signing_key, props,private_key,callback){
-        return this.call('update_witness',[witness_name, url, block_signing_key, props],(err,response)=>{
+    //Update witness account with maximum block size greater than minimum block size of 1024*64 and array of Prize feeds
+    updateWitnessTransaction(account_name, url, block_signing_key, accountCreationFee,maximumBlockSizeLimit,prizeFeeds,private_key,callback){
+
+        let props={
+            account_creation_fee:accountCreationFee,
+            maximum_block_size:maximumBlockSizeLimit,
+            price_feeds:prizeFeeds,
+        };
+        return this.call('update_witness',[account_name, url, block_signing_key, props],(err,response)=>{
             if(err)
                 callback(err,'');
             else {
@@ -544,6 +551,6 @@ class Steem extends EventEmitter {
 
 
 // Export singleton instance
-const steem = new Steem(config);
-exports = module.exports = steem;
-exports.Steem = Steem;
+const sophia= new Sophia(config);
+exports = module.exports = sophia;
+exports.Sophia = Sophia;

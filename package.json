@@ -1,7 +1,7 @@
 {
-  "name": "@SophiaTX/steem-js",
-  "version": "0.7.1",
-  "description": "Steem.js the JavaScript API for Sophia blockchain",
+  "name": "@SophiaTX/alexandria-js",
+  "version": "0.0.1",
+  "description": "Alexandria.js the JavaScript API for Sophia blockchain",
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run build-browser && npm run build-node",
@@ -18,10 +18,10 @@
     "url": "git+https://github.com/sophiatx/alexandria.js.git"
   },
   "keywords": [
-    "steem",
-    "steemit",
+    "sophia",
+    "sophiatx",
     "blockchain",
-    "steemjs"
+    "alexandriajs"
   ],
   "babel": {
     "presets": [
@@ -44,7 +44,6 @@
   "author": "Fabien (https://github.com/bonustrack)",
   "license": "MIT",
   "dependencies": {
-    "@steemit/rpc-auth": "^1.1.0",
     "babel-core": "^6.18.0",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-stage-3": "^6.17.0",

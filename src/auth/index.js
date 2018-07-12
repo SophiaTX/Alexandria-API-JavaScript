@@ -4,7 +4,7 @@ var bigi = require('bigi'),
 	Point = ecurve.Point,
 	secp256k1 = ecurve.getCurveByName('secp256k1'),
 	config = require('../config'),
-	operations = require('./serializer/src/operations'),
+	//operations = require('./serializer/src/operations'),
 	Signature = require('./ecc/src/signature'),
 	KeyPrivate = require('./ecc/src/key_private'),
 	PublicKey = require('./ecc/src/key_public'),
@@ -13,8 +13,8 @@ var bigi = require('bigi'),
   const signature = require('./ecc/src/signature');
 
 var Auth = {};
-var transaction = operations.transaction;
-var signed_transaction = operations.signed_transaction;
+//var transaction = operations.transaction;
+//var signed_transaction = operations.signed_transaction;
 
 Auth.verify = function (name, password, auths) {
 	var hasKey = false;
@@ -127,22 +127,22 @@ Auth.createSignature=function(digest, privateKey){
 	 return signature.signHash(digest, privateKey).toHex();
 };
 
-Auth.signTransaction = function (trx, keys) {
-	var signatures = [];
-	if (trx.signatures) {
-		signatures = [].concat(trx.signatures);
-	}
-
-	var cid = new Buffer(config.get('chain_id'), 'hex');
-	var buf = transaction.toBuffer(trx);
-
-	for (var key in keys) {
-		var sig = Signature.signBuffer(Buffer.concat([cid, buf]), keys[key]);
-		signatures.push(sig.toBuffer());
-	}
-
-	return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
-};
+// Auth.signTransaction = function (trx, keys) {
+// 	var signatures = [];
+// 	if (trx.signatures) {
+// 		signatures = [].concat(trx.signatures);
+// 	}
+//
+// 	var cid = new Buffer(config.get('chain_id'), 'hex');
+// 	var buf = transaction.toBuffer(trx);
+//
+// 	for (var key in keys) {
+// 		var sig = Signature.signBuffer(Buffer.concat([cid, buf]), keys[key]);
+// 		signatures.push(sig.toBuffer());
+// 	}
+//
+// 	return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
+// };
 Auth.normalizeBrainKey=function(brain_key){
 	try{
         var phrase=normalize(brain_key).toString();

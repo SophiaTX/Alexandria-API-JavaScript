@@ -72,7 +72,7 @@ function makeConfig(options) {
   return {
     devtool: isDevelopment ? 'cheap-eval-source-map' : 'source-map',
     entry: {
-      steem: path.join(options.baseDir, 'src/browser.js'),
+      alexandria: path.join(options.baseDir, 'src/browser.js'),
      // 'steem-tests': path.join(options.baseDir, 'test/api.test.js'),
     },
     output: {

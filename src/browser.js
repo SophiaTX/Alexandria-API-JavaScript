@@ -1,25 +1,23 @@
 const api = require("./api");
 const auth = require("./auth");
-const broadcast = require("./broadcast");
+//const broadcast = require("./broadcast");
 const config = require("./config");
-const formatter = require("./formatter")(api);
+//const formatter = require("./formatter")(api);
 const utils = require("./utils");
 
-const steem = {
+const sophia = {
   api,
   auth,
-  broadcast,
   config,
-  formatter,
   utils
 };
 
 if (typeof window !== "undefined") {
-  window.steem = steem;
+  window.sophia = sophia;
 }
 
 if (typeof global !== "undefined") {
-  global.steem = steem;
+  global.sophia = sophia;
 }
 
-exports = module.exports = steem;
+exports = module.exports = sophia;
