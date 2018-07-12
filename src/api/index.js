@@ -123,13 +123,13 @@ class Steem extends EventEmitter {
         }
     }
 
-    start() {
-        return this.transport.start();
-    }
-
-    stop() {
-        return this.transport.stop();
-    }
+    // start() {
+    //     return this.transport.start();
+    // }
+    //
+    // stop() {
+    //     return this.transport.stop();
+    // }
 
     send(api, data, callback) {
         var cb = callback;
@@ -197,29 +197,34 @@ class Steem extends EventEmitter {
         });
     }
     startBroadcasting(transaction,private_key,callback) {
-        return this.call('about', [''], (err, response) => {
-            if (err)
-                callback(err, null);
-            else {
-                console.log(response.chain_id);
-                this.call('get_transaction_digest', [transaction, response.chain_id], (err, response) => {
-                    if (err)
-                        callback(err, null);
-                    else {
-                        let sign=auth.createSignature(response,private_key);
+        try {
+            return this.call('about', [''], (err, response) => {
+                if (err)
+                    callback(err, null);
+                else {
+                    console.log(response.chain_id);
+                    this.call('get_transaction_digest', [transaction, response.chain_id], (err, response) => {
+                        if (err)
+                            callback(err, null);
+                        else {
+                            let sign = auth.createSignature(response, private_key);
 
-                        this.call('add_signature', [transaction,sign], (err, response) => {
-                            if (err)
-                                callback(err, null);
-                            else {
-                                this.call('broadcast_transaction', [response], callback);
-                            }
+                            this.call('add_signature', [transaction, sign], (err, response) => {
+                                if (err)
+                                    callback(err, null);
+                                else {
+                                    this.call('broadcast_transaction', [response], callback);
+                                }
 
-                        });
-                    }
-                });
-            }
-        });
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        catch(ex){
+            console.log(ex);
+        }
     }
     createAccountTransaction(creator,seed,private_key,json_meta, owner, active, memo_key,callback){
         return this.call('create_account',[creator,seed, json_meta, owner, active, memo_key],(err,response)=>{
@@ -468,7 +473,7 @@ class Steem extends EventEmitter {
     //
     //     return release;
     // }
-
+    //
     // streamOperations(mode = 'head', callback) {
     //     if (typeof mode === 'function') {
     //         callback = mode;
