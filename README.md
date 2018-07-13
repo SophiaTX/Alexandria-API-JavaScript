@@ -134,7 +134,7 @@ Accounts
 
   Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  ```js
- sophia.api.createAccountTransaction(witnessName,seed,witnessPrivateKey,json_meta, owner, active, memo_key,function(err,response){
+ sophia.api.createAccountTransaction(creatorName,seed,creatorPrivateKey,json_meta, owner, active, memo_key,function(err,response){
      console.log(err,response);
  });
  ```
