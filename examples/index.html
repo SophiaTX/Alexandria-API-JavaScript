@@ -41,11 +41,19 @@
 //  sophia.api.voteForWitnessTransaction('rumGMWVHCxedjhSHMBQYk3o9LVD', 'GN3Ug8ou6tiE4kWvyopJBJmZgcw', true,'5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
 //      console.log(err,response);
 //  });
-//  //........Not Tested
-//       let prizeFeed=[];
-//  sophia.api.updateWitnessTransaction('32KHRSaU8djTceiu7KCtth86TVW3','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,prizeFeed,'5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF',function(err,response){
-//      console.log(err,response);
-//  });
+//  //........Test not completed
+//       let feedvalue={
+//           value:767889,
+//
+//       };
+//       let feedquote={
+//           base:'9.000 EUR',
+//           quote:'8.0000 SPHTX'
+//       };
+//       let prizeFeed=[[feedvalue,feedquote]];
+//       sophia.api.updateWitnessTransaction('32KHRSaU8djTceiu7KCtth86TVW3','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,prizeFeed,'5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF',function(err,response){
+//           console.log(err,response);
+//       });
 //  //........
 //     //Get the information about the blockchain
 // sophia.api.about(function(err, response){
