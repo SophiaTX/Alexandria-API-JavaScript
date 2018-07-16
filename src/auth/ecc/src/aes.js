@@ -5,7 +5,6 @@ const assert = require('assert')
 const PublicKey = require('./key_public')
 const PrivateKey = require('./key_private')
 const hash = require('./hash')
-
 const Long = ByteBuffer.Long;
 
 module.exports = {
@@ -27,8 +26,44 @@ module.exports = {
     @property {Buffer} message - Plain text message
     @property {number} checksum - shared secret checksum
 */
-function encrypt(private_key, public_key, message, nonce = uniqueNonce()) {
-    return crypt(private_key, public_key, nonce, message)
+function encrypt(private_key, public_key, message) {
+    private_key = PrivateKey(private_key)
+    if (!private_key)
+        throw new TypeError('private_key is required')
+
+    public_key = PublicKey(public_key)
+    if (!public_key)
+        throw new TypeError('public_key is required')
+
+    if (!Buffer.isBuffer(message)) {
+        if (typeof message !== 'string')
+            throw new TypeError('message should be buffer or string')
+        message = new Buffer(message, 'binary')
+    }
+    const S = private_key.getSharedSecret(public_key);
+    let ebuf = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN)
+
+    ebuf.append(S.toString('binary'), 'binary')
+    ebuf = new Buffer(ebuf.copy(0, ebuf.offset).toBinary(), 'binary')
+    const encryption_key = hash.sha512(ebuf)
+
+    // D E B U G
+    // console.log('crypt', {
+    //     priv_to_pub: private_key.toPublic().toString(),
+    //     pub: public_key.toString(),
+    //     nonce: nonce.toString(),
+    //     message: message.length,
+    //     checksum,
+    //     S: S.toString('hex'),
+    //     encryption_key: encryption_key.toString('hex'),
+    // })
+
+    const iv = encryption_key.slice(32, 48)
+    const key = encryption_key.slice(0, 32)
+
+        message = cryptoJsEncrypt(message, key, iv)
+
+    return  message;
 }
 
 /**
@@ -44,8 +79,46 @@ function encrypt(private_key, public_key, message, nonce = uniqueNonce()) {
 
     @return {Buffer} - message
 */
-function decrypt(private_key, public_key, nonce, message, checksum) {
-    return crypt(private_key, public_key, nonce, message, checksum).message
+function decrypt(private_key, public_key, message) {
+    private_key = PrivateKey(private_key)
+    if (!private_key)
+        throw new TypeError('private_key is required')
+
+    public_key = PublicKey(public_key)
+    if (!public_key)
+        throw new TypeError('public_key is required')
+
+    if (!Buffer.isBuffer(message)) {
+        if (typeof message !== 'string')
+            throw new TypeError('message should be buffer or string')
+        message = new Buffer(message, 'binary')
+    }
+
+    const S = private_key.getSharedSecret(public_key);
+    let ebuf = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN)
+    ebuf.append(S.toString('binary'), 'binary')
+    ebuf = new Buffer(ebuf.copy(0, ebuf.offset).toBinary(), 'binary')
+    const encryption_key = hash.sha512(ebuf)
+
+    // D E B U G
+    // console.log('crypt', {
+    //     priv_to_pub: private_key.toPublic().toString(),
+    //     pub: public_key.toString(),
+    //     nonce: nonce.toString(),
+    //     message: message.length,
+    //     checksum,
+    //     S: S.toString('hex'),
+    //     encryption_key: encryption_key.toString('hex'),
+    // })
+
+    const iv = encryption_key.slice(32, 48)
+    const key = encryption_key.slice(0, 32)
+
+    // check is first 64 bit of sha256 hash treated as uint64_t truncated to 32 bits.
+
+    message = cryptoJsDecrypt(message, key, iv)
+
+    return message;
 }
 
 /**
@@ -125,7 +198,7 @@ function cryptoJsDecrypt(message, key, iv) {
     const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv)
     // decipher.setAutoPadding(true)
     message = Buffer.concat([decipher.update(message), decipher.final()])
-    return message
+    return message;
 }
 
 /** This method does not use a checksum, the returned data must be validated some other way.
@@ -141,7 +214,7 @@ function cryptoJsEncrypt(message, key, iv) {
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv)
     // cipher.setAutoPadding(true)
     message = Buffer.concat([cipher.update(message), cipher.final()])
-    return message
+    return message;
 }
 
 /** @return {string} unique 64 bit unsigned number string.  Being time based, this is careful to never choose the same nonce twice.  This value could be recorded in the blockchain for a long time.

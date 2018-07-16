@@ -1,6 +1,5 @@
 
 import ByteBuffer from 'bytebuffer'
-import assert from 'assert'
 import base58 from 'bs58'
 import {Aes, PrivateKey, PublicKey} from './ecc'
 import {ops} from './serializer'
@@ -14,13 +13,12 @@ const encMemo = ops.encrypted_memo
     @return {string} - utf8 decoded string (hash prefix)
 */
 export function decode(private_key, memo) {
-    assert(memo, 'memo is required')
-    assert.equal(typeof memo, 'string', 'memo')
-    if(!/^#/.test(memo)) return memo
-    memo = memo.substring(1)
-
-    assert(private_key, 'private_key is required')
-    checkEncryption()
+    // assert(memo, 'memo is required')
+    // assert.equal(typeof memo, 'string', 'memo')
+    // if(!/^#/.test(memo)) return memo
+    // memo = memo.substring(1)
+    // assert(private_key, 'private_key is required')
+    // checkEncryption()
 
     private_key = toPrivateObj(private_key)
 
@@ -54,14 +52,13 @@ export function decode(private_key, memo) {
     @return {string} - base64 decoded string (or plain text)
 */
 export function encode(private_key, public_key, memo, testNonce) {
-    assert(memo, 'memo is required')
-    assert.equal(typeof memo, 'string', 'memo')
-    if(!/^#/.test(memo)) return memo
-    memo = memo.substring(1)
-
-    assert(private_key, 'private_key is required')
-    assert(public_key, 'public_key is required')
-    checkEncryption()
+    //  assert(memo, 'memo is required')
+    //  assert.equal(typeof memo, 'string', 'memo')
+    // if(!/^#/.test(memo)) return memo
+    // memo = memo.substring(1)
+    // assert(private_key, 'private_key is required')
+    // assert(public_key, 'public_key is required')
+    // checkEncryption()
 
     private_key = toPrivateObj(private_key)
     public_key = toPublicObj(public_key)

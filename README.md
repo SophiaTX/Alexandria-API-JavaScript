@@ -159,7 +159,7 @@ Accounts
  Transaction
  =================
  
-  Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
+  Transfer an amount (in the form of "amount (space) currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
  ```js
  sophia.api.transferTransaction(from, to, amount, memo,privateKey,function(err,response){
      console.log(err,response);

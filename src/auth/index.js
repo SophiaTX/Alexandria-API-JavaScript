@@ -10,12 +10,19 @@ var bigi = require('bigi'),
 	PublicKey = require('./ecc/src/key_public'),
   hash = require('./ecc/src/hash');
   import {normalize} from "./ecc/src/brain_key";
+  import {encrypt,decrypt} from "./ecc/src/aes";
   const signature = require('./ecc/src/signature');
 
 var Auth = {};
 //var transaction = operations.transaction;
 //var signed_transaction = operations.signed_transaction;
-
+Auth.encrypt=function(privatekey, publickey, message){
+	return bs58.encode(encrypt(privatekey,publickey,message));
+};
+Auth.decrypt=function(privatekey,publickey,message){
+	let messagestring=bs58.decode(message);
+	return decrypt(privatekey,publickey,messagestring).toString();
+};
 Auth.verify = function (name, password, auths) {
 	var hasKey = false;
 	var roles = [];
