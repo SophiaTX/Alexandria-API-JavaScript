@@ -209,4 +209,16 @@ Voting
      console.log(err,response);
  });
  ```
+ Cryptography
+ =================
 
+ Use privateKey of sender's account and publicKey of receiver's account to encrypt the message
+ ```js
+ console.log(sophia.auth.encrypt(privateKey,publickey
+     ,Message));
+```
+ Use publicKey of sender's account and privateKey of receiver's account to decrypt the message
+ ```js
+ console.log(sophia.auth.decrypt(privateKey,publicKey
+     ,EncryptedMessage));
+```
