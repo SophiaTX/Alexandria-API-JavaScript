@@ -8,6 +8,7 @@ Table of Contents
 - [Help](#help)
 - [Details](#details)
 - [Keys](#keys)
+- [Cryptography](#cryptography)
 - [Accounts](#accounts)
 - [Transaction](#transaction)
 - [Witness](#witness)
@@ -16,11 +17,11 @@ Table of Contents
 
 Install
 =================
-```
+````
 git clone https://github.com/SophiaTX/Alexandria.js.git
 npm install
 npm run build
-```
+````
 Help
 =================
 
@@ -129,24 +130,36 @@ Check if the account still exists
  ```js
  console.log(sophia.auth.normalizeBrainKey(passphrase));
  ```
+ Cryptography
+ =================
+ 
+  Use privateKey of sender's account and publicKey of receiver's account to encrypt the message
+  ```js
+  console.log(sophia.auth.encrypt(privateKey,publickey,Message));
+ ```
+  Use publicKey of sender's account and privateKey of receiver's account to decrypt the message
+  ```js
+  console.log(sophia.auth.decrypt(privateKey,publicKey,EncryptedMessage));
+ ```
+ 
 Accounts
 ================= 
 
  Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  ```js
- sophia.api.createAccountTransaction(creatorName,seed,creatorPrivateKey,json_meta, owner, active, memo_key,function(err,response){
+ sophia.api.createAccount(creatorName,seed,creatorPrivateKey,json_meta, owner, active, memo_key,function(err,response){
      console.log(err,response);
  });
  ```
   Delete account using user's PrivateKey
  ```js  
- sophia.api.deleteAccountTransaction(accountName,privateKey,function(err,response){
+ sophia.api.deleteAccount(accountName,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
   Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  ```js
- sophia.api.updateAccountTransaction(accountName,privateKey,jsonMeta,owner,active, memoKey,function(err,response){
+ sophia.api.updateAccount(accountName,privateKey,jsonMeta,owner,active, memoKey,function(err,response){
      console.log(err,response);
  });
  ```
@@ -161,19 +174,19 @@ Accounts
  
   Transfer an amount (in the form of "amount (space) currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
  ```js
- sophia.api.transferTransaction(from, to, amount, memo,privateKey,function(err,response){
+ sophia.api.transfer(from, to, amount, memo,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
  Transfer amount (in the form of "amount currencySymbol, 10.000 SPHTX") to Vesting.
   ```js
-  sophia.api.transferToVestingTransaction(from, to, amount,privateKey,function(err,response){
+  sophia.api.transferToVesting(from, to, amount,privateKey,function(err,response){
       console.log(err,response);
   });
   ```
   Withdraw amount (in the form of "amount currencySymbol, 10.000 SPHTX") from Vesting in fractions.
   ```js
-  sophia.api.withdrawVestingTransaction(from,vestingShares,privateKey,function(err,response){
+  sophia.api.withdrawVesting(from,vestingShares,privateKey,function(err,response){
       console.log(err,response);
   });
   ```
@@ -199,24 +212,14 @@ Voting
 
  Set a proxy account for doing votes on behalf of first account.
  ```js
- sophia.api.setVotingProxyTransaction(accountToModify, proxy,privateKey,function(err,response){
+ sophia.api.setVotingProxy(accountToModify, proxy,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
  Vote for a witness using witness name and voter's PrivateKey
  ```js
- sophia.api.voteForWitnessTransaction(witnessToVoteFor, approve=true,privateKey,function(err,response){
+ sophia.api.voteForWitness(witnessToVoteFor, approve=true,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
- Cryptography
- =================
-
- Use privateKey of sender's account and publicKey of receiver's account to encrypt the message
- ```js
- console.log(sophia.auth.encrypt(privateKey,publickey,Message));
-```
- Use publicKey of sender's account and privateKey of receiver's account to decrypt the message
- ```js
- console.log(sophia.auth.decrypt(privateKey,publicKey,EncryptedMessage));
-```
+ 

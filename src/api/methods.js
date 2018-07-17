@@ -55,22 +55,7 @@ export default [
         "method": "create_simple_transaction",
         "params": ["tx"]
     },
-    {
 
-        "method": "create_account",
-        "params": [
-            "creator",
-            "name_seed",
-            "json_meta",
-            "owner",
-            "active",
-            "memo_key"
-        ]
-    },
-    {
-        "method": "broadcast_transaction",
-        "params": ["tx"]
-    },
     {
         "method": "get_transaction_digest",
         "params": ["tx",
@@ -117,66 +102,6 @@ export default [
     {
         "method": "get_vesting_balance",
         "params": ["account_name"]
-    },
-    {
-        "method": "update_account",
-        "params": [
-       "account_name",
-       "json_meta",
-       "owner" ,
-        "active",
-        "memo"
-        ]
-    },{
-        "method": "delete_account",
-        "params": ["account_name"]
-    },{
-        "method": "transfer",
-        "params": [
-            "from",
-            "to",
-            "amount",
-            "memo"
-        ]
-    },{
-
-        "method": "transfer_to_vesting",
-        "params": [
-            "from",
-            "to",
-            "amount"
-        ]
-    },{
-
-    "method": "set_voting_proxy",
-        "params": [
-        "account_to_modify",
-        "proxy"
-    ]
-},{
-
-    "method": "vote_for_witness",
-        "account_to_vote": [
-        "witness_to_vote_for",
-        "approve=true"
-    ]
-},{
-
-    "method": "withdraw_vesting",
-        "params": [
-        "from",
-        "vesting_shares"
-    ]
-},{
-
-    "method": "update_witness",
-        "params": [
-        "witness_name",
-        "url",
-        "block_signing_key",
-        "props"
-
-    ]
-},
+    }
 
 ];

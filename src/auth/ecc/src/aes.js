@@ -60,9 +60,7 @@ function encrypt(private_key, public_key, message) {
 
     const iv = encryption_key.slice(32, 48)
     const key = encryption_key.slice(0, 32)
-
-        message = cryptoJsEncrypt(message, key, iv)
-
+    message = cryptoJsEncrypt(message, key, iv)
     return  message;
 }
 
@@ -117,7 +115,6 @@ function decrypt(private_key, public_key, message) {
     // check is first 64 bit of sha256 hash treated as uint64_t truncated to 32 bits.
 
     message = cryptoJsDecrypt(message, key, iv)
-
     return message;
 }
 

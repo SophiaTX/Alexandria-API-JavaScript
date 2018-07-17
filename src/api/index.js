@@ -142,6 +142,12 @@ class Sophia extends EventEmitter {
         return this.transport.send(api, data, cb);
     }
 
+    /**
+     * @param method -  method name
+     * @param params - arguments
+     * @param callback - callback function
+     * @returns {object}
+     */
     call(method, params, callback) {
         if (this._transportType !== 'http') {
             callback(new Error('RPC methods can only be called when using http transport'));
@@ -187,7 +193,13 @@ class Sophia extends EventEmitter {
             uri: url
         });
     }
-    //Broadcast transactions over the blockchain using users private key
+    /**
+     * Broadcast transactions over the blockchain using users private key
+     * @param transaction
+     * @param private_key
+     * @param callback
+     * @returns {Transaction id and object}
+     */
     startBroadcasting(transaction,private_key,callback) {
         try {
             return this.call('about', [''], (err, response) => {
@@ -228,8 +240,19 @@ class Sophia extends EventEmitter {
             console.log(ex);
         }
     }
-    //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-    createAccountTransaction(creator,seed,private_key,json_meta, owner, active, memo_key,callback){
+     /**
+      * Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+      * @param creator - sponsor account with enough balance for creating an account
+     * @param seed - account name (easy to remember)
+     * @param private_key - Creator's private key
+     * @param json_meta - json data (details about the account)
+     * @param owner - Owner Key
+     * @param active - Active Key
+     * @param memo_key - Memo Key
+     * @param callback
+     * @returns {object}
+     */
+    createAccount(creator,seed,private_key,json_meta, owner, active, memo_key,callback){
         return this.call('create_account',[creator,seed, json_meta, owner, active, memo_key],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -246,8 +269,18 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
-    updateAccountTransaction(account_name,private_key,json_meta,owner,active, memo_key,callback){
+    /**
+     * Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
+     * @param account_name - account name (hash / System generated)
+     * @param private_key - user's private key
+     * @param json_meta - json data (details about the account)
+     * @param owner - Owner Key
+     * @param active - Active Key
+     * @param memo_key - Memo Key
+     * @param callback
+     * @returns {object}
+     */
+    updateAccount(account_name,private_key,json_meta,owner,active, memo_key,callback){
         return this.call('update_account',[account_name, json_meta, owner, active, memo_key],(err,response)=>{
             if(err)
                 callback(err,null);
@@ -264,8 +297,14 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Delete account using user's PrivateKey
-    deleteAccountTransaction(account_name,private_key,callback){
+    /**
+     * Delete account using user's PrivateKey
+     * @param account_name - name of the account to be deleted
+     * @param private_key - user's private key
+     * @param callback
+     * @returns {object}
+     */
+    deleteAccount(account_name,private_key,callback){
         return this.call('delete_account',[account_name],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -282,8 +321,17 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
-    transferTransaction(from, to, amount, memo,private_key,callback){
+    /**
+     * Transfer an amount (in the form of "amount (space) currencySymbol i.e 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
+     * @param from - account name of sender
+     * @param to - account name of receiver
+     * @param amount - amount to be transferred
+     * @param memo - encrypted memo to be transferred along with the amount
+     * @param private_key - private key of the user
+     * @param callback
+     * @returns {object}
+     */
+    transfer(from, to, amount, memo,private_key,callback){
         return this.call('transfer',[from, to, amount, memo],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -300,8 +348,16 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Transfer amount (in the form of "amount currencySymbol, 10.000 SPHTX") to Vesting.
-    transferToVestingTransaction(from, to, amount,private_key,callback){
+    /**
+     * Transfer amount (in the form of "amount currencySymbol, 10.000 SPHTX") to Vesting.
+     * @param from - sender's account name
+     * @param to - receiver's account name
+     * @param amount - amount to be transferred
+     * @param private_key - sender's private key
+     * @param callback
+     * @returns {object}
+     */
+    transferToVesting(from, to, amount,private_key,callback){
         return this.call('transfer_to_vesting',[from, to, amount],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -316,8 +372,15 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Set a proxy account for doing votes on behalf of first account.
-    setVotingProxyTransaction(account_to_modify, proxy,private_key,callback){
+    /**
+     * Set a proxy account for doing votes on behalf of first account.
+     * @param account_to_modify - main account name
+     * @param proxy - proxy account name
+     * @param private_key - private key of the main account
+     * @param callback
+     * @returns {object}
+     */
+    setVotingProxy(account_to_modify,proxy,private_key,callback){
         return this.call('set_voting_proxy',[account_to_modify, proxy],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -332,8 +395,15 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Vote for a witness using witness name and voter's PrivateKey
-    voteForWitnessTransaction(witness_to_vote_for, approve=true,private_key,callback){
+    /**
+     * Vote for a witness using witness name and voter's PrivateKey
+     * @param witness_to_vote_for - account name of the witness
+     * @param approve - True for positive vote and false for negative vote to the witness
+     * @param private_key - private key of the user
+     * @param callback
+     * @returns {object}
+     */
+    voteForWitness(witness_to_vote_for, approve=true,private_key,callback){
         return this.call('vote_for_witness',[witness_to_vote_for, approve],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -348,8 +418,15 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Withdraw amount (in the form of "amount currencySymbol, 10.000 SPHTX") from Vesting in fractions.
-    withdrawVestingTransaction(from,vesting_shares,private_key,callback){
+    /**
+     * Withdraw amount (in the form of "amount currencySymbol, 10.000 SPHTX") from Vesting in fractions.
+     * @param from - users account name
+     * @param vesting_shares - amount to be be withdrawn from vesting account
+     * @param private_key - user's private key
+     * @param callback
+     * @returns {object}
+     */
+    withdrawVesting(from,vesting_shares,private_key,callback){
         return this.call('withdraw_vesting',[from,vesting_shares],(err,response)=>{
             if(err)
                 callback(err,'');
@@ -366,8 +443,19 @@ class Sophia extends EventEmitter {
             }
         });
     }
-    //Update witness account with maximum block size greater than minimum block size of 1024*64 and array of Prize feeds
-    updateWitnessTransaction(account_name, url, block_signing_key, accountCreationFee,maximumBlockSizeLimit,prizeFeeds,private_key,callback){
+    /**
+     * Update witness account with maximum block size greater than minimum block size of 1024*64 and array of Prize feeds
+     * @param account_name - account name of the user wishes to be witness
+     * @param url - url of the description published online about the user
+     * @param block_signing_key - users public key for signing the blocks
+     * @param accountCreationFee - account creation fees
+     * @param maximumBlockSizeLimit - maximum block size limit set by the user, minimum is 1024*64 bytes which can go upto 4mb = 4,000,000 bytes
+     * @param prizeFeeds - prize description and feeds published....? todo: prizeFeeds object generation
+     * @param private_key - private key of the user to broadcast the transaction
+     * @param callback
+     * @returns {object}
+     */
+    updateWitness(account_name, url, block_signing_key, accountCreationFee,maximumBlockSizeLimit,prizeFeeds,private_key,callback){
 
         let props={
             account_creation_fee:accountCreationFee,

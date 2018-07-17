@@ -4,25 +4,39 @@ var bigi = require('bigi'),
 	Point = ecurve.Point,
 	secp256k1 = ecurve.getCurveByName('secp256k1'),
 	config = require('../config'),
-	//operations = require('./serializer/src/operations'),
-	Signature = require('./ecc/src/signature'),
 	KeyPrivate = require('./ecc/src/key_private'),
 	PublicKey = require('./ecc/src/key_public'),
   hash = require('./ecc/src/hash');
   import {normalize} from "./ecc/src/brain_key";
-  import {encrypt,decrypt} from "./ecc/src/aes";
+
   const signature = require('./ecc/src/signature');
 
 var Auth = {};
-//var transaction = operations.transaction;
-//var signed_transaction = operations.signed_transaction;
-Auth.encrypt=function(privatekey, publickey, message){
-	return bs58.encode(encrypt(privatekey,publickey,message));
+/**
+ * @param privatekey of sender
+ * @param publickey of receiver
+ * @param message
+ * @returns {*}
+ */
+Auth.encrypt = function (privatekey, publickey, message) {
+    return bs58.encode((0, _aes.encrypt)(privatekey, publickey, message));
 };
-Auth.decrypt=function(privatekey,publickey,message){
-	let messagestring=bs58.decode(message);
-	return decrypt(privatekey,publickey,messagestring).toString();
+/**
+ * @param privatekey of receiver
+ * @param publickey of sender
+ * @param message encrypted
+ * @returns {*}
+ */
+Auth.decrypt = function (privatekey, publickey, message) {
+    var messagestring = bs58.decode(message);
+    return (0, _aes.decrypt)(privatekey, publickey, messagestring).toString();
 };
+/**
+ * @param name
+ * @param password
+ * @param auths
+ * @returns {boolean}
+ */
 Auth.verify = function (name, password, auths) {
 	var hasKey = false;
 	var roles = [];
@@ -38,22 +52,11 @@ Auth.verify = function (name, password, auths) {
 	return hasKey;
 };
 
-// Auth.generateKeys = function (name, password,roles) {
-// 	var pubKeys = {};
-// 	roles.forEach(function (role) {
-// 		var seed = name + role + password;
-// 		var brainKey = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
-// 		var hashSha256 = hash.sha256(brainKey);
-// 		var bigInt = bigi.fromBuffer(hashSha256);
-// 		var toPubKey = secp256k1.G.multiply(bigInt);
-// 		var point = new Point(toPubKey.curve, toPubKey.x, toPubKey.y, toPubKey.z);
-// 		var pubBuf = point.getEncoded(toPubKey.compressed);
-// 		var checksum = hash.ripemd160(pubBuf);
-// 		var addy = Buffer.concat([pubBuf, checksum.slice(0, 4)]);
-// 		pubKeys[role] = config.get('address_prefix') + bs58.encode(addy);});
-// 	return pubKeys;
-// };
-
+/**
+ * @param name - blockchain account name
+ * @param password - very strong password typically no shorter than a private key
+ * @returns {*}
+ */
 Auth.generatePublicKey = function (name, password) {
         var seed = name + password;
         var brainKey = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
@@ -71,7 +74,7 @@ Auth.generatePublicKey = function (name, password) {
 /**
 	@arg {string} name - blockchain account name
 	@arg {string} password - very strong password typically no shorter than a private key
-	@arg {array} roles - defaults to standard Steem blockchain-level roles
+    @returns {*}
 */
 
 Auth.getKeyPair = function (name, password) {
@@ -80,15 +83,10 @@ Auth.getKeyPair = function (name, password) {
     privKeys['public'] = this.wifToPublic(privKeys['private']);
     return privKeys;
 };
-
-// Auth.getPrivateKeys = function (name, password, roles = ['owner', 'active', 'posting', 'memo']) {
-// 	var privKeys = {};
-// 	roles.forEach(function (role) {
-// 		privKeys[role] = this.toWif(name, password, role);
-// 		privKeys[role + 'Pubkey'] = this.wifToPublic(privKeys[role]);
-// 	}.bind(this));
-// 	return privKeys;
-// };
+/**
+ * @param privWif
+ * @returns {boolean}
+ */
 Auth.isWif = function (privWif) {
 	var isWif = false;
 	try {
@@ -104,7 +102,11 @@ Auth.isWif = function (privWif) {
 	} catch (e) { }
 	return isWif;
 };
-
+/**
+ @arg {string} name - blockchain account name
+ @arg {string} password - very strong password typically no shorter than a private key
+ @returns {*}
+ */
 Auth.toWif = function (name, password) {
 	var seed = name + password;
 	var brainKey = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
@@ -116,40 +118,45 @@ Auth.toWif = function (name, password) {
 	var privWif = Buffer.concat([privKey, checksum]);
 	return bs58.encode(privWif);
 };
-
+/**
+ *
+ * @param privWif
+ * @param pubWif
+ * @returns {boolean}
+ */
 Auth.wifIsValid = function (privWif, pubWif) {
 	return (this.wifToPublic(privWif) == pubWif);
 };
-
+/**
+ * @param privWif
+ * @returns {*}
+ */
 Auth.wifToPublic = function (privWif) {
 	var pubWif = KeyPrivate.fromString(privWif);
 	pubWif = pubWif.toPublic().toString();
 	return pubWif;
 };
-
+/**
+ * @param pubkey
+ * @param address_prefix
+ * @returns {boolean}
+ */
 Auth.isPubkey = function(pubkey, address_prefix) {
 	return PublicKey.fromString(pubkey, address_prefix) != null;
 };
+/**
+ * @param digest
+ * @param privateKey
+ * @returns {*}
+ */
 Auth.createSignature=function(digest, privateKey){
 	 return signature.signHash(digest, privateKey).toHex();
 };
 
-// Auth.signTransaction = function (trx, keys) {
-// 	var signatures = [];
-// 	if (trx.signatures) {
-// 		signatures = [].concat(trx.signatures);
-// 	}
-//
-// 	var cid = new Buffer(config.get('chain_id'), 'hex');
-// 	var buf = transaction.toBuffer(trx);
-//
-// 	for (var key in keys) {
-// 		var sig = Signature.signBuffer(Buffer.concat([cid, buf]), keys[key]);
-// 		signatures.push(sig.toBuffer());
-// 	}
-//
-// 	return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
-// };
+/**
+ * @param brain_key
+ * @returns {*}
+ */
 Auth.normalizeBrainKey=function(brain_key){
 	try{
         var phrase=normalize(brain_key).toString();
