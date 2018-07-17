@@ -97,31 +97,31 @@ Check if the account still exists
  Keys
  =================
  
- generates separate public key for each of the roles
+ Generates separate public key for each of the roles
   ```js
  console.log(sophia.auth.generateKeys(name,password));
  ```
- validates account name if it can be set or not
+ Validates account name whether it can be set or not
  ```js
  console.log(sophia.utils.validateAccountName(accountName));
  ```
- generates public key and private key pair
+ Generates public key and private key pair
  ```js
  console.log(sophia.auth.getPrivateKeys(name,password));
  ```
- checks the format of Public key and decides if it is valid with prefix
+ Checks the format of Public key and decides if it is valid with prefix
  ```js
  console.log(sophia.auth.isPubkey(publicKey,prefix));
  ```
- checks the format of Private key and decides if it is valid
+ Checks the format of Private key and decides if it is valid
  ```js
  console.log(sophia.auth.isWif(privateKey));
  ```
- returns public key on supplied Private key
+ Returns public key on supplied Private key
  ```js
  console.log(sophia.auth.wifToPublic(privateKey));
  ```
- matches public key with private key returns boolean value
+ Matches public key with private key returns boolean value
  ```js
  console.log(sophia.auth.wifIsValid(privateKey,publicKey));
  ```
@@ -132,7 +132,7 @@ Check if the account still exists
 Accounts
 ================= 
 
-  Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+ Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  ```js
  sophia.api.createAccountTransaction(creatorName,seed,creatorPrivateKey,json_meta, owner, active, memo_key,function(err,response){
      console.log(err,response);
@@ -144,7 +144,7 @@ Accounts
      console.log(err,response);
  });
  ```
-   Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
+  Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  ```js
  sophia.api.updateAccountTransaction(accountName,privateKey,jsonMeta,owner,active, memoKey,function(err,response){
      console.log(err,response);
@@ -214,11 +214,9 @@ Voting
 
  Use privateKey of sender's account and publicKey of receiver's account to encrypt the message
  ```js
- console.log(sophia.auth.encrypt(privateKey,publickey
-     ,Message));
+ console.log(sophia.auth.encrypt(privateKey,publickey,Message));
 ```
  Use publicKey of sender's account and privateKey of receiver's account to decrypt the message
  ```js
- console.log(sophia.auth.decrypt(privateKey,publicKey
-     ,EncryptedMessage));
+ console.log(sophia.auth.decrypt(privateKey,publicKey,EncryptedMessage));
 ```
