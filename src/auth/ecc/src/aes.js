@@ -20,11 +20,8 @@ module.exports = {
     @arg {PrivateKey} private_key - required and used for decryption
     @arg {PublicKey} public_key - required and used to calcualte the shared secret
     @arg {string} [nonce = uniqueNonce()] - assigned a random unique uint64
-
     @return {object}
-    @property {string} nonce - random or unique uint64, provides entropy when re-using the same private/public keys.
     @property {Buffer} message - Plain text message
-    @property {number} checksum - shared secret checksum
 */
 function encrypt(private_key, public_key, message) {
     private_key = PrivateKey(private_key)
@@ -46,18 +43,6 @@ function encrypt(private_key, public_key, message) {
     ebuf.append(S.toString('binary'), 'binary')
     ebuf = new Buffer(ebuf.copy(0, ebuf.offset).toBinary(), 'binary')
     const encryption_key = hash.sha512(ebuf)
-
-    // D E B U G
-    // console.log('crypt', {
-    //     priv_to_pub: private_key.toPublic().toString(),
-    //     pub: public_key.toString(),
-    //     nonce: nonce.toString(),
-    //     message: message.length,
-    //     checksum,
-    //     S: S.toString('hex'),
-    //     encryption_key: encryption_key.toString('hex'),
-    // })
-
     const iv = encryption_key.slice(32, 48)
     const key = encryption_key.slice(0, 32)
     message = cryptoJsEncrypt(message, key, iv)
@@ -66,15 +51,11 @@ function encrypt(private_key, public_key, message) {
 
 /**
     Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
-
     @arg {PrivateKey} private_key - required and used for decryption
     @arg {PublicKey} public_key - required and used to calcualte the shared secret
     @arg {string} nonce - random or unique uint64, provides entropy when re-using the same private/public keys.
     @arg {Buffer} message - Encrypted or plain text message
-    @arg {number} checksum - shared secret checksum
-
     @throws {Error|TypeError} - "Invalid Key, ..."
-
     @return {Buffer} - message
 */
 function decrypt(private_key, public_key, message) {
@@ -97,18 +78,6 @@ function decrypt(private_key, public_key, message) {
     ebuf.append(S.toString('binary'), 'binary')
     ebuf = new Buffer(ebuf.copy(0, ebuf.offset).toBinary(), 'binary')
     const encryption_key = hash.sha512(ebuf)
-
-    // D E B U G
-    // console.log('crypt', {
-    //     priv_to_pub: private_key.toPublic().toString(),
-    //     pub: public_key.toString(),
-    //     nonce: nonce.toString(),
-    //     message: message.length,
-    //     checksum,
-    //     S: S.toString('hex'),
-    //     encryption_key: encryption_key.toString('hex'),
-    // })
-
     const iv = encryption_key.slice(32, 48)
     const key = encryption_key.slice(0, 32)
 

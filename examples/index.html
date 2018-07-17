@@ -7,11 +7,11 @@
 <body>
 <script src="../dist/alexandria.min.js"></script>
 <script>
- //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
- // sophia.api.createAccount('GN3Ug8ou6tiE4kWvyopJBJmZgcw','Test12435353353egerg456','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
- //     'SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',function(err,response){
- //     console.log(err,response);
- // });
+//      //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+//  sophia.api.createAccount('GN3Ug8ou6tiE4kWvyopJBJmZgcw','Test12435353353egerg456rte','5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
+//      'SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',function(err,response){
+//      console.log(err,response);
+//  });
 //     //Delete account using user's PrivateKey
 //  sophia.api.deleteAccount('4X67GiCWDDdw2oRD5gGe1TeYbhih','5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF',function(err,response){
 //      console.log(err,response);
@@ -98,11 +98,11 @@
 //      console.log(err, response);
 //  });
 //     // generates separate public key for each of the roles
-//console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
+// console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
 // console.log(sophia.utils.validateAccountName('dan home ace'));
 //     // generates public key and private key pair
-//console.log(sophia.auth.getKeyPair('sanjiv','abcde'));
+// console.log(sophia.auth.getKeyPair('sanjiv','abcde'));
 //     //checks the format of Public key and decides if it is valid with prefix
 // console.log(sophia.auth.isPubkey('SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','SPH'));
 //     //checks the format of Private key and decides if it is valid
@@ -113,25 +113,25 @@
 // console.log(sophia.auth.wifIsValid('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'));
 //     //Corrects the caps and spaces in distorted passPhrase (brainKey)
 // console.log(sophia.auth.normalizeBrainKey('DERRIDE BASCULE NIMBUS DOXA BURL AURALLY OER GOSSIPY BEHALE PINKER INVOKER YAULD HOYLE POTTY TITE WHUD'));
- //  //........Test not completed
- //       let feedvalue={
- //           value:767889,
- //       };
- //       let feedquote={
- //           base:'9.000 EUR',
- //           quote:'8.0000 SPHTX'
- //       };
- //       let prizeFeed=[[feedvalue,feedquote]];
- //       sophia.api.updateWitnessTransaction('32KHRSaU8djTceiu7KCtth86TVW3','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,prizeFeed,'5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF',function(err,response){
- //           console.log(err,response);
- //       });
- //  //........
- //   //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
- // console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
- //     ,'Hello World of JS'));
- // //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
- // console.log(sophia.auth.decrypt('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
- //     ,'C1nxfKaK8fHxD2TB6JSru1knJJq5Dz6im2SD8pqV8JhS'));
+//   //........Test not completed
+//        let feedvalue={
+//            value:767889,
+//        };
+//        let feedquote={
+//            base:'9.000 EUR',
+//            quote:'8.0000 SPHTX'
+//        };
+//        let prizeFeed=[[feedvalue,feedquote]];
+//        sophia.api.updateWitnessTransaction('32KHRSaU8djTceiu7KCtth86TVW3','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,prizeFeed,'5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF',function(err,response){
+//            console.log(err,response);
+//        });
+//   //........
+   //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
+ console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
+     ,'Hello World of JS'));
+ //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
+ console.log(sophia.auth.decrypt('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
+     ,'C1nxfKaK8fHxD2TB6JSru1knJJq5Dz6im2SD8pqV8JhS'));
 </script>
 </body>
 </html>

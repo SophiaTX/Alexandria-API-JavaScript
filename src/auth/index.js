@@ -2,14 +2,14 @@ var bigi = require('bigi'),
 	bs58 = require('bs58'),
 	ecurve = require('ecurve'),
 	Point = ecurve.Point,
+    _aes = require('./ecc/src/aes'),
 	secp256k1 = ecurve.getCurveByName('secp256k1'),
 	config = require('../config'),
 	KeyPrivate = require('./ecc/src/key_private'),
 	PublicKey = require('./ecc/src/key_public'),
-  hash = require('./ecc/src/hash');
-  import {normalize} from "./ecc/src/brain_key";
-
-  const signature = require('./ecc/src/signature');
+    hash = require('./ecc/src/hash');
+import {normalize} from "./ecc/src/brain_key";
+const signature = require('./ecc/src/signature');
 
 var Auth = {};
 /**
