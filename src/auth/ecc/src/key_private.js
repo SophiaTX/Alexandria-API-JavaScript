@@ -39,8 +39,6 @@ function PrivateKey(d) {
 
     /** @return {string} private key like PVT_K1_base58privatekey.. */
     function toString() {
-      // todo, use PVT_K1_
-      // return 'PVT_K1_' + keyUtils.checkEncode(toBuffer(), 'K1')
       return toWif()
     }
 
@@ -92,18 +90,6 @@ function PrivateKey(d) {
         // SHA512 used in ECIES
         return hash.sha512(S)
     }
-
-    // /** ECIES TODO unit test
-    //   @arg {string|Object} pubkey wif, PublicKey object
-    //   @return {Buffer} 64 byte shared secret
-    // */
-    // function getSharedSecret(public_key) {
-    //     public_key = PublicKey(public_key).toUncompressed()
-    //     var P = public_key.Q.multiply( d );
-    //     var S = P.affineX.toBuffer({size: 32});
-    //     // ECIES, adds an extra sha512
-    //     return hash.sha512(S);
-    // }
 
     /**
       @arg {string} name - child key name.
@@ -213,12 +199,6 @@ PrivateKey.isValid = function(key) {
     }
 }
 
-/** @deprecated */
-PrivateKey.fromWif = function(str) {
-    console.log('PrivateKey.fromWif is deprecated, please use PrivateKey.fromString');
-    return PrivateKey.fromString(str)
-}
-
 /**
     @throws {AssertError|Error} parsing key
     @arg {string} privateStr Eosio or Wallet Import Format (wif) -- a secret
@@ -268,7 +248,6 @@ function initialize() {
     return
   }
 
-  unitTest()
   keyUtils.addEntropy(...keyUtils.cpuEntropy())
   assert(keyUtils.entropyCount() >= 128, 'insufficient entropy')
 
@@ -276,33 +255,6 @@ function initialize() {
 }
 
 PrivateKey.initialize = promiseAsync(initialize)
-
-/**
-  Unit test basic private and public key functionality.
-
-  @throws {AssertError}
-*/
-function unitTest() {
-  const pvt = PrivateKey(hash.sha256(''))
-
-  const pvtError = 'key comparison test failed on a known private key'
-  assert.equal(pvt.toWif(), '5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss', pvtError)
-  assert.equal(pvt.toString(), '5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss', pvtError)
-  // assert.equal(pvt.toString(), 'PVT_K1_2jH3nnhxhR3zPUcsKaWWZC9ZmZAnKm3GAnFD1xynGJE1Znuvjd', pvtError)
-
-  const pub = pvt.toPublic()
-  const pubError = 'pubkey string comparison test failed on a known public key'
-  assert.equal(pub.toString(), 'SPH859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM', pubError)
-  // assert.equal(pub.toString(), 'PUB_K1_859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2Ht7beeX', pubError)
-  // assert.equal(pub.toStringLegacy(), 'EOS859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM', pubError)
-
-  doesNotThrow(() => PrivateKey.fromString(pvt.toWif()), 'converting known wif from string')
-  doesNotThrow(() => PrivateKey.fromString(pvt.toString()), 'converting known pvt from string')
-  doesNotThrow(() => PublicKey.fromString(pub.toString()), 'converting known public key from string')
-  // doesNotThrow(() => PublicKey.fromString(pub.toStringLegacy()), 'converting known public key from string')
-
-  unitTested = true
-}
 
 /** @private */
 const doesNotThrow = (cb, msg) => {

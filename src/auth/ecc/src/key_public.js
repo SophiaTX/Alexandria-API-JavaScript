@@ -32,19 +32,6 @@ function PublicKey(Q) {
 
     let pubdata // cache
 
-    // /**
-    //     @todo secp224r1
-    //     @return {string} PUB_K1_base58pubkey..
-    // */
-    // function toString() {
-    //     if(pubdata) {
-    //         return pubdata
-    //     }
-    //     pubdata = `PUB_K1_` + keyUtils.checkEncode(toBuffer(), 'K1')
-    //     return pubdata;
-    // }
-
-    /** @todo rename to toStringLegacy */
     function toString() {
       return 'SPH' + keyUtils.checkEncode(toBuffer())
     }

@@ -19,7 +19,9 @@ const externalEntropyArray = randomBytes(101)
 
 
 /**
-    Additional forms of entropy are used.  A week random number generator can run out of entropy.  This should ensure even the worst random number implementation will be reasonably safe.
+    Additional forms of entropy are used.
+    A week random number generator can run out of entropy.
+    This should ensure even the worst random number implementation will be reasonably safe.
 
     @arg {number} [cpuEntropyBits = 0] generate entropy on the fly.  This is
     not required, entropy can be added in advanced via addEntropy or initialize().
@@ -34,12 +36,8 @@ function random32ByteBuffer({cpuEntropyBits = 0, safe = true} = {}) {
     assert(typeof safe, 'boolean', 'boolean')
 
     if(safe) {
-      assert(entropyCount >= 128, 'Call initialize() to add entropy')
+        assert(entropyCount >= 128, 'Call initialize() to add entropy')
     }
-
-    // if(entropyCount > 0) {
-    //     console.log(`Additional private key entropy: ${entropyCount} events`)
-    // }
 
     const hash_array = []
     hash_array.push(randomBytes(32))
@@ -53,21 +51,6 @@ function random32ByteBuffer({cpuEntropyBits = 0, safe = true} = {}) {
     Adds entropy.  This may be called many times while the amount of data saved
     is accumulatively reduced to 101 integers.  Data is retained in RAM for the
     life of this module.
-
-    @example React <code>
-    componentDidMount() {
-        this.refs.MyComponent.addEventListener("mousemove", this.onEntropyEvent, {capture: false, passive: true})
-    }
-    componentWillUnmount() {
-        this.refs.MyComponent.removeEventListener("mousemove", this.onEntropyEvent);
-    }
-    onEntropyEvent = (e) => {
-        if(e.type === 'mousemove')
-            key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY)
-        else
-            console.log('onEntropyEvent Unknown', e.type, e)
-    }
-    </code>
 */
 function addEntropy(...ints) {
     assert.equal(externalEntropyArray.length, 101, 'externalEntropyArray')

@@ -1,7 +1,5 @@
 import Promise from 'bluebird';
 import isNode from 'detect-node';
-import newDebug from 'debug';
-
 import Transport from './base';
 
 let WebSocket;
@@ -13,7 +11,6 @@ if (isNode) {
   throw new Error("Couldn't decide on a `WebSocket` class");
 }
 
-const debug = newDebug('steem:ws');
 
 export default class WsTransport extends Transport {
   constructor(options = {}) {
@@ -62,7 +59,7 @@ export default class WsTransport extends Transport {
   }
 
   send(api, data, callback) {
-    debug('Steem::send', api, data);
+    debug('Sophia::send', api, data);
     return this.start().then(() => {
       const deferral = {};
       new Promise((resolve, reject) => {
@@ -134,6 +131,5 @@ export default class WsTransport extends Transport {
       this.emit('track-performance', _request.message.method, Date.now() - _request.startedAt);
       _request.deferral.resolve(message.result);
     }
-
   }
 }

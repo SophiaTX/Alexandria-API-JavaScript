@@ -13,8 +13,6 @@ module.exports = {
 }
 
 /**
-    Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
-
     @throws {Error|TypeError} - "Invalid Key, ..."
 
     @arg {PrivateKey} private_key - required and used for decryption
@@ -50,7 +48,6 @@ function encrypt(private_key, public_key, message) {
 }
 
 /**
-    Spec: http://localhost:3002/steem/@dantheman/how-to-encrypt-a-memo-when-transferring-steem
     @arg {PrivateKey} private_key - required and used for decryption
     @arg {PublicKey} public_key - required and used to calcualte the shared secret
     @arg {string} nonce - random or unique uint64, provides entropy when re-using the same private/public keys.
@@ -183,7 +180,9 @@ function cryptoJsEncrypt(message, key, iv) {
     return message;
 }
 
-/** @return {string} unique 64 bit unsigned number string.  Being time based, this is careful to never choose the same nonce twice.  This value could be recorded in the blockchain for a long time.
+/** @return {string} unique 64 bit unsigned number string.
+ * Being time based, this is careful to never choose the same nonce twice.
+ * This value could be recorded in the blockchain for a long time.
 */
 function uniqueNonce() {
     if(unique_nonce_entropy === null) {

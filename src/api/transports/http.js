@@ -2,7 +2,7 @@ import fetch from 'cross-fetch';
 import newDebug from 'debug';
 import Transport from './base';
 
-const debug = newDebug('steem:http');
+const debug = newDebug('sophia:http');
 
 class RPCError extends Error {
   constructor(rpcError) {
@@ -39,7 +39,7 @@ export default class HttpTransport extends Transport {
     if (this.options.useAppbaseApi) {
         api = 'condenser_api';
     }
-    debug('Steem::send', api, data);
+    debug('Sophia::send', api, data);
     const id = data.id || this.id++;
     const params = [api, data.method, data.params];
     jsonRpc(this.options.uri, {method: 'call', id, params})

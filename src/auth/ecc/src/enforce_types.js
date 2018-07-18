@@ -1,4 +1,4 @@
-module.exports = function enforce(type, value) { // Copied from https://github.com/bitcoinjs/bitcoinjs-lib
+module.exports = function enforce(type, value) {
   switch (type) {
     case 'Array': {
       if (Array.isArray(value)) return
