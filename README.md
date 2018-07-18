@@ -58,7 +58,7 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
- Get transaction history of an account from (start from) and limit (number of data to be displayed)
+ Get transaction history of an account from (-1 means most recent entry) and limit (number of data to be displayed)
  ```js
  sophia.api.getAccountHistory(accountName,from,limit,function(err, response){
      console.log(err, response);
