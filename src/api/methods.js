@@ -62,6 +62,7 @@ export default [
         "method": "get_account_name_from_seed",
         "params": ["seed"]
     },
+
     {
         "method": "account_exist",
         "params": ["account_name"]
