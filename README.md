@@ -60,7 +60,7 @@ Check if the account still exists
  ```
  Get transaction history of an account
  ```js
- sophia.api.getAccountHistory(accountName,from,to,function(err, response){
+ sophia.api.getAccountHistory(accountName,from,limit,function(err, response){
      console.log(err, response);
  });
  ```
