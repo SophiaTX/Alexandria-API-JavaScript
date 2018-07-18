@@ -95,6 +95,12 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
+  Get feed history of the currency using its symbol
+  ```js
+   sophia.api.getFeedHistory(symbol,function(err, response){
+       console.log(err, response);
+   });
+ ```
  Keys
  =================
  

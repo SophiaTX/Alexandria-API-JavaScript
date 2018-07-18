@@ -25,7 +25,8 @@ export default [
       "params": ["blockNum", "onlyVirtual"]
     },
     {
-      "method": "get_feed_history"
+      "method": "get_feed_history",
+        "params": ["symbol"]
     },
     {
       "method": "get_account",
