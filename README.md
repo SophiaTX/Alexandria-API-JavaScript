@@ -25,13 +25,13 @@ npm run build
 Help
 =================
 
- Get the information about the blockchain
+ Get the current version and information about the blockchain
 ```js
 sophia.api.about(function(err, response){
   console.log(err, response);
 });
 ```
-Get help to work with the blockchain, this returns all the method and necessary details about the blockchain its functionalities.
+Get help to work with the blockchain, this returns all the method and necessary details about the blockchain and its methods.
 ```js
 sophia.api.info(function(err, response){
     console.log(err, response);
