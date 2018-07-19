@@ -165,7 +165,7 @@ Accounts
  ```
   Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  ```js
- sophia.api.updateAccount(accountName,privateKey,jsonMeta,owner,active, memoKey,function(err,response){
+ sophia.api.updateAccount(accountName,jsonMeta,owner,active, memoKey,,privateKey,function(err,response){
      console.log(err,response);
  });
  ```

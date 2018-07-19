@@ -91,6 +91,14 @@ export default [
     {
         "method": "get_vesting_balance",
         "params": ["account_name"]
+    },
+    {
+        "method": "calculate_fee",
+        "params": ["op","symbol"]
+    },
+    {
+        "method": "add_fee",
+        "params": ["op","fee"]
     }
 
 ];

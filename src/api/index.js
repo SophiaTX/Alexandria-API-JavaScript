@@ -154,6 +154,7 @@ class Sophia extends EventEmitter {
             return
         }
         const id = ++this.seqNo;
+
         jsonRpc(this.options.uri, {method, params, id})
             .then(res => { callback(null, res) }, err => { callback(err) });
     }
@@ -280,7 +281,7 @@ class Sophia extends EventEmitter {
      * @param callback
      * @returns {object}
      */
-    updateAccount(account_name,private_key,json_meta,owner,active, memo_key,callback){
+    updateAccount(account_name,json_meta,owner,active, memo_key,private_key,callback){
         return this.call('update_account',[account_name, json_meta, owner, active, memo_key],(err,response)=>{
             if(err)
                 callback(err,null);
