@@ -242,7 +242,7 @@ Voting
  ```
  Vote for a witness using witness name and voter's PrivateKey
  ```js
- sophia.api.voteForWitness(witnessToVoteFor, approve=true,privateKey,function(err,response){
+ sophia.api.voteForWitness(accountToVoteWith, witnessToVoteFor, approve=true,privateKey,function(err,response){
      console.log(err,response);
  });
  ```

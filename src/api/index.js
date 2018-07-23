@@ -204,7 +204,7 @@ class Sophia extends EventEmitter {
 
     startBroadcasting(operation,private_key,callback) {
         let chain_id;
-        let operationWithFee;
+        let transaction;
         try {
             return this.call('about', [''], (err, response) => {
                 if (err)
@@ -215,40 +215,46 @@ class Sophia extends EventEmitter {
                     this.call('calculate_fee',[operation,'SPHTX'],(err,response)=>{
                         if (err)
                             callback(err, '');
+
                         else {
-                            console.log(response);
+                            console.log('Estimated fees for this transaction is:'+response);
                                 this.call('add_fee',[operation,response],(err,response)=>{
                                     if(err){
                                         callback(err, '');
                                     }
                                     else{
-                                        operationWithFee=response;
-                                        console.log(operationWithFee);
-                            this.call('get_transaction_digest', [operationWithFee, chain_id], (err, response) => {
-                                if (err)
-                                    callback(err, '');
-                                else {
-                                    let sign = auth.createSignature(response, private_key);
+                                        this.call('create_simple_transaction',[response],(err,response)=> {
+                                            if (err)
+                                                callback(err, '');
+                                            else {
+                                                transaction=response;
+                                                this.call('get_transaction_digest', [transaction, chain_id], (err, response) => {
+                                                    if (err)
+                                                        callback(err, '');
+                                                    else {
+                                                        let sign = auth.createSignature(response, private_key);
 
-                                    this.call('add_signature', [operationWithFee, sign], (err, response) => {
-                                        if (err)
-                                            callback(err, '');
-                                        else {
-                                            this.call('broadcast_transaction', [response], (err, response) => {
-                                                if (err)
-                                                    console.log(err);
+                                                        this.call('add_signature', [transaction, sign], (err, response) => {
+                                                            if (err)
+                                                                callback(err, '');
+                                                            else {
+                                                                this.call('broadcast_transaction', [response], (err, response) => {
+                                                                    if (err)
+                                                                        console.log(err);
 
-                                                else {
-                                                    console.log('New transaction id is:' + response.transaction_id);
-                                                    callback('', response);
-                                                }
+                                                                    else {
+                                                                        console.log('New transaction id is:' + response.transaction_id);
+                                                                        callback('', response);
+                                                                    }
 
-                                            });
-                                        }
+                                                                });
+                                                            }
 
-                                    });
-                                }
-                            });
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
                         }
@@ -278,15 +284,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
-
-
+                this.startBroadcasting(response,private_key,callback);
             }
         });
     }
@@ -306,15 +304,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,null);
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, null);
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
-
-
+                 this.startBroadcasting(response,private_key,callback)
             }
         });
     }
@@ -330,15 +320,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
-
-
+                 this.startBroadcasting(response,private_key,callback)
             }
         });
     }
@@ -357,15 +339,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
-
-
+                this.startBroadcasting(response,private_key,callback)
             }
         });
     }
@@ -383,13 +357,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
+                this.startBroadcasting(response,private_key,callback);
             }
         });
     }
@@ -406,13 +374,8 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
+                 this.startBroadcasting(response,private_key,callback)
+
             }
         });
     }
@@ -424,18 +387,12 @@ class Sophia extends EventEmitter {
      * @param callback
      * @returns {object}
      */
-    voteForWitness(witness_to_vote_for, approve=true,private_key,callback){
-        return this.call('vote_for_witness',[witness_to_vote_for, approve],(err,response)=>{
+    voteForWitness(accountToVoteWith, witness_to_vote_for, approve=true,private_key,callback){
+        return this.call('vote_for_witness',[accountToVoteWith, witness_to_vote_for, approve],(err,response)=>{
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
+                        this.startBroadcasting(response,private_key,callback);
             }
         });
     }
@@ -452,15 +409,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
-
-
+                this.startBroadcasting(response,private_key,callback);
             }
         });
     }
@@ -489,19 +438,20 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                this.call('create_simple_transaction',[response],(err,response)=> {
-                    if (err)
-                        callback(err, '');
-                    else {
-                        this.startBroadcasting(response,private_key,callback)
-                    }
-                });
-
-
+                 this.startBroadcasting(response,private_key,callback)
             }
         });
     }
 
+    /**
+     * Get account history depending on the search type
+     * @param accountName - name of the the account
+     * @param type - type of operation
+     * @param from - starting point of the search
+     * @param limit - number of data to be searched
+     * @param callback - callback function
+     * @return {Object}
+     */
     getAccountHistoryByType(accountName,type,from, limit,callback) {
         return this.call('get_account_history', [accountName, from, limit], (err, response) => {
             if (err)

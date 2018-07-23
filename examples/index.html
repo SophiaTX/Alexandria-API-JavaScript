@@ -8,8 +8,8 @@
 <body>
 <script src="../dist/alexandria.min.js"></script>
 <script>
-   // // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-   // sophia.api.createAccount('initminer','test45747477','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+   // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+   // sophia.api.createAccount('initminer','test45747477ww12','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
    //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
    //         console.log(err,response);
    //     });
@@ -22,8 +22,8 @@
  //    'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
  //     console.log(err,response);
  // });
- // //   //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
- // sophia.api.transfer('martyn', 'rumGMWVHCxedjhSHMBQYk3o9LVD', '10.000 SPHTX','transfer to testing','5JYeZJMfYazRE3W9w6VAofBx9s9pUCpQzcqSpAiPTirfKVb1XMM',function(err,response){
+ //   //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
+ // sophia.api.transfer('martyn', 'sanjiv', '10.000 SPHTX','transfer to testing','5JYeZJMfYazRE3W9w6VAofBx9s9pUCpQzcqSpAiPTirfKVb1XMM',function(err,response){
  //     console.log(err,response);
  //  });
 //     //Set a proxy account for doing votes on behalf of first account.
@@ -39,9 +39,9 @@
 //      console.log(err,response);
 //  });
 //     //Vote for a witness using witness name and voter's PrivateKey
-//  sophia.api.voteForWitness('rumGMWVHCxedjhSHMBQYk3o9LVD', 'GN3Ug8ou6tiE4kWvyopJBJmZgcw', true,'5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV',function(err,response){
-//      console.log(err,response);
-//  });
+ sophia.api.voteForWitness('sanjiv', 'initminer', true,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
+     console.log(err,response);
+ });
 //     //Get the information about the blockchain
 // sophia.api.about(function(err, response){
 //   console.log(err, response);
@@ -58,10 +58,10 @@
 // sophia.api.getOpsInBlock('1983',true,function(err, response){
 //     console.log(err, response);
 // });
-//   //Get account details
-//    sophia.api.getAccount('sanjiv', function(err, response){
-//        console.log(err, response);
-//    });
+  //Get account details
+   sophia.api.getAccount('test45747477ww', function(err, response){
+       console.log(err, response);
+   });
 //   //Get list of Witnesses or miners
 // sophia.api.listWitnesses('initminer','10',function(err, response){
 //     console.log(err, response);
@@ -78,10 +78,10 @@
  // sophia.api.getAccountHistory('matej','10','9',function(err, response){
  //     console.log(err, response);
  // });
-   // Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
-   sophia.api.getAccountHistoryByType('matej','witness_update','10','9',function(err, response){
-       console.log(err, response);
-   });
+ //   // Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
+ //   sophia.api.getAccountHistoryByType('matej','transfer','12','10',function(err, response){
+ //       console.log(err, response);
+ //   });
  //   // Get transaction details using transaction id
  //   sophia.api.getTransaction('983a427bb721bd7bf8e307839f895b7bc37432d9',function(err, response){
  //       console.log(err, response);
