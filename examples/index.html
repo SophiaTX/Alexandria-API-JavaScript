@@ -8,8 +8,8 @@
 <body>
 <script src="../dist/alexandria.min.js"></script>
 <script>
-   // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-   // sophia.api.createAccount('initminer','sanjiv','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+   // // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+   // sophia.api.createAccount('initminer','test45747477','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
    //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
    //         console.log(err,response);
    //     });
@@ -78,10 +78,14 @@
  // sophia.api.getAccountHistory('matej','10','9',function(err, response){
  //     console.log(err, response);
  // });
-   // Get transaction details using transaction id
-   sophia.api.getTransaction('983a427bb721bd7bf8e307839f895b7bc37432d9',function(err, response){
+   // Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
+   sophia.api.getAccountHistoryByType('matej','witness_update','10','9',function(err, response){
        console.log(err, response);
    });
+ //   // Get transaction details using transaction id
+ //   sophia.api.getTransaction('983a427bb721bd7bf8e307839f895b7bc37432d9',function(err, response){
+ //       console.log(err, response);
+ //   });
  //   //Get feed history
  //  sophia.api.getFeedHistory('SPHTX',function(err, response){
  //      console.log(err, response);

@@ -64,6 +64,12 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
+ Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
+ ```js
+ sophia.api.getAccountHistoryByType(accountName,type,from,limit,function(err, response){
+      console.log(err, response);
+ });
+```
  Get ActiveKey related to the account
  ```js
  sophia.api.getActiveAuthority(accountName,function(err, response){

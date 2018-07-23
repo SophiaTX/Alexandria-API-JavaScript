@@ -201,40 +201,60 @@ class Sophia extends EventEmitter {
      * @param callback
      * @returns {Transaction id and object}
      */
+
     startBroadcasting(operation,private_key,callback) {
+        let chain_id;
+        let operationWithFee;
         try {
             return this.call('about', [''], (err, response) => {
                 if (err)
                     callback(err, '');
                 else {
-                    console.log('Transaction is being generated on chain id:'+response.chain_id);
-                    this.call('get_transaction_digest', [operation, response.chain_id], (err, response) => {
+                    chain_id=response.chain_id;
+                    console.log('Transaction is being generated on chain id:'+chain_id);
+                    this.call('calculate_fee',[operation,'SPHTX'],(err,response)=>{
                         if (err)
                             callback(err, '');
                         else {
-                            let sign = auth.createSignature(response, private_key);
-
-                            this.call('add_signature', [operation, sign], (err, response) => {
+                            console.log(response);
+                                this.call('add_fee',[operation,response],(err,response)=>{
+                                    if(err){
+                                        callback(err, '');
+                                    }
+                                    else{
+                                        operationWithFee=response;
+                                        console.log(operationWithFee);
+                            this.call('get_transaction_digest', [operationWithFee, chain_id], (err, response) => {
                                 if (err)
                                     callback(err, '');
                                 else {
-                                    this.call('broadcast_transaction', [response], (err,response)=>{
-                                        if(err)
-                                            console.log(err);
+                                    let sign = auth.createSignature(response, private_key);
 
-                                        else
-                                        {
-                                            console.log('New transaction id is:'+response.transaction_id);
-                                            callback('',response);
+                                    this.call('add_signature', [operationWithFee, sign], (err, response) => {
+                                        if (err)
+                                            callback(err, '');
+                                        else {
+                                            this.call('broadcast_transaction', [response], (err, response) => {
+                                                if (err)
+                                                    console.log(err);
+
+                                                else {
+                                                    console.log('New transaction id is:' + response.transaction_id);
+                                                    callback('', response);
+                                                }
+
+                                            });
                                         }
 
                                     });
                                 }
-
                             });
+                                    }
+                                });
                         }
                     });
                 }
+
             });
         }
         catch(ex){
@@ -444,6 +464,8 @@ class Sophia extends EventEmitter {
             }
         });
     }
+
+
     /**
      * Update witness account with maximum block size greater than minimum block size of 1024*64 and array of Prize feeds
      * @param account_name - account name of the user wishes to be witness
@@ -480,7 +502,21 @@ class Sophia extends EventEmitter {
         });
     }
 
+    getAccountHistoryByType(accountName,type,from, limit,callback) {
+        return this.call('get_account_history', [accountName, from, limit], (err, response) => {
+            if (err)
+                callback(err, '');
+            else {
+                response.forEach(r=>{
+                    let operationName=r[r.length-1].op[r.length-2];
+                    if(operationName===type){
+                        callback('',r[r.length-1]);
+                    }
 
+                });
+            }
+        });
+    }
 
     // streamBlockNumber(mode = 'head', callback, ts = 200) {
     //     if (typeof mode === 'function') {
