@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="5">
+  <!--<meta http-equiv="refresh" content="5">-->
   <title>Alexandria.js</title>
 </head>
 <body>
@@ -22,8 +22,8 @@
  //    'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
  //     console.log(err,response);
  // });
- //   //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
- // sophia.api.transfer('initminer', 'rumGMWVHCxedjhSHMBQYk3o9LVD', '100000 SPHTX','transfer for testing','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err,response){
+ // //   //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
+ // sophia.api.transfer('martyn', 'rumGMWVHCxedjhSHMBQYk3o9LVD', '10.000 SPHTX','transfer to testing','5JYeZJMfYazRE3W9w6VAofBx9s9pUCpQzcqSpAiPTirfKVb1XMM',function(err,response){
  //     console.log(err,response);
  //  });
 //     //Set a proxy account for doing votes on behalf of first account.
@@ -58,10 +58,10 @@
 // sophia.api.getOpsInBlock('1983',true,function(err, response){
 //     console.log(err, response);
 // });
-  //Get account details
-   sophia.api.getAccount('sanjiv', function(err, response){
-       console.log(err, response);
-   });
+//   //Get account details
+//    sophia.api.getAccount('sanjiv', function(err, response){
+//        console.log(err, response);
+//    });
 //   //Get list of Witnesses or miners
 // sophia.api.listWitnesses('initminer','10',function(err, response){
 //     console.log(err, response);
@@ -71,31 +71,35 @@
 //     console.log(err, response);
 // });
 //   //Check if the account still exists
-//  sophia.api.accountExist('rumGMWVHCxedjhSHMBQYk3o9LVD',function(err, response){
+//  sophia.api.accountExist('sanjiv',function(err, response){
 //      console.log(err, response);
-//  });
-//  // Get transaction history of an account
-//  sophia.api.getAccountHistory('45fR5HHoV2XA7NyvKdc3CK4WrixE','10','9',function(err, response){
-//      console.log(err, response);
-//  });
+ // });
+ // // Get transaction history of an account
+ // sophia.api.getAccountHistory('matej','10','9',function(err, response){
+ //     console.log(err, response);
+ // });
+   // Get transaction details using transaction id
+   sophia.api.getTransaction('983a427bb721bd7bf8e307839f895b7bc37432d9',function(err, response){
+       console.log(err, response);
+   });
  //   //Get feed history
  //  sophia.api.getFeedHistory('SPHTX',function(err, response){
  //      console.log(err, response);
  //  });
-//   //Get ActiveKey related to the account
-//  sophia.api.getActiveAuthority('ArkTree1',function(err, response){
-//      console.log(err, response);
-//  });
+ //  //Get ActiveKey related to the account
+ // sophia.api.getActiveAuthority('ArkTree1',function(err, response){
+ //     console.log(err, response);
+ // });
 //   //Get OwnerKey related to the account
 //  sophia.api.getOwnerAuthority('ArkTree1',function(err, response){
 //      console.log(err, response);
 //  });
 //     //Get account balance of an account
-//     sophia.api.getAccountBalance('matej',function(err, response){
+//     sophia.api.getAccountBalance('initminer',function(err, response){
 //         console.log(err, response);
 //     });
 //   //Get account name using the seed(Any data string including uppercase,lowercase and numbers) used to create the account.
-//   sophia.api.getAccountNameFromSeed('initminer',function(err, response){
+//   sophia.api.getAccountNameFromSeed('martyn',function(err, response){
 //        console.log(err, response);
 //   });
 //   //Get vesting balance of the account
@@ -119,19 +123,19 @@
 //     //Corrects the caps and spaces in distorted passPhrase (brainKey)
 // console.log(sophia.auth.normalizeBrainKey('DERRIDE BASCULE NIMBUS DOXA BURL AURALLY OER GOSSIPY BEHALE PINKER INVOKER YAULD HOYLE POTTY TITE WHUD'));
 // //Update witness is the function to create a witness contender, prize feed example ([["USD",{"base":"1 USD","quote":"10 SPHTX"}]]) can be used for testing,
-   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
-   //To become a witness user should have atleast 250,000 SPHTX in their vesting account.
-//        let prizeFeed=[["USD",{"base":"1 USD","quote":"10 SPHTX"}]];
-//        sophia.api.updateWitness('rumGMWVHCxedjhSHMBQYk3o9LVD','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,
-//            prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
-//            console.log(err,response);
-//        });
+//   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
+//   //To become a witness user should have atleast 250,000 SPHTX in their vesting account.
+// let prizeFeed=[["USD",{"base":"1 USD","quote":"10 SPHTX"}]];
+// sophia.api.updateWitness('rumGMWVHCxedjhSHMBQYk3o9LVD','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,
+// prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
+// console.log(err,response);
+// });
 //    //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
-//  console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
-//      ,'Hello World of JS'));
+// console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
+//  ,'Hello World of JS'));
 //  //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
-//  console.log(sophia.auth.decrypt('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
-//      ,'C1nxfKaK8fHxD2TB6JSru1knJJq5Dz6im2SD8pqV8JhS'));
+// console.log(sophia.auth.decrypt('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
+//  ,'C1nxfKaK8fHxD2TB6JSru1knJJq5Dz6im2SD8pqV8JhS'));
 </script>
 </body>
 </html>

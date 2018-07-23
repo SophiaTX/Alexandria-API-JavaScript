@@ -196,8 +196,12 @@ Accounts
       console.log(err,response);
   });
   ```
- 
- 
+  Get transaction details using transaction id
+  ```js
+  sophia.api.getTransaction(transactionId,function(err, response){
+       console.log(err, response);
+  });
+ ```
 Witness
 =================
 Update witness is the function to update an existing account as a witness contender it needs prize feed update as an argument, 
