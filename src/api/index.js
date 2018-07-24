@@ -63,7 +63,6 @@ class Sophia extends EventEmitter {
             if (this.transport && this._transportType !== options.transport) {
                 this.transport.stop();
             }
-
             this._transportType = options.transport;
 
             if (typeof options.transport === 'string') {
@@ -228,7 +227,7 @@ class Sophia extends EventEmitter {
                                                 callback(err, '');
                                             else {
                                                 transaction=response;
-                                                this.call('get_transaction_digest', [transaction, chain_id], (err, response) => {
+                                                this.call('get_transaction_digest', [transaction], (err, response) => {
                                                     if (err)
                                                         callback(err, '');
                                                     else {
@@ -392,7 +391,7 @@ class Sophia extends EventEmitter {
             if(err)
                 callback(err,'');
             else {
-                        this.startBroadcasting(response,private_key,callback);
+                this.startBroadcasting(response,private_key,callback);
             }
         });
     }

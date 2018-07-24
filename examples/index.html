@@ -9,7 +9,7 @@
 <script src="../dist/alexandria.min.js"></script>
 <script>
    // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-   // sophia.api.createAccount('initminer','test45747477ww12','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+   // sophia.api.createAccount('initminer','test45747477ww124556','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
    //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
    //         console.log(err,response);
    //     });
@@ -39,9 +39,9 @@
 //      console.log(err,response);
 //  });
 //     //Vote for a witness using witness name and voter's PrivateKey
- sophia.api.voteForWitness('sanjiv', 'initminer', true,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
-     console.log(err,response);
- });
+//  sophia.api.voteForWitness('sanjiv', 'initminer', false,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
+//      console.log(err,response);
+//  });
 //     //Get the information about the blockchain
 // sophia.api.about(function(err, response){
 //   console.log(err, response);
@@ -58,10 +58,10 @@
 // sophia.api.getOpsInBlock('1983',true,function(err, response){
 //     console.log(err, response);
 // });
-  //Get account details
-   sophia.api.getAccount('test45747477ww', function(err, response){
-       console.log(err, response);
-   });
+//   //Get account details
+//    sophia.api.getAccount('matej', function(err, response){
+//        console.log(err, response);
+//    });
 //   //Get list of Witnesses or miners
 // sophia.api.listWitnesses('initminer','10',function(err, response){
 //     console.log(err, response);
@@ -87,7 +87,7 @@
  //       console.log(err, response);
  //   });
  //   //Get feed history
- //  sophia.api.getFeedHistory('SPHTX',function(err, response){
+ //  sophia.api.getFeedHistory('USD',function(err, response){
  //      console.log(err, response);
  //  });
  //  //Get ActiveKey related to the account
@@ -128,12 +128,12 @@
 // console.log(sophia.auth.normalizeBrainKey('DERRIDE BASCULE NIMBUS DOXA BURL AURALLY OER GOSSIPY BEHALE PINKER INVOKER YAULD HOYLE POTTY TITE WHUD'));
 // //Update witness is the function to create a witness contender, prize feed example ([["USD",{"base":"1 USD","quote":"10 SPHTX"}]]) can be used for testing,
 //   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
-//   //To become a witness user should have atleast 250,000 SPHTX in their vesting account.
-// let prizeFeed=[["USD",{"base":"1 USD","quote":"10 SPHTX"}]];
-// sophia.api.updateWitness('rumGMWVHCxedjhSHMBQYk3o9LVD','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','10.000 SPHTX',1024670,
-// prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
-// console.log(err,response);
-// });
+  //To become a witness user should have atleast 250,000 SPHTX in their vesting account.
+let prizeFeed=[["USD",{"base":"1 USD","quote":"0.877566 SPHTX"}]];
+sophia.api.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','0.0500 SPHTX',1024670,
+prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
+console.log(err,response);
+});
 //    //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
 // console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
 //  ,'Hello World of JS'));

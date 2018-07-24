@@ -43,8 +43,7 @@ export default [
 
     {
         "method": "get_transaction_digest",
-        "params": ["tx",
-            'chain_id',
+        "params": ["tx"
             ]
     },
     {
