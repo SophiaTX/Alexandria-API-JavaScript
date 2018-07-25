@@ -1,5 +1,4 @@
 {
   "transport": "http",
-  "uri": "https://testwalletapi.sophiatx.com",
   "address_prefix": "SPH"
 }
