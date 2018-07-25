@@ -41,7 +41,6 @@
       "semi": 2
     }
   },
-  "author": "Fabien (https://github.com/bonustrack)",
   "license": "MIT",
   "dependencies": {
     "babel-core": "^6.18.0",
