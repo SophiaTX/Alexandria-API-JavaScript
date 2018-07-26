@@ -11,21 +11,21 @@
 <script>
   // Sophia Connection
     sophia.api.setOptions({transport: 'http', uri: 'https://testwalletapi.sophiatx.com' });
-   // // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-   // sophia.api.createAccount('initminer','test45747477ww124556576899','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
-   //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
-   //         console.log(response);
-   //         alert(err);
-   //     });
+   // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+   sophia.api.createAccount('initminer','test45747477ww124556576899','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L15','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+       'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
+           console.log(response);
+           alert(err);
+       });
   //
   // steem.broadcast.vote('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w', 'sanjiv','initminer', '', 1, function(err, result) {
   //     console.log(err, result);
   // });
  // //Delete account using user's PrivateKey
- sophia.api.deleteAccount('sanjiv','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK89u',function(err,response){
-      alert(err+response);
-      console.log(err+response);
-  });
+ // sophia.api.deleteAccount('sanjiv','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK89u',function(err,response){
+ //      alert(err+response);
+ //      console.log(err+response);
+ //  });
  //    //Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  // sophia.api.updateAccount('rumGMWVHCxedjhSHMBQYk3o9LVD','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
  //    'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){

@@ -121,25 +121,34 @@ function PrivateKey(d) {
 
 /** @private */
 function parseKey(privateStr) {
-  assert(typeof privateStr, 'string', 'privateStr')
-  const match = privateStr.match(/^([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
 
-  if(match === null) {
-    // legacy WIF - checksum includes the version
-    const versionKey = keyUtils.checkDecode(privateStr, 'sha256x2')
-    const version = versionKey.readUInt8(0);
-    assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
-    const privateKey = PrivateKey.fromBuffer(versionKey.slice(1))
-    const keyType = 'K1'
-    const format = 'WIF'
-    return {privateKey, format, keyType}
-  }
+        assert(typeof privateStr, 'string', 'privateStr')
+        const match = privateStr.match(/^([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
+        let version;
+        if (match === null) {
+            // legacy WIF - checksum includes the version
+            const versionKey = keyUtils.checkDecode(privateStr, 'sha256x2')
+            version = versionKey.readUInt8(0);
 
-  assert(match.length === 3, 'Expecting private key like: base58privateKey..')
-  const [, keyType, keyString] = match
-  assert.equal(keyType, 'K1', 'private key expected')
-  const privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType))
-  return {privateKey, format: 'PVT', keyType}
+            const privateKey = PrivateKey.fromBuffer(versionKey.slice(1))
+            const keyType = 'K1'
+            const format = 'WIF'
+            return {privateKey, format, keyType}
+        }
+    try {
+            assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
+        assert(match.length === 3, 'Expecting private key like: base58privateKey..')
+        const [, keyType, keyString] = match
+        assert.equal(keyType, 'K1', 'private key expected')
+    }catch(error){
+        alert(error);
+        console.log(error);
+    }
+        const [, keyType, keyString] = match
+        const privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType))
+        return {privateKey, format: 'PVT', keyType}
+
+
 }
 
 PrivateKey.fromHex = function(hex) {
