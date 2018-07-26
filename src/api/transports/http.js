@@ -1,6 +1,7 @@
 import fetch from 'cross-fetch';
 import Transport from './base';
 
+
 class RPCError extends Error {
   constructor(rpcError) {
     super(rpcError.message);
@@ -11,24 +12,27 @@ class RPCError extends Error {
 }
 
 export function jsonRpc(uri, {method, id, params}) {
-  const payload = {id, jsonrpc: '2.0', method, params};
-  return fetch(uri, {
-    body: JSON.stringify(payload),
-    method: 'POST',
-      headers: {
-          Accept: 'application/json, text/plain, */*',
-      },
-  }).then(response=> {
-    return response.json();
-  }).then(rpcRes => {
-    if (rpcRes.id !== id) {
-      throw new Error(`Invalid response id: ${ rpcRes.id }`);
-    }
-    if (rpcRes.error) {
-      throw new RPCError(rpcRes.error);
-    }
-    return rpcRes.result;
-  });
+    const payload = {id, jsonrpc: '2.0', method, params};
+    return fetch(uri, {
+        body: JSON.stringify(payload),
+        method: 'POST',
+        headers: {
+            Accept: 'application/json, text/plain, */*',
+        },
+    }).then(response => {
+        return response.json();
+    }).then(rpcRes => {
+        if (rpcRes.id !== id) {
+            throw new Error(`Invalid response id: ${ rpcRes.id }`);
+        }
+        if (rpcRes.error) {
+            throw new RPCError(rpcRes.error);
+        }
+        return rpcRes.result;
+    }).catch(err => {
+        throw new Error(err);
+    });
+
 }
 
 export default class HttpTransport extends Transport {

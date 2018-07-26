@@ -122,7 +122,7 @@ function PrivateKey(d) {
 /** @private */
 function parseKey(privateStr) {
   assert(typeof privateStr, 'string', 'privateStr')
-  const match = privateStr.match(/^PVT_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
+  const match = privateStr.match(/^([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
 
   if(match === null) {
     // legacy WIF - checksum includes the version
@@ -135,9 +135,9 @@ function parseKey(privateStr) {
     return {privateKey, format, keyType}
   }
 
-  assert(match.length === 3, 'Expecting private key like: PVT_K1_base58privateKey..')
+  assert(match.length === 3, 'Expecting private key like: base58privateKey..')
   const [, keyType, keyString] = match
-  assert.equal(keyType, 'K1', 'K1 private key expected')
+  assert.equal(keyType, 'K1', 'private key expected')
   const privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType))
   return {privateKey, format: 'PVT', keyType}
 }

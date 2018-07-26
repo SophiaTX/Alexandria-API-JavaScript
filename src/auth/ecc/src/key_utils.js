@@ -182,27 +182,32 @@ function checkEncode(keyBuffer, keyType = null) {
   @return {string} checksum encoded base58 string
 */
 function checkDecode(keyString, keyType = null) {
+
     assert(keyString != null, 'private key expected')
     const buffer = new Buffer(base58.decode(keyString))
     const checksum = buffer.slice(-4)
     const key = buffer.slice(0, -4)
 
     let newCheck
-    if(keyType === 'sha256x2') { // legacy
+    if (keyType === 'sha256x2') { // legacy
         newCheck = hash.sha256(hash.sha256(key)).slice(0, 4) // WIF (legacy)
     } else {
-      const check = [key]
-      if(keyType) {
-          check.push(Buffer.from(keyType))
-      }
-      newCheck = hash.ripemd160(Buffer.concat(check)).slice(0, 4) //PVT
+        const check = [key]
+        if (keyType) {
+            check.push(Buffer.from(keyType))
+        }
+        newCheck = hash.ripemd160(Buffer.concat(check)).slice(0, 4) //PVT
     }
-
+    try{
     if (checksum.toString() !== newCheck.toString()) {
         throw new Error('Invalid checksum, ' +
             `${checksum.toString('hex')} != ${newCheck.toString('hex')}`
-        )
+        );
     }
+    }catch(error){
+        alert(error);
+        console.log(error);
+    }
+    return key;
 
-    return key
 }

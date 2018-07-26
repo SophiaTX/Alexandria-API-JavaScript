@@ -148,14 +148,23 @@ class Sophia extends EventEmitter {
      * @returns {object}
      */
     call(method, params, callback) {
-        if (this._transportType !== 'http') {
-            callback(new Error('RPC methods can only be called when using http transport'));
-            return
-        }
-        const id = ++this.seqNo;
+        try {
+            if (this._transportType !== 'http') {
+                callback(new Error('RPC methods can only be called when using http transport'));
+                return
+            }
+            const id = ++this.seqNo;
 
-        jsonRpc(this.options.uri, {method, params, id})
-            .then(res => { callback(null, res) }, err => { callback(err) });
+            jsonRpc(this.options.uri, {method, params, id})
+                .then(res => {
+                    callback(null, res)
+                }, err => {
+                    callback(err,null)
+                });
+        }
+        catch(e){
+            callback(e,null);
+        }
     }
 
     signedCall(method, params, account, key, callback) {
@@ -202,68 +211,55 @@ class Sophia extends EventEmitter {
      */
 
     startBroadcasting(operation,private_key,callback) {
-        let chain_id;
-        let transaction;
         try {
-            return this.call('about', [''], (err, response) => {
-                if (err)
-                    callback(err, '');
-                else {
-                    chain_id=response.chain_id;
-                    console.log('Transaction is being generated on chain id:'+chain_id);
-                    this.call('calculate_fee',[operation,'SPHTX'],(err,response)=>{
+            let transaction;
+            return this.call('calculate_fee',[operation,'SPHTX'],(err,response)=>{
                         if (err)
-                            callback(err, '');
-
+                            callback(err, null);
                         else {
-                            console.log('Estimated fees for this transaction is:'+response);
                                 this.call('add_fee',[operation,response],(err,response)=>{
                                     if(err){
-                                        callback(err, '');
+                                        callback(err, null);
                                     }
                                     else{
                                         this.call('create_simple_transaction',[response],(err,response)=> {
                                             if (err)
-                                                callback(err, '');
+                                                callback(err, null);
                                             else {
                                                 transaction=response;
                                                 this.call('get_transaction_digest', [transaction], (err, response) => {
                                                     if (err)
-                                                        callback(err, '');
+                                                        callback(err, null);
                                                     else {
-                                                        let sign = auth.createSignature(response, private_key);
+                                                        let signature=auth.createSignature(response, private_key);
 
-                                                        this.call('add_signature', [transaction, sign], (err, response) => {
-                                                            if (err)
-                                                                callback(err, '');
-                                                            else {
-                                                                this.call('broadcast_transaction', [response], (err, response) => {
-                                                                    if (err)
-                                                                        console.log(err);
-
-                                                                    else {
-                                                                        console.log('New transaction id is:' + response.transaction_id);
-                                                                        callback('', response);
-                                                                    }
-
-                                                                });
-                                                            }
-
-                                                        });
+                                                                 this.call('add_signature', [transaction, signature], (err, response) => {
+                                                                     if (err)
+                                                                         callback(err, null);
+                                                                     else {
+                                                                         this.call('broadcast_transaction', [response], (err, response) => {
+                                                                             if (err) {
+                                                                                 callback(err, null);
+                                                                             }
+                                                                             else {
+                                                                                 callback(null, response);
+                                                                             }
+                                                                         });
+                                                                     }
+                                                                 });
+                                                             }
+                                                         });
                                                     }
                                                 });
                                             }
                                         });
                                     }
                                 });
-                        }
-                    });
-                }
 
-            });
-        }
+
+                         }
         catch(ex){
-            console.log(ex);
+         callback(err,null);
         }
     }
      /**

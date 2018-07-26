@@ -7,18 +7,25 @@
 </head>
 <body>
 <script src="../dist/alexandria.min.js"></script>
+<!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
-  // // Sophia Connection
-  //   sophia.api.setOptions({transport: 'http', uri: 'https://testwalletapi.sophiatx.com' });
-  //  // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-   // sophia.api.createAccount('initminer','test45747477ww124556','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+  // Sophia Connection
+    sophia.api.setOptions({transport: 'http', uri: 'https://testwalletapi.sophiatx.com' });
+   // // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+   // sophia.api.createAccount('initminer','test45747477ww124556576899','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
    //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
-   //         console.log(err,response);
+   //         console.log(response);
+   //         alert(err);
    //     });
- // // //Delete account using user's PrivateKey
- // sophia.api.deleteAccount('sanjiv','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
- //     console.log(err,response);
- // });
+  //
+  // steem.broadcast.vote('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w', 'sanjiv','initminer', '', 1, function(err, result) {
+  //     console.log(err, result);
+  // });
+ // //Delete account using user's PrivateKey
+ sophia.api.deleteAccount('sanjiv','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK89u',function(err,response){
+      alert(err+response);
+      console.log(err+response);
+  });
  //    //Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  // sophia.api.updateAccount('rumGMWVHCxedjhSHMBQYk3o9LVD','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
  //    'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
@@ -57,12 +64,13 @@
 //     console.log(err, response);
 // });
 //   //Get details of operations inside a block
-// sophia.api.getOpsInBlock('1983',true,function(err, response){
+// sophia.api.getOpsInBlock('1983454',true,function(err, response){
 //     console.log(err, response);
 // });
 //   //Get account details
-//    sophia.api.getAccount('matej', function(err, response){
+//    sophia.api.getAccount('matej57547', function(err, response){
 //        console.log(err, response);
+//        alert(err)
 //    });
 //   //Get list of Witnesses or miners
 // sophia.api.listWitnesses('initminer','10',function(err, response){
@@ -75,7 +83,7 @@
 //   //Check if the account still exists
 //  sophia.api.accountExist('sanjiv',function(err, response){
 //      console.log(err, response);
- // });
+//  });
  // // Get transaction history of an account
  // sophia.api.getAccountHistory('matej','10','9',function(err, response){
  //     console.log(err, response);
