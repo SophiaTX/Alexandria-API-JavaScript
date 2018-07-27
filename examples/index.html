@@ -10,16 +10,17 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
   // Sophia Connection
-    sophia.api.setOptions({transport: 'http', uri: 'https://testwalletapi.sophiatx.com' });
+   sophia.api.setOptions({transport: 'http', uri: 'https://testwalletapi.sophiatx.com' });
    // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-   sophia.api.createAccount('initminer','test45747477ww124556576899','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L15','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+   sophia.api.createAccount('initminer','test45747477ww1245565768910','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
        'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
-           console.log(response);
+           console.log(err,response);
            alert(err);
-       });
+   });
   //
   // steem.broadcast.vote('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w', 'sanjiv','initminer', '', 1, function(err, result) {
-  //     console.log(err, result);
+  //     console.log(err,null);
+  //     alert(result);
   // });
  // //Delete account using user's PrivateKey
  // sophia.api.deleteAccount('sanjiv','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK89u',function(err,response){
@@ -68,7 +69,7 @@
 //     console.log(err, response);
 // });
 //   //Get account details
-//    sophia.api.getAccount('matej57547', function(err, response){
+//    sophia.api.getAccount('sanjiv', function(err, response){
 //        console.log(err, response);
 //        alert(err)
 //    });
@@ -113,7 +114,7 @@
 //         console.log(err, response);
 //     });
 //   //Get account name using the seed(Any data string including uppercase,lowercase and numbers) used to create the account.
-//   sophia.api.getAccountNameFromSeed('martyn',function(err, response){
+//   sophia.api.getAccountNameFromSeed('sanjiv',function(err, response){
 //        console.log(err, response);
 //   });
 //   //Get vesting balance of the account

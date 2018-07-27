@@ -196,18 +196,17 @@ function checkDecode(keyString, keyType = null) {
         if (keyType) {
             check.push(Buffer.from(keyType))
         }
-        newCheck = hash.ripemd160(Buffer.concat(check)).slice(0, 4) //PVT
+        newCheck = hash.ripemd160(Buffer.concat(check)).slice(0, 4); //PVT
     }
-    try{
+
+
     if (checksum.toString() !== newCheck.toString()) {
         throw new Error('Invalid checksum, ' +
-            `${checksum.toString('hex')} != ${newCheck.toString('hex')}`
+            `${checksum.toString('hex')} != ${newCheck.toString('hex')}` + 'Please use a valid private key'
         );
     }
-    }catch(error){
-        alert(error);
-        console.log(error);
-    }
+
     return key;
 
 }
+

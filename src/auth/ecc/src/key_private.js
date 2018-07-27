@@ -135,16 +135,12 @@ function parseKey(privateStr) {
             const format = 'WIF'
             return {privateKey, format, keyType}
         }
-    try {
-            assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
+
+        assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
         assert(match.length === 3, 'Expecting private key like: base58privateKey..')
         const [, keyType, keyString] = match
         assert.equal(keyType, 'K1', 'private key expected')
-    }catch(error){
-        alert(error);
-        console.log(error);
-    }
-        const [, keyType, keyString] = match
+
         const privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType))
         return {privateKey, format: 'PVT', keyType}
 

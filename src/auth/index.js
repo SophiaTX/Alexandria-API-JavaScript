@@ -150,7 +150,12 @@ Auth.isPubkey = function(pubkey, address_prefix) {
  * @returns {*}
  */
 Auth.createSignature=function(digest, privateKey){
-	return signature.signHash(digest, privateKey).toHex();
+	try {
+        return signature.signHash(digest, privateKey).toHex()
+    }
+    catch(error){
+		console.log(error)
+	}
 };
 
 /**

@@ -16,10 +16,15 @@ export function jsonRpc(uri, {method, id, params}) {
     return fetch(uri, {
         body: JSON.stringify(payload),
         method: 'POST',
+
         headers: {
             Accept: 'application/json, text/plain, */*',
+
         },
     }).then(response => {
+        // if (!response.ok) {
+        //     throw new Error(`HTTP ${ response.status }: ${ response.statusText }`);
+        // }
         return response.json();
     }).then(rpcRes => {
         if (rpcRes.id !== id) {
@@ -30,7 +35,7 @@ export function jsonRpc(uri, {method, id, params}) {
         }
         return rpcRes.result;
     }).catch(err => {
-        throw new Error(err);
+        throw err;
     });
 
 }
