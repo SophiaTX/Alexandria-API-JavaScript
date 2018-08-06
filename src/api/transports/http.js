@@ -1,7 +1,6 @@
 import fetch from 'cross-fetch';
 import Transport from './base';
 
-
 class RPCError extends Error {
   constructor(rpcError) {
     super(rpcError.message);
@@ -16,16 +15,15 @@ export function jsonRpc(uri, {method, id, params}) {
     return fetch(uri, {
         body: JSON.stringify(payload),
         method: 'POST',
-
         headers: {
             Accept: 'application/json, text/plain, */*',
-
         },
-    }).then(response => {
-        // if (!response.ok) {
+    }).then(function(response){
+        // if (response.status===500) {
         //     throw new Error(`HTTP ${ response.status }: ${ response.statusText }`);
         // }
         return response.json();
+
     }).then(rpcRes => {
         if (rpcRes.id !== id) {
             throw new Error(`Invalid response id: ${ rpcRes.id }`);

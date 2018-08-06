@@ -21,6 +21,16 @@ Install
 git clone https://github.com/SophiaTX/Alexandria.js.git
 npm install
 npm run build
+<script src="../dist/alexandria.min.js"></script>
+
+````
+or,  use the new updated sophiatx-alexandria-api 1.0.1, npm module to run the project
+
+````
+npm install sophiatx-alexandria-api
+```js
+var sophia=require('sophiatx-alexandria-api');
+```
 ````
 Help
 =================

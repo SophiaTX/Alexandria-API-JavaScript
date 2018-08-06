@@ -123,13 +123,13 @@ function PrivateKey(d) {
 function parseKey(privateStr) {
 
         assert(typeof privateStr, 'string', 'privateStr')
-        const match = privateStr.match(/^([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
+        const match = privateStr.match(/^PVT_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
         let version;
         if (match === null) {
             // legacy WIF - checksum includes the version
             const versionKey = keyUtils.checkDecode(privateStr, 'sha256x2')
             version = versionKey.readUInt8(0);
-
+            assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
             const privateKey = PrivateKey.fromBuffer(versionKey.slice(1))
             const keyType = 'K1'
             const format = 'WIF'

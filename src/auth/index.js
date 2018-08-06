@@ -151,11 +151,11 @@ Auth.isPubkey = function(pubkey, address_prefix) {
  */
 Auth.createSignature=function(digest, privateKey){
 	try {
-        return signature.signHash(digest, privateKey).toHex()
-    }
+        return signature.signHash(digest, privateKey).toHex();
+     }
     catch(error){
-		console.log(error)
-	}
+	 	console.log(error);
+	 }
 };
 
 /**

@@ -199,8 +199,9 @@ function checkDecode(keyString, keyType = null) {
         newCheck = hash.ripemd160(Buffer.concat(check)).slice(0, 4); //PVT
     }
 
+    console.log("Comparing " + checksum.toString('hex') + " and " + newCheck.toString('hex') );
 
-    if (checksum.toString() !== newCheck.toString()) {
+    if (checksum.toString('hex') !== newCheck.toString('hex'))  {
         throw new Error('Invalid checksum, ' +
             `${checksum.toString('hex')} != ${newCheck.toString('hex')}` + 'Please use a valid private key'
         );

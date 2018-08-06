@@ -202,7 +202,7 @@ Signature.signHash = function(dataSha256, privateKey) {
     if (dataSha256.length !== 32 || !Buffer.isBuffer(dataSha256))
         throw new Error("dataSha256: 32 byte buffer required");
 
-    privateKey = PrivateKey(privateKey)
+    privateKey = PrivateKey(privateKey);
     assert(privateKey, 'privateKey required')
 
     var der, e, ecsignature, i, lenR, lenS, nonce;
