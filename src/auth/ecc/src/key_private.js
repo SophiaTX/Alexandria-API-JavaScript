@@ -90,7 +90,6 @@ function PrivateKey(d) {
         // SHA512 used in ECIES
         return hash.sha512(S)
     }
-
     /**
       @arg {string} name - child key name.
       @return {PrivateKey}
@@ -103,11 +102,9 @@ function PrivateKey(d) {
       const index = createHash('sha256').update(toBuffer()).update(name).digest()
       return PrivateKey(index)
     }
-
     function toHex() {
         return toBuffer().toString('hex');
     }
-
     return {
         d,
         toWif,
@@ -121,7 +118,6 @@ function PrivateKey(d) {
 
 /** @private */
 function parseKey(privateStr) {
-
         assert(typeof privateStr, 'string', 'privateStr')
         const match = privateStr.match(/^PVT_([A-Za-z0-9]+)_([A-Za-z0-9]+)$/)
         let version;
@@ -135,16 +131,12 @@ function parseKey(privateStr) {
             const format = 'WIF'
             return {privateKey, format, keyType}
         }
-
         assert.equal(0x80, version, `Expected version ${0x80}, instead got ${version}`)
         assert(match.length === 3, 'Expecting private key like: base58privateKey..')
         const [, keyType, keyString] = match
         assert.equal(keyType, 'K1', 'private key expected')
-
         const privateKey = PrivateKey.fromBuffer(keyUtils.checkDecode(keyString, keyType))
         return {privateKey, format: 'PVT', keyType}
-
-
 }
 
 PrivateKey.fromHex = function(hex) {

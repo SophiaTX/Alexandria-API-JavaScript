@@ -35,7 +35,10 @@ npm install sophiatx-alexandria-api
 ```js
 var sophia=require('sophiatx-alexandria-api');
 ```
-
+Connect to http services
+```js
+sophia.api.setOptions({transport: 'http', uri: httpConnectionUrl });
+```
 Help
 =================
 
@@ -78,7 +81,7 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
- Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
+ Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account,account_delete,withdraw_vesting,etc.)
  ```js
  sophia.api.getAccountHistoryByType(accountName,type,from,limit,function(err, response){
       console.log(err, response);

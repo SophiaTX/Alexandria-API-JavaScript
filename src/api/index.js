@@ -463,6 +463,46 @@ class Sophia extends EventEmitter {
         });
     }
 
+    /**
+     * get Account transfer history
+     * @param accountName - name of the the account
+     * @param from - starting point of the search
+     * @param limit - number of data to be searched
+     * @param callback - callback function
+     * @return {Object}
+     */
+    getAccountTransferHistory(accountName,from, limit,callback) {
+        return this.call('get_account_history', [accountName, from, limit], (err, response) => {
+            if (err)
+                callback(err, '');
+            else {
+                response.forEach(r=>{
+                    let operationName=r[r.length-1].op[r.length-2];
+
+                    if(operationName==='transfer'){
+                        let result='{"block": '+r[r.length-1].block+',' +
+                            '                          "fee_payer": "'+r[r.length-1].fee_payer+'",' +
+                            '                         "op": {' +
+                            '                           "amount": "'+r[r.length-1].op[r.length-1].amount+'",' +
+                            '                            "fee": "'+r[r.length-1].op[r.length-1].fee+'", ' +
+                            '                            "from": "'+r[r.length-1].op[r.length-1].from+'",' +
+                            '                          "memo": "'+r[r.length-1].op[r.length-1].memo+'",' +
+                            '                          "to": "'+r[r.length-1].op[r.length-1].to+'",' +
+                            '                         "type": "'+operationName+'"' +
+                            '                          },' +
+                            '                     "op_in_trx": '+r[r.length-1].op_in_trx+',' +
+                            '                    "timestamp": "'+r[r.length-1].timestamp+'",' +
+                            '                         "trx_id": "'+r[r.length-1].trx_id+'",' +
+                            '                          "trx_in_block": '+r[r.length-1].trx_in_block+',' +
+                            '                         "virtual_op": '+r[r.length-1].virtual_op+'}';
+                        let objectResult=JSON.parse(result);
+                        callback('',objectResult);
+                    }
+
+                });
+            }
+        });
+    }
     // streamBlockNumber(mode = 'head', callback, ts = 200) {
     //     if (typeof mode === 'function') {
     //         callback = mode;
