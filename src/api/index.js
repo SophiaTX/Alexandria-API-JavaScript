@@ -11,7 +11,7 @@ import {
 } from './transports/http';
 
 const auth = require('../auth');
-var functions={};
+const functions={};
 class Sophia extends EventEmitter {
 
     constructor(options = {}) {
