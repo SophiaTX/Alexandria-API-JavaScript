@@ -37,7 +37,7 @@ var sophia=require('sophiatx-alexandria-api');
 ```
 Connect to http services
 ```js
-sophia.api.setOptions({transport: 'http', uri: httpConnectionUrl });
+sophia.api.setOptions({url: httpConnectionUrl });
 ```
 Help
 =================
