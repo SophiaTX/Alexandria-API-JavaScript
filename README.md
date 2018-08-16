@@ -30,10 +30,10 @@ npm run build
 or,  use the new updated sophiatx-alexandria-api 1.0.1, npm module to run the project
 
 ````
-npm install sophiatx-alexandria-api
+npm install sophiatx-alexandria-api --save
 ````
 ```js
-var sophia=require('sophiatx-alexandria-api');
+let sophia=require('sophiatx-alexandria-api');
 ```
 Connect to http services
 ```js
@@ -265,7 +265,7 @@ Voting
  ```
  Vote for a witness using witness name and voter's PrivateKey
  ```js
- sophia.api.voteForWitness(accountToVoteWith, witnessToVoteFor, approve=true,privateKey,function(err,response){
+ sophia.api.voteForWitness(accountToVoteWith, accountToVoteFor, approve=true,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
