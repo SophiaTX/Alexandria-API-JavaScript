@@ -188,7 +188,7 @@ Accounts
  ```
   Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  ```js
- sophia.api.updateAccount(accountName,jsonMeta,owner,active, memoKey,,privateKey,function(err,response){
+ sophia.api.updateAccount(accountName,jsonMeta,owner,active, memoKey,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
@@ -239,6 +239,12 @@ To become a witness the user must have at least 250,000 SPHTX tokens in her vest
 Get list of Witnesses or miners
 ```js
 sophia.api.listWitnesses(startFromWitnessName,count,function(err, response){
+    console.log(err, response);
+});
+```
+Get list of Witnesses by votes in descending order
+```js
+sophia.api.listWitnessesByVote(startFromWitnessName,count,function(err, response){
     console.log(err, response);
 });
 ```
