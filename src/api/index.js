@@ -39,7 +39,7 @@ class Sophia extends EventEmitter {
                 return this[`${methodName}With`](options, callback);
             };
 
-	          this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
+            this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
             this[`${methodName}Async`] = Promise.promisify(this[methodName]);
         });
         /*this.callAsync = Promise.promisify(this.call);
@@ -127,7 +127,7 @@ class Sophia extends EventEmitter {
             let id = Math.random();
             let self = this;
             this.log('xmit:' + id + ':', data);
-            cb = function(e, d) {
+            cb = function (e, d) {
                 if (e) {
                     self.log('error', 'rsp:' + id + ':\n\n', e, d);
                 } else {
@@ -159,11 +159,11 @@ class Sophia extends EventEmitter {
                 .then(res => {
                     callback(null, res);
                 }, err => {
-                    callback(err,null);
+                    callback(err, null);
                 });
         }
-        catch(e){
-            callback(e,null);
+        catch (e) {
+            callback(e, null);
         }
     }
 
@@ -210,56 +210,49 @@ class Sophia extends EventEmitter {
      * @returns {object}
      */
 
-    startBroadcasting(operation,privateKey,callback) {
-        let sign;
+    startBroadcasting(operation, privateKey, callback) {
+        let signedTransaction;
+        let chainId;
         let transaction;
         try {
-            return this.call('calculate_fee',[operation,'SPHTX'],(err,response)=>{
+            return this.call('calculate_fee', [operation, 'SPHTX'], (err, response) => {
+                if (err)
+                    callback(err, null);
+                else {
+                    this.call('add_fee', [operation, response], (err, response) => {
                         if (err)
                             callback(err, null);
                         else {
-                                this.call('add_fee',[operation,response],(err,response)=>{
-                                    if(err){
-                                        callback(err, null);
-                                    }
-                                    else{
-                                        this.call('create_simple_transaction',[response],(err,response)=> {
-                                            if (err)
-                                                callback(err, null);
-                                            else {
-                                                transaction=response;
-                                                this.call('get_transaction_digest', [transaction], (err, response) => {
-                                                    if (err)
-                                                        callback(err, null);
-                                                    else {
-                                                        sign=auth.createSignature(response, privateKey);
-                                                        this.call('add_signature', [transaction, sign], (err, response) => {
-                                                                     if (err)
-                                                                         callback(err, null);
-                                                                     else {
-                                                                         this.call('broadcast_transaction', [response], (err, response) => {
-                                                                             if (err) {
-                                                                                 callback(err, null);
-                                                                             }
-                                                                             else {
-                                                                                 callback(null, response);
-                                                                             }
-                                                                         });
-                                                                     }
-                                                                 });
-                                                             }
-                                                         });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-
-
-                         }
-        catch(ex){
-         callback(err,null);
+                            transaction=response;
+                            this.call('about', [operation, response], (err, response) => {
+                                if (err)
+                                    callback(err, null);
+                                else {
+                                    chainId=response.chain_id;
+                                    this.call('create_simple_transaction', [transaction], (err, response) => {
+                                        if (err)
+                                            callback(err, null);
+                                        else {
+                                            signedTransaction = auth.signTransaction(response, privateKey,chainId);
+                                            this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+                                                if (err) {
+                                                    callback(err, null);
+                                                }
+                                                else {
+                                                    callback(null, response);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        catch (ex) {
+            callback(err, null);
         }
     }
 }
@@ -290,10 +283,6 @@ class Sophia extends EventEmitter {
     // );
     //
     // }
-
-
-
-
 
 let sophia = new Sophia(config);
 
