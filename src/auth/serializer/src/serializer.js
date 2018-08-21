@@ -62,10 +62,12 @@ class Serializer {
             var iterable = this.keys;
             for (var i = 0, field; i < iterable.length; i++) {
                 field = iterable[i];
-                var type = this.types[field];
-                type.appendByteBuffer(b, object[field]);
-            }
 
+                var type = this.types[field];
+
+                type.appendByteBuffer(b, object[field]);
+                console.log(object[field]);
+            }
         } catch (error) {
             try {
                 EC.throw(this.operation_name+'.'+field+" = "+ JSON.stringify(object[field]), error);
