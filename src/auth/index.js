@@ -179,20 +179,17 @@ Auth.normalizeBrainKey=function(brain_key){
     }
 
 };
-Auth.signTransaction = function (trx, key, chainid) {
+Auth.signTransaction = function (trx, key,chainid) {
     var signatures = [];
     if (trx.signatures) {
         signatures = [].concat(trx.signatures);
     }
     var cid = new Buffer(chainid, 'hex');
     var buf = transaction.toBuffer(trx);
-	console.log(buf.toString('hex'));
-	console.log(cid.toString('hex'));
-	var sig = signature.sign(Buffer.concat([cid, buf]), key);
+    console.log(buf.toString('hex'));
+	var data=Buffer.concat([cid, buf]);
+	var sig = signature.sign(data, key);
 	signatures.push(sig.toBuffer());
-	signatures.forEach(s=>{
-		console.log(s.toString('hex'));
-	});
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
 
