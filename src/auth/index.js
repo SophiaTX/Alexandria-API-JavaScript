@@ -11,7 +11,6 @@ var bigi = require('bigi'),
     operations = require('./serializer/src/operations');
 import {normalize} from "./ecc/src/brain_key";
 const signature = require('./ecc/src/signature');
-const serial=require('./serializer');
 
 
 var Auth = {};
@@ -156,9 +155,8 @@ Auth.isPubkey = function(pubkey, address_prefix) {
  */
 Auth.createSignature=function(transaction, privateKey){
 	try {
-		let digest="";
 
-        return signature.signHash(digest, privateKey).toHex();
+        return signature.signHash(transaction, privateKey).toHex();
      }
     catch(error){
 	 	console.log(error);
@@ -186,9 +184,7 @@ Auth.signTransaction = function (trx, key,chainid) {
     }
     var cid = new Buffer(chainid, 'hex');
     var buf = transaction.toBuffer(trx);
-    console.log(buf.toString('hex'));
-	var data=Buffer.concat([cid, buf]);
-	var sig = signature.sign(data, key);
+	var sig = signature.sign(Buffer.concat([cid, buf]), key);
 	signatures.push(sig.toBuffer());
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };

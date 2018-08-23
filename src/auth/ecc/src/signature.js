@@ -224,11 +224,7 @@ Signature.signHash = function(dataSha256, privateKey) {
             console.log("WARN: " + nonce + " attempts to find canonical signature");
         }
     }
-
     return Signature(ecsignature.r, ecsignature.s, i);
-
-
-
 };
 
 Signature.fromBuffer = function(buf) {
