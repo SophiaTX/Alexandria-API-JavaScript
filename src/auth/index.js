@@ -184,9 +184,9 @@ Auth.signTransaction = function (trx, key,chainid) {
     }
     var cid = new Buffer(chainid, 'hex');
     var buf = transaction.toBuffer(trx);
-    console.log(buf.toString('hex'));
 	var sig = signature.sign(Buffer.concat([cid, buf]), key);
-	signatures.push(sig.toBuffer());
+	console.log(sig.toHex());
+	signatures.push(sig.toHex());
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
 

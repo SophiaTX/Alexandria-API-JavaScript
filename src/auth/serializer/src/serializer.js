@@ -185,7 +185,6 @@ class Serializer {
     toByteBuffer(object) {
         var b = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN);
         this.appendByteBuffer(b, object);
-        console.log(b.copy(0, b.offset));
         return b.copy(0, b.offset);
     }
 
