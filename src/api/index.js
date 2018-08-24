@@ -234,7 +234,15 @@ class Sophia extends EventEmitter {
                                             callback(err, null);
                                         else {
                                             signedTransaction = auth.signTransaction(response, privateKey,chainId);
-                                            this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+
+                                            this.call('get_transaction_digest', [transaction], (err, response) => {
+                                                if (err) {
+                                                    callback(err, null);
+                                                }
+                                                else {
+                                                    callback(null, response);
+
+                                                this.call('broadcast_transaction', [signedTransaction], (err, response) => {
                                                 if (err) {
                                                     callback(err, null);
                                                 }
@@ -244,7 +252,12 @@ class Sophia extends EventEmitter {
                                             });
                                         }
                                     });
+
+                                        }
+
+                                    });
                                 }
+
                             });
                         }
                     });
