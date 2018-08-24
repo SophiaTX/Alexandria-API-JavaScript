@@ -422,7 +422,7 @@ let escrow_transfer = new Serializer(
     from: string,
     to: string,
     sbd_amount: asset,
-    steem_amount: asset,
+    sphtx_amount: asset,
     escrow_id: uint32,
     agent: string,
     fee: asset,
@@ -451,7 +451,7 @@ let escrow_release = new Serializer(
     receiver: string,
     escrow_id: uint32,
     sbd_amount: asset,
-    steem_amount: asset
+    sphtx_amount: asset
 }
 );
 
@@ -703,6 +703,12 @@ let comment_benefactor_reward = new Serializer(
     reward: asset
 }
 );
+let account_delete = new Serializer(
+    "account_delete", {
+        fee:asset,
+        account: string
+    }
+);
 
 operation.st_operations = [
     vote,    
@@ -715,7 +721,8 @@ operation.st_operations = [
     feed_publish,    
     convert,    
     account_create,    
-    account_update,    
+    account_update,
+    account_delete,
     witness_update,    
     account_witness_vote,    
     account_witness_proxy,    

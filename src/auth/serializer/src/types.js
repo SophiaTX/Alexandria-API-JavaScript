@@ -33,7 +33,7 @@ Types.asset = {
         let b_copy = b.copy(b.offset, b.offset + 7)
         let symbol = new Buffer(b_copy.toBinary(), "binary").toString().replace(/\x00/g, "")
         b.skip(7);
-        // "1.000 STEEM" always written with full precision
+        // "1.000 SPHTX" always written with full precision
         let amount_string = fromImpliedDecimal(amount, precision)
         return amount_string + " " + symbol
     },
@@ -41,25 +41,24 @@ Types.asset = {
         object = object.trim()
         if( ! /^[0-9]+\.?[0-9]* [A-Za-z0-9]+$/.test(object))
             throw new Error("Expecting amount like '99.000 SYMBOL', instead got '" + object + "'")
-
-        let [ amount, symbol ] = object.split(" ")
+        let [ amount, symbol ] = object.split(" ");
         if(symbol.length > 6)
             throw new Error("Symbols are not longer than 6 characters " + symbol + "-"+ symbol.length)
-
-        b.writeInt64(v.to_long(amount.replace(".", "")))
-        let dot = amount.indexOf(".") // 0.000
-        let precision = dot === -1 ? 0 : amount.length - dot - 1
-        b.writeUint8(precision)
-        b.append(symbol.toUpperCase(), 'binary')
-        for(let i = 0; i < 7 - symbol.length; i++)
+        //b.writeInt64(v.to_long(amount.replace(".","")));
+        b.writeInt64(v.to_long(amount.replace(".","")));
+        //let dot = amount.indexOf("."); // 0.000
+        //let precision = dot === -1 ? 0 : amount.length - dot - 1;
+        //b.writeUint8(precision)
+         b.append(symbol.toUpperCase(), 'binary')
+        for(let i = 0; i < 8 - symbol.length; i++)
             b.writeUint8(0)
-        return
+        return;
     },
     fromObject(object){
         return object
     },
     toObject(object, debug = {}){
-        if (debug.use_default && object === undefined) { return "0.000 STEEM"; }
+        if (debug.use_default && object === undefined) { return "0.000 SPHTX"; }
         return object
     }
 }

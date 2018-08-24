@@ -178,10 +178,10 @@ Signature.sign = function(data, privateKey) {
     if(typeof data === 'string') {
         data = Buffer.from(data, 'utf8');
     }
+    console.log(data.toString('hex'));
     assert(Buffer.isBuffer(data), 'data is a required String or Buffer');
     data = hash.sha256(data);
-    console.log(data);
-    return Signature.signHash(data, privateKey);
+    return Signature.signHash(data, privateKey).toHex();
 
 };
 
@@ -198,6 +198,7 @@ Signature.signHash = function(dataSha256, privateKey) {
 
     if (typeof dataSha256 === 'string') {
         dataSha256 = Buffer.from(dataSha256, 'hex');
+        console.log(dataSha256);
     }
 
     if (dataSha256.length !== 32 || !Buffer.isBuffer(dataSha256))
@@ -225,7 +226,7 @@ Signature.signHash = function(dataSha256, privateKey) {
             console.log("WARN: " + nonce + " attempts to find canonical signature");
         }
     }
-    return Signature(ecsignature.r, ecsignature.s, i);
+    return new Signature(ecsignature.r, ecsignature.s, i);
 };
 
 Signature.fromBuffer = function(buf) {

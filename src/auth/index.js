@@ -155,8 +155,9 @@ Auth.isPubkey = function(pubkey, address_prefix) {
  */
 Auth.createSignature=function(transaction, privateKey){
 	try {
-
-        return signature.signHash(transaction, privateKey).toHex();
+        var data=signature.signHash(transaction, privateKey);
+        console.log(data);
+        return data.toHex();
      }
     catch(error){
 	 	console.log(error);
@@ -177,16 +178,19 @@ Auth.normalizeBrainKey=function(brain_key){
     }
 
 };
-Auth.signTransaction = function (trx, key,chainid) {
+Auth.signTransaction = function (trx, key,chainid,digest) {
     var signatures = [];
     if (trx.signatures) {
         signatures = [].concat(trx.signatures);
     }
     var cid = new Buffer(chainid, 'hex');
     var buf = transaction.toBuffer(trx);
-	var sig = signature.sign(Buffer.concat([cid, buf]), key);
-	console.log(sig.toHex());
-	signatures.push(sig.toHex());
+    console.log(Buffer.concat([cid,buf]).toString('hex'));
+    var sig1 = signature.signHash(digest, key);
+    console.log(sig1.toHex());
+	var sig = signature.sign(Buffer.concat([cid,buf]), key);
+	console.log(sig);
+	signatures.push(sig);
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
 

@@ -105,6 +105,7 @@ module.exports = _my = {
             value = ""+value;
         }
         return Long.fromString(value);
+
     },
     
     to_string(value, field_name=""){

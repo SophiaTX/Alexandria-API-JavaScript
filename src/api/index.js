@@ -214,7 +214,7 @@ class Sophia extends EventEmitter {
         let signedTransaction;
         let chainId;
         let transaction;
-        let createtranscation;
+        let createtransaction;
         try {
             return this.call('calculate_fee', [operation, 'SPHTX'], (err, response) => {
                 if (err)
@@ -229,32 +229,30 @@ class Sophia extends EventEmitter {
                                 if (err)
                                     callback(err, null);
                                 else {
-                                    chainId=response.chain_id;
+                                    chainId = response.chain_id;
                                     this.call('create_simple_transaction', [transaction], (err, response) => {
                                         if (err)
                                             callback(err, null);
                                         else {
-                                            createtranscation=response;
-                                            this.call('get_transaction_digest', [response], (err, response) => {
-                                                if (err) {
+                                            createtransaction = response;
+                                            console.log(createtransaction);
+                                            this.call('get_transaction_digest', [createtransaction], (err, response) => {
+                                                if (err)
                                                     callback(err, null);
-                                                }
                                                 else {
                                                     console.log(response);
-                                                    signedTransaction = auth.signTransaction(createtranscation, privateKey,chainId);
-                                                this.call('broadcast_transaction', [signedTransaction], (err, response) => {
-                                                if (err) {
-                                                    callback(err, null);
-                                                }
-                                                else {
-                                                    callback(null, response);
+                                                    signedTransaction = auth.signTransaction(createtransaction, privateKey, chainId,response);
+                                                            this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+                                                                if (err) {
+                                                                    callback(err, null);
+                                                                }
+                                                                else {
+                                                                    callback(null, response);
+                                                                }
+                                                            });
                                                 }
                                             });
                                         }
-                                    });
-
-                                        }
-
                                     });
                                 }
 

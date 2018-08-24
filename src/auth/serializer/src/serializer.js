@@ -66,7 +66,6 @@ class Serializer {
                 var type = this.types[field];
 
                 type.appendByteBuffer(b, object[field]);
-
             }
         } catch (error) {
             try {
@@ -75,7 +74,7 @@ class Serializer {
                 EC.throw(this.operation_name+'.'+field+" = "+ object[field], error);
             }
         }
-        return ;
+        return;
     }
 
     fromObject(serialized_object){
@@ -185,6 +184,7 @@ class Serializer {
     toByteBuffer(object) {
         var b = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN);
         this.appendByteBuffer(b, object);
+
         return b.copy(0, b.offset);
     }
 
