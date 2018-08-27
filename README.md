@@ -13,6 +13,7 @@ Table of Contents
 - [Transaction](#transaction)
 - [Witness](#witness)
 - [Voting](#voting)
+- [Data Transmission](#data-transmission)
 
 
 Install
@@ -269,4 +270,23 @@ Voting
      console.log(err,response);
  });
  ```
- 
+ Data Transmission
+ =================
+  Get the list of received documents, it can be searched by receiver, sender.
+  ```js
+  sophia.api.getReceivedDocuments(appId, accountName, searchType, start, count, function(err,response){
+     console.log(err,response);
+  });
+  ```
+ Send binary data to the list of recipients (Secured/Encoded data could be transmitted using this function).
+ ```js
+ sophia.api.makeCustomBinaryOperation(appId, from, to, data, privateKey, function(err,response){
+     console.log(err,response);
+ });
+```
+ Send JSON data to the list of recipients.
+ ```js
+ sophia.api.makeCustomJSONOperation(appId, from, to, data, privateKey, function(err,response){
+    console.log(err,response);
+ });
+ ```

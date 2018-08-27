@@ -11,12 +11,12 @@
 <script>
   //Sophia Connection
    sophia.api.setOptions({url: 'http://195.48.9.209:9093' });
-  //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-    sophia.api.createAccount('initminer','test45747477ww12455657689101023478910','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
-      'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
-          console.log(err,response);
-          alert(err);
-      });
+  // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+  //   sophia.api.createAccount('initminer','test45747477ww12455657689101023478910','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
+  //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
+  //         console.log(err,response);
+  //         alert(err);
+  //     });
 //
 //
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
@@ -51,6 +51,19 @@
 //  sophia.api.voteForWitness('sanjiv', 'initminer', false,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
 //      console.log(err,response);
 // //  });
+      //Get the list of received documents, it can be searched by receiver, sender.
+   sophia.api.getReceivedDocuments(appId, accountName, searchType, start, count, function(err,response){
+       console.log(err,response);
+    });
+      //Send binary data to the list of recipients
+   sophia.api.makeCustomBinaryOperation(appId, from, to, data, privateKey, function(err,response){
+       console.log(err,response);
+    });
+      //Send JSON data to the list of recipients
+   sophia.api.makeCustomJSONOperation(appId, from, to, data, privateKey, function(err,response){
+       console.log(err,response);
+    });
+
 //       //Get the information about the blockchain
 // sophia.api.about(function(err, response){
 //   console.log(err, response);
