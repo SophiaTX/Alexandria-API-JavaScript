@@ -10,19 +10,18 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
   //Sophia Connection
-   sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
- //  //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
- //    sophia.api.createAccount('initminer','test45747477ww124556576891010234789107','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
- //      'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
- //          console.log(err,response);
- //          alert(err);
- //      });
+   sophia.api.setOptions({url: 'http://﻿195.48.9.209:9093' });
+  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
+  // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+  // sophia.api.createAccount('initminer','test45747477ww12455657689101','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad','SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad',
+  //     'SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad',function(err,response){
+  //         console.log(err,response);
+  // });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
 //
-//  //Delete account using user's PrivateKey
- sophia.api.deleteAccount('sanjiv','5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK89u',function(err,response){
-      alert(err+response);
-      console.log(err+response);
+ //Delete account using user's PrivateKey
+  sophia.api.deleteAccount('jpmv9Of3CBm-cz1TZ7pNgZGEv5o','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err,response){
+      console.log(err,response);
   });
 //     //Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
 //  sophia.api.updateAccount('rumGMWVHCxedjhSHMBQYk3o9LVD','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
@@ -66,11 +65,11 @@
 //     console.log(err, response);
 // });
 //   //Get account details
-//    sophia.api.getAccount('dAk2DbsCG2QphYaNSXCgzYG8kZU', function(err, response){
-//       console.log(err, response);
-//       alert(err)
-//   });
-//   //Get list of Witnesses or miners
+//   sophia.api.getAccount('test45747477ww12455657689101', function(err, response){
+//         console.log(err, response);
+//         alert(err)
+//     });
+// //   //Get list of Witnesses or miners
 // sophia.api.listWitnesses('initminer','10',function(err, response){
 //     console.log(err, response);
 // });
@@ -138,7 +137,7 @@
 // console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w'));
 // console.log(sophia.auth.createSignature("ac66593dc9b3de89329fba9fdf5b0153ec1d71a31a1fafb73ac58fb73ea05bec","5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1l"));
 //     //returns public key on supplied Private key
-// console.log(sophia.auth.wifToPublic('5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i'));
+//console.log(sophia.auth.wifToPublic('5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz'));
 //     //matches public key with private key returns boolean value
 // console.log(sophia.auth.wifIsValid('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'));
 //     //Corrects the caps and spaces in distorted passPhrase (brainKey)

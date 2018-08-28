@@ -178,7 +178,6 @@ Signature.sign = function(data, privateKey) {
     if(typeof data === 'string') {
         data = Buffer.from(data, 'utf8');
     }
-    console.log(data.toString('hex'));
     assert(Buffer.isBuffer(data), 'data is a required String or Buffer');
     data = hash.sha256(data);
     return Signature.signHash(data, privateKey).toHex();

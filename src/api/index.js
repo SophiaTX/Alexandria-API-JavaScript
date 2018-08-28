@@ -235,7 +235,6 @@ class Sophia extends EventEmitter {
                                             callback(err, null);
                                         else {
                                             createtransaction = response;
-                                            console.log(createtransaction);
                                             this.call('get_transaction_digest', [createtransaction], (err, response) => {
                                                 if (err)
                                                     callback(err, null);

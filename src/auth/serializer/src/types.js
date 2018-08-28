@@ -222,7 +222,12 @@ Types.string =
     },
     appendByteBuffer(b, object){
         v.required(object);
-        b.writeVString(object.toString())
+        if(object.includes("-"))
+        b.writeVString(object.toString().replace("-","+"));
+        else if(object.includes("_"))
+            b.writeVString(object.toString().replace("_","/"));
+        else
+            b.writeVString(object.toString());
         return;
     },
     fromObject(object){
