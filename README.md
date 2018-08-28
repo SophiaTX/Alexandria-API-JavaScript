@@ -272,7 +272,7 @@ Voting
  ```
  Data Transmission
  =================
-  Get the list of received documents, it can be searched by receiver, sender.
+  Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
   ```js
   sophia.api.getReceivedDocuments(appId, accountName, searchType, start, count, function(err,response){
      console.log(err,response);

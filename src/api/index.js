@@ -159,7 +159,7 @@ class Sophia extends EventEmitter {
                 .then(res => {
                     callback(null, res);
                 }, err => {
-                    callback(err,null);
+                    callback(err, null);
                 });
         }
         catch(e){
@@ -856,21 +856,41 @@ sophia.getReceivedDocuments=function(appId, accountName, searchType, start, coun
         }
     });
 };
-sophia.makeCustomJSONOperation=function( appId, from, to, data, callback) {
+/**
+ * Send Custom JSON data to list of recipients
+ * @param appId
+ * @param from
+ * @param to
+ * @param data
+ * @param privateKey
+ * @param callback
+ * @return {Object}
+ */
+sophia.makeCustomJSONOperation=function( appId, from, to, data, privateKey, callback) {
     return sophia.call('make_custom_json_operation', [appId, from, to, data], (err, response) => {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            sophia.startBroadcasting(response,privateKey,callback);
         }
     });
 };
-sophia.makeCustomBinaryOperation=function(appId, from, to, data, callback) {
+/**
+ * Send custom data (encoded or raw) to list of recipients
+ * @param appId
+ * @param from
+ * @param to
+ * @param data
+ * @param privateKey
+ * @param callback
+ * @return {Object}
+ */
+sophia.makeCustomBinaryOperation=function(appId, from, to, data, privateKey, callback) {
     return sophia.call('make_custom_binary_operation', [appId, from, to, data], (err, response) => {
         if (err)
-            callback(err, '');
+            callback(err,'');
         else {
-            callback('', response);
+            sophia.startBroadcasting(response,privateKey,callback);
         }
     });
 };
