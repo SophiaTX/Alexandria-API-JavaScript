@@ -2,6 +2,8 @@
 
 // Low-level types that make up operations
 
+import {normalize} from "../../ecc/src/brain_key";
+
 const v = require('./validation');
 const ObjectId = require('./object_id')
 const fp = require('./fast_parser');
@@ -220,16 +222,21 @@ Types.string =
     {fromByteBuffer(b){
         return new Buffer(b.readVString(), 'utf8');
     },
+
     appendByteBuffer(b, object){
         v.required(object);
-        if(object.includes("-"))
-        b.writeVString(object.toString().replace("-","+"));
-        else if(object.includes("_"))
-            b.writeVString(object.toString().replace("_","/"));
-        else
+
+        if(object.includes('-')||object.includes('_')) {
+            let base64Name;
+            base64Name=object.toString().split('-').join('+');
+            base64Name=base64Name.toString().split('_').join('/');
+            b.writeVString(base64Name.toString());
+        }else{
             b.writeVString(object.toString());
+        }
         return;
     },
+
     fromObject(object){
         v.required(object);
         return new Buffer(object, 'utf8');

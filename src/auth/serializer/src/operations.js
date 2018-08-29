@@ -31,8 +31,8 @@ static_variant [
 
 // Merge tmp.js - See "Generated code follows" below
 
-import types from "./types"
-import SerializerImpl from "./serializer"
+import types from "./types";
+import SerializerImpl from "./serializer";
 
 const {
     //id_type,
@@ -154,6 +154,7 @@ let signed_block_header = new Serializer(
 
 let vote = new Serializer( 
     "vote", {
+        fee: asset,
     voter: string,
     author: string,
     permlink: string,
@@ -173,17 +174,19 @@ let comment = new Serializer(
 }
 );
 
-let transfer = new Serializer( 
+let transfer = new Serializer(
     "transfer", {
-    from: string,
-    to: string,
-    amount: asset,
-    memo: string
-}
+        fee: asset,
+        from: string,
+        to: string,
+        amount: asset,
+        memo: string
+    }
 );
 
 let transfer_to_vesting = new Serializer( 
     "transfer_to_vesting", {
+        fee: asset,
     from: string,
     to: string,
     amount: asset
@@ -192,6 +195,7 @@ let transfer_to_vesting = new Serializer(
 
 let withdraw_vesting = new Serializer( 
     "withdraw_vesting", {
+        fee: asset,
     account: string,
     vesting_shares: asset
 }
@@ -259,10 +263,10 @@ let account_create = new Serializer(
 
 let account_update = new Serializer( 
     "account_update", {
+        fee: asset,
     account: string,
     owner: optional(authority),
     active: optional(authority),
-    posting: optional(authority),
     memo_key: public_key,
     json_metadata: string
 }
@@ -278,16 +282,17 @@ let chain_properties = new Serializer(
 
 let witness_update = new Serializer( 
     "witness_update", {
+    fee: asset,
     owner: string,
     url: string,
     block_signing_key: public_key,
     props: chain_properties,
-    fee: asset
 }
 );
 
 let account_witness_vote = new Serializer( 
     "account_witness_vote", {
+        fee: asset,
     account: string,
     witness: string,
     approve: bool
@@ -296,6 +301,7 @@ let account_witness_vote = new Serializer(
 
 let account_witness_proxy = new Serializer( 
     "account_witness_proxy", {
+        fee: asset,
     account: string,
     proxy: string
 }
@@ -711,21 +717,21 @@ let account_delete = new Serializer(
 );
 
 operation.st_operations = [
-    vote,    
-    comment,    
-    transfer,    
+    transfer,
     transfer_to_vesting,
-    account_create,
     withdraw_vesting,
+    vote,
+    account_create,
+    account_update,
     account_delete,
-    limit_order_create,    
-    limit_order_cancel,    
+    witness_update,
+    comment,
+    account_witness_vote,
+    account_witness_proxy,
+    limit_order_create,
+    limit_order_cancel,
     feed_publish,    
     convert,
-    account_update,
-    witness_update,    
-    account_witness_vote,    
-    account_witness_proxy,    
     pow,    
     custom,    
     report_over_production,    
