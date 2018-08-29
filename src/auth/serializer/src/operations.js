@@ -341,9 +341,10 @@ let delete_comment = new Serializer(
 
 let custom_json = new Serializer( 
     "custom_json", {
-    required_auths: set(string),
-    required_posting_auths: set(string),
-    id: string,
+    fee:asset,
+    sender:string,
+    recipients:array,
+    app_id:uint64,
     json: string
 }
 );
@@ -533,12 +534,11 @@ let cancel_transfer_from_savings = new Serializer(
 
 let custom_binary = new Serializer( 
     "custom_binary", {
-    required_owner_auths: set(string),
-    required_active_auths: set(string),
-    required_posting_auths: set(string),
-    required_auths: array(authority),
-    id: string,
-    data: bytes()
+        fee:asset,
+        sender:string,
+        recipients:array,
+        app_id:uint64,
+        data: bytes()
 }
 );
 
@@ -729,14 +729,15 @@ operation.st_operations = [
     account_witness_vote,
     account_witness_proxy,
     limit_order_create,
+    custom,
+    custom_json,
+    custom_binary,
     limit_order_cancel,
     feed_publish,    
     convert,
-    pow,    
-    custom,    
+    pow,
     report_over_production,    
-    delete_comment,    
-    custom_json,    
+    delete_comment,
     comment_options,    
     set_withdraw_vesting_route,    
     limit_order_create2,    
@@ -752,8 +753,7 @@ operation.st_operations = [
     escrow_approve,    
     transfer_to_savings,    
     transfer_from_savings,    
-    cancel_transfer_from_savings,    
-    custom_binary,    
+    cancel_transfer_from_savings,
     decline_voting_rights,    
     reset_account,    
     set_reset_account,    
