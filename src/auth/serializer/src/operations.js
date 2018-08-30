@@ -343,7 +343,7 @@ let custom_json = new Serializer(
     "custom_json", {
     fee:asset,
     sender:string,
-    recipients:array,
+    recipients:set(string),
     app_id:uint64,
     json: string
 }
@@ -536,7 +536,7 @@ let custom_binary = new Serializer(
     "custom_binary", {
         fee:asset,
         sender:string,
-        recipients:array,
+        recipients:set(string),
         app_id:uint64,
         data: bytes()
 }

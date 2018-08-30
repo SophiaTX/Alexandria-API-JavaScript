@@ -851,7 +851,22 @@ sophia.getReceivedDocuments=function(appId, accountName, searchType, start, coun
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            if (response.length > 0) {
+                response.forEach(r => {
+                    let simplifieddata=JSON.stringify(r[r.length - 1].data);
+                        let result = '{"app_id": ' + r[r.length - 1].app_id + ',' +
+                            '                          "binary": "' + r[r.length - 1].binary + '",' +
+                            '                         "recipients": "' +r[r.length - 1].recipients+ '",' +
+                            '                     "sender": "' + r[r.length - 1].sender + '",' +
+                            '                     "data": ' + simplifieddata + ',' +
+                            '                    "received": "' + r[r.length - 1].received + '"}';
+                        let objectResult = JSON.parse(result);
+                        callback('', objectResult);
+
+                });
+            }else{
+                callback('',response);
+            }
         }
     });
 };

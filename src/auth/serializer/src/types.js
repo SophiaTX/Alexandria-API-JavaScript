@@ -452,7 +452,8 @@ Types.set = function(st_operation){
                 dup_map[o] = true;
             }
         }
-        return sortOperation(array, st_operation);
+        //return sortOperation(array, st_operation);
+            return array; // don't need sorting of array to make numbers come last and alphabets first
     },
     fromByteBuffer(b){
         var size = b.readVarint32();
@@ -470,7 +471,9 @@ Types.set = function(st_operation){
     appendByteBuffer(b, object){
         if (!object) { object = []; }
         b.writeVarint32(object.length);
+        console.log(object);
         var iterable = this.validate(object);
+        console.log(iterable);
         for (var i = 0, o; i < iterable.length; i++) {
             o = iterable[i];
             st_operation.appendByteBuffer(b, o);
