@@ -13,6 +13,7 @@ Table of Contents
 - [Transaction](#transaction)
 - [Witness](#witness)
 - [Voting](#voting)
+- [Data Transmission](#data-transmission)
 
 
 Install
@@ -30,14 +31,14 @@ npm run build
 or,  use the new updated sophiatx-alexandria-api 1.0.1, npm module to run the project
 
 ````
-npm install sophiatx-alexandria-api
+npm install sophiatx-alexandria-api --save
 ````
 ```js
-var sophia=require('sophiatx-alexandria-api');
+let sophia=require('sophiatx-alexandria-api');
 ```
 Connect to http services
 ```js
-sophia.api.setOptions({transport: 'http', uri: httpConnectionUrl });
+sophia.api.setOptions({url: httpConnectionUrl });
 ```
 Help
 =================
@@ -188,7 +189,7 @@ Accounts
  ```
   Update ActiveKey, OwnerKey, MemoKey and JsonMetadata of the account using user's PrivateKey
  ```js
- sophia.api.updateAccount(accountName,jsonMeta,owner,active, memoKey,,privateKey,function(err,response){
+ sophia.api.updateAccount(accountName,jsonMeta,owner,active, memoKey,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
@@ -242,6 +243,12 @@ sophia.api.listWitnesses(startFromWitnessName,count,function(err, response){
     console.log(err, response);
 });
 ```
+Get list of Witnesses by votes in descending order
+```js
+sophia.api.listWitnessesByVote(startFromWitnessName,count,function(err, response){
+    console.log(err, response);
+});
+```
 Get details about a Witness
 ```js
 sophia.api.getWitness(witnessName,function(err, response){
@@ -259,8 +266,27 @@ Voting
  ```
  Vote for a witness using witness name and voter's PrivateKey
  ```js
- sophia.api.voteForWitness(accountToVoteWith, witnessToVoteFor, approve=true,privateKey,function(err,response){
+ sophia.api.voteForWitness(accountToVoteWith, accountToVoteFor, approve=true,privateKey,function(err,response){
      console.log(err,response);
  });
  ```
- 
+ Data Transmission
+ =================
+  Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
+  ```js
+  sophia.api.getReceivedDocuments(appId, accountName, searchType, start, count, function(err,response){
+     console.log(err,response);
+  });
+  ```
+ Send binary data to the list of recipients (Secured/Encoded data could be transmitted using this function).
+ ```js
+ sophia.api.makeCustomBinaryOperation(appId, from, to, data, privateKey, function(err,response){
+     console.log(err,response);
+ });
+```
+ Send JSON data to the list of recipients.
+ ```js
+ sophia.api.makeCustomJSONOperation(appId, from, to, data, privateKey, function(err,response){
+    console.log(err,response);
+ });
+ ```
