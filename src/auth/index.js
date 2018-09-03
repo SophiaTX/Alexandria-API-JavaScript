@@ -7,11 +7,15 @@ var bigi = require('bigi'),
 	config = require('../config'),
 	KeyPrivate = require('./ecc/src/key_private'),
 	PublicKey = require('./ecc/src/key_public'),
-    hash = require('./ecc/src/hash');
+    hash = require('./ecc/src/hash'),
+    operations = require('./serializer/src/operations');
 import {normalize} from "./ecc/src/brain_key";
 const signature = require('./ecc/src/signature');
 
+
 var Auth = {};
+var signed_transaction = operations.signed_transaction;
+var transaction = operations.transaction;
 /**
  * @param privatekey of sender
  * @param publickey of receiver
@@ -149,9 +153,11 @@ Auth.isPubkey = function(pubkey, address_prefix) {
  * @param privateKey
  * @returns {*}
  */
-Auth.createSignature=function(digest, privateKey){
+Auth.createSignature=function(transaction, privateKey){
 	try {
-        return signature.signHash(digest, privateKey).toHex();
+        var data=signature.signHash(transaction, privateKey);
+        console.log(data);
+        return data.toHex();
      }
     catch(error){
 	 	console.log(error);
@@ -172,4 +178,19 @@ Auth.normalizeBrainKey=function(brain_key){
     }
 
 };
+Auth.CreateDigest=function(trx, chainid){
+    var cid = new Buffer(chainid, 'hex');
+    var buf = transaction.toBuffer(trx);
+    return hash.sha256(Buffer.concat([cid,buf])).toString('hex');
+};
+Auth.signTransaction = function (trx, key,digest) {
+    var signatures = [];
+    if (trx.signatures) {
+        signatures = [].concat(trx.signatures);
+    }
+	var sig = signature.signHash(digest, key);
+	signatures.push(sig.toHex());
+    return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
+};
+
 module.exports = Auth;

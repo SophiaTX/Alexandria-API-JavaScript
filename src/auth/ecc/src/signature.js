@@ -7,7 +7,7 @@ const keyUtils = require('./key_utils');
 const PublicKey = require('./key_public');
 const PrivateKey = require('./key_private');
 
-module.exports = Signature
+module.exports = Signature;
 
 function Signature(r, s, i) {
     assert.equal(r != null, true, 'Missing parameter');
@@ -179,10 +179,10 @@ Signature.sign = function(data, privateKey) {
         data = Buffer.from(data, 'utf8');
     }
     assert(Buffer.isBuffer(data), 'data is a required String or Buffer');
-    data = hash.sha256(data)
-    return Signature.signHash(data, privateKey);
+    data = hash.sha256(data);
+    return Signature.signHash(data, privateKey).toHex();
 
-}
+};
 
 /**
     Sign a buffer of exactally 32 bytes in size (sha256(text))
@@ -224,11 +224,7 @@ Signature.signHash = function(dataSha256, privateKey) {
             console.log("WARN: " + nonce + " attempts to find canonical signature");
         }
     }
-
-    return Signature(ecsignature.r, ecsignature.s, i);
-
-
-
+    return new Signature(ecsignature.r, ecsignature.s, i);
 };
 
 Signature.fromBuffer = function(buf) {

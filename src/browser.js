@@ -20,4 +20,4 @@ if (typeof global !== "undefined") {
   global.sophia = sophia;
 }
 
-exports = module.exports = sophia;
+module.exports = sophia;
