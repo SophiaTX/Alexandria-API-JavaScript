@@ -12,11 +12,11 @@
   //Sophia Connection
    sophia.api.setOptions({url: 'http://﻿195.48.9.209:9093' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
-  // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-  // sophia.api.createAccount('initminer','test45747477ww12455657689101','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad','SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad',
-  //     'SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad',function(err,response){
-  //         console.log(err,response);
-  // });
+ //  // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+ //  sophia.api.createAccount('initminer','test45747477ww124556576891011','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad','SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad',
+ //      'SPH6zDAKpmQFATYSFC57hMCcCXjbDwQgG8YwkxbLUokGyXwXAjhad',function(err,response){
+ //          console.log(err,response);
+ //  });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
 //
 //  //Delete account using user's PrivateKey
@@ -60,10 +60,10 @@
 //    sophia.api.makeCustomJSONOperation(2, 'PcQ-byG-3OczM99qg1m_6zU9ArAA', to, data, '5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz', function(err,response){
 //        console.log(err,response);
 //     });
-         //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
-     sophia.api.getReceivedDocuments(2, 'PcQ-byG-3OczM99qg1m_6zU9ArAA', 'by_sender', '2018-08-22T13:39:34', '10', function(err,response){
-         console.log(err,response);
-      });
+//          //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
+//      sophia.api.getReceivedDocuments(2, 'PcQ-byG-3OczM99qg1m_6zU9ArAA', 'by_sender', '2018-08-22T13:39:34', '10', function(err,response){
+//          console.log(err,response);
+//       });
 //       //Get the information about the blockchain
 // sophia.api.about(function(err, response){
 //   console.log(err, response);

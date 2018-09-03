@@ -197,7 +197,6 @@ Signature.signHash = function(dataSha256, privateKey) {
 
     if (typeof dataSha256 === 'string') {
         dataSha256 = Buffer.from(dataSha256, 'hex');
-        console.log(dataSha256);
     }
 
     if (dataSha256.length !== 32 || !Buffer.isBuffer(dataSha256))

@@ -218,35 +218,31 @@ class Sophia extends EventEmitter {
         try {
             return this.call('calculate_fee', [operation, 'SPHTX'], (err, response) => {
                 if (err)
-                    callback(err, null);
+                    callback(err, '');
                 else {
                     this.call('add_fee', [operation, response], (err, response) => {
                         if (err)
-                            callback(err, null);
+                            callback(err, '');
                         else {
                             transaction=response;
                             this.call('about', [operation, response], (err, response) => {
                                 if (err)
-                                    callback(err, null);
+                                    callback(err, '');
                                 else {
                                     chainId = response.chain_id;
                                     this.call('create_simple_transaction', [transaction], (err, response) => {
                                         if (err)
-                                            callback(err, null);
+                                            callback(err, '');
                                         else {
                                             createtransaction = response;
-                                            this.call('get_transaction_digest', [createtransaction], (err, response) => {
-                                                if (err)
-                                                    callback(err, null);
-                                                else {
-                                                    console.log(createtransaction);
-                                                    signedTransaction = auth.signTransaction(createtransaction, privateKey, chainId,response);
+                                                    var digest=auth.CreateDigest(createtransaction,chainId);
+                                                    signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
                                                             this.call('broadcast_transaction', [signedTransaction], (err, response) => {
                                                                 if (err) {
-                                                                    callback(err, null);
+                                                                    callback(err, '');
                                                                 }
                                                                 else {
-                                                                    callback(null, response);
+                                                                    callback('', response);
                                                                 }
                                                             });
                                                 }
@@ -258,11 +254,10 @@ class Sophia extends EventEmitter {
                             });
                         }
                     });
-                }
-            });
+
         }
         catch (ex) {
-            callback(err, null);
+            callback(ex, null);
         }
     }
 }
