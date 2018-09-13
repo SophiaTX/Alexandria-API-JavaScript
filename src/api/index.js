@@ -3,6 +3,7 @@ import Promise from 'bluebird';
 import config from '../config';
 import methods from './methods';
 import transports from './transports';
+//import logger from '../logging';
 import {
     camelCase
 } from '../utils';
@@ -15,8 +16,8 @@ class Sophia extends EventEmitter {
 
     constructor(options = {}) {
         super(options);
-        this._setTransport(options);
-        this._setLogger(options);
+        //this._setTransport(options);
+        //this._setLogger(options);
         this.options = options;
         this.seqNo = 0; // used for rpc calls
         methods.forEach(method => {
@@ -81,7 +82,9 @@ class Sophia extends EventEmitter {
     }
 
     _setLogger(options) {
+        console.log('in logger options');
         if (options.hasOwnProperty('logger')) {
+            console.log('Yes');
             switch (typeof options.logger) {
                 case 'function':
                     this.__logger = {
@@ -150,7 +153,10 @@ class Sophia extends EventEmitter {
     call(method, params, callback) {
         try {
             if (this._transportType !== 'http') {
+
+                //logger.log('RPC methods can only be called when using http transport');
                 callback(new Error('RPC methods can only be called when using http transport'));
+
                 return;
             }
             const id = ++this.seqNo;
@@ -184,12 +190,12 @@ class Sophia extends EventEmitter {
     //         .then(res => { callback(null, res); }, err => { callback(err); });
     // }
 
-    setOptions(options) {
-        Object.assign(this.options, options);
-        this._setLogger(options);
-        this._setTransport(options);
-        this.transport.setOptions(options);
-    }
+    // setOptions(options) {
+    //     Object.assign(this.options, options);
+    //     this._setLogger(options);
+    //     this._setTransport(options);
+    //     this.transport.setOptions(options);
+    // }
 
     // setWebSocket(url) {
     //     this.setOptions({
@@ -235,24 +241,27 @@ class Sophia extends EventEmitter {
                                             callback(err, '');
                                         else {
                                             createtransaction = response;
-                                                    var digest=auth.CreateDigest(createtransaction,chainId);
+                                                    var digest = auth.CreateDigest(createtransaction, chainId);
                                                     signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
-                                                            this.call('broadcast_transaction', [signedTransaction], (err, response) => {
-                                                                if (err) {
-                                                                    callback(err, '');
-                                                                }
-                                                                else {
-                                                                    callback('', response);
-                                                                }
-                                                            });
+                                                    this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+                                                        if (err) {
+                                                            //logger.log(err);
+                                                            callback(err, '');
+
+                                                        }
+                                                        else {
+                                                            callback('', response);
+                                                        }
+                                                    });
                                                 }
+                                            });
+                                        }
                                             });
                                         }
                                     });
                                 }
 
-                            });
-                        }
+
                     });
 
         }
@@ -288,7 +297,6 @@ class Sophia extends EventEmitter {
     // );
     //
     // }
-
 let sophia = new Sophia(config);
 
 sophia.setOptions=function(options) {
@@ -312,7 +320,12 @@ sophia.setOptions=function(options) {
 sophia.createAccount= function(creator, seed, privateKey, jsonMeta, owner, active, memoKey, callback) {
 
     return sophia.call('create_account', [creator, seed, jsonMeta, owner, active, memoKey], function (err, response) {
-        if (err) callback(err, ''); else {
+        if (err)
+        {
+            //logger.log(err);
+            callback(err, '');
+        }
+        else {
             sophia.startBroadcasting(response, privateKey, callback);
         }
     });
@@ -492,7 +505,6 @@ sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
                     if (operationName === type) {
                         callback('', r[r.length - 1]);
                     }
-
                 });
             }else{
                 callback('',response);
@@ -832,6 +844,25 @@ sophia.getVestingBalance=function(accountName,callback) {
     });
 };
 /**
+ * Sponsor accounts
+ * @param sponsoring_account
+ * @param sponsored_account
+ * @param is_sponsoring
+ * @param privateKey
+ * @param callback
+ * @return {Object}
+ */
+sophia.sponsorAccountFees=function(sponsoring_account, sponsored_account, is_sponsoring, privateKey, callback) {
+    return sophia.call('sponsor_account_fees', [sponsoring_account, sponsored_account, is_sponsoring], (err, response) => {
+        if (err)
+            callback(err, '');
+        else {
+            //callback('', response);
+            sophia.startBroadcasting(response,privateKey,callback);
+        }
+    });
+};
+/**
  * List of all the documents received
  * @param appId
  * @param accountName
@@ -903,6 +934,7 @@ sophia.makeCustomBinaryOperation=function(appId, from, to, data, privateKey, cal
         }
     });
 };
+
 
 module.exports = sophia;
 exports.Sophia = Sophia;

@@ -181,7 +181,7 @@ Accounts
      console.log(err,response);
  });
  ```
-  Delete account using user's PrivateKey
+ Delete account using user's PrivateKey
  ```js  
  sophia.api.deleteAccount(accountName,privateKey,function(err,response){
      console.log(err,response);
@@ -199,6 +199,13 @@ Accounts
      console.log(err, response);
  });
  ```
+ Sponsor an account, isSponsored is a boolean value to enable and disable the sponsorship
+  ```js
+  sophia.api.sponsorAccountFees(sponsor,sponsored,isSponsored,privateKey,function(err, response){
+       console.log(err, response);
+  });
+  ```
+ 
  Transaction
  =================
  
