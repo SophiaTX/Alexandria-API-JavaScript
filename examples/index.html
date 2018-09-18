@@ -10,8 +10,12 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
  //Sophia Connection
+
  sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
   //sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
+
+ //sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
+ // sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
  //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  //  sophia.api.createAccount('initminer','test45747','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
@@ -74,7 +78,7 @@
 //     console.log(err, response);
 // });
 //   //Get details about the block using block_id
-// sophia.api.getBlock('1983',function(err, response){
+// sophia.api.getBlock('1600',function(err, response){
 //     console.log(err, response);
 // });
 //   //Get details of operations inside a block
@@ -135,18 +139,29 @@
 //       sophia.api.getAccountBalance('abc',function(err, response){
 //           console.log(err, response);
 //       });
+
   //Get account name using the seed(Any data string including uppercase,lowercase and numbers) used to create the account.
   // sophia.api.getAccountNameFromSeed('test45747477ww124556576891011123',function(err, response){
   //       console.log(err, response);
   //  });
 //   //Get vesting balance of the account
 //  sophia.api.getVestingBalance('abc',function(err, response){
+ // Get account name using the seed(Any data string including uppercase,lowercase and numbers) used to create the account.
+ //  sophia.api.getAccountNameFromSeed('abc',function(err, response){
+ //        console.log(err, response);
+ //   });
+ //  //Get vesting balance of the account
+ // sophia.api.getVestingBalance('abc',function(err, response){
+ //     console.log(err, response);
+ // });
+//sponsoring account
+//  sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','false','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
 //      console.log(err, response);
 //  });
-// sponsoring account
- sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
-     console.log(err, response);
- });
+// // sponsoring account
+//  sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
+//      console.log(err, response);
+//  });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
