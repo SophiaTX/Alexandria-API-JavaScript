@@ -299,6 +299,7 @@ Voting
  ```
  Daemon Methods
  ==============
+ Run other endpoint methods 
  ```js
  sophia.api.callPlugin(pluginName,methodName,arguments,function(err, response){
       console.log(err, response);
