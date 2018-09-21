@@ -3,7 +3,6 @@ import Promise from 'bluebird';
 import config from '../config';
 import methods from './methods';
 import transports from './transports';
-//import logger from '../logging';
 import {
     camelCase
 } from '../utils';
@@ -245,9 +244,8 @@ class Sophia extends EventEmitter {
                                                     signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
                                                     this.call('broadcast_transaction', [signedTransaction], (err, response) => {
                                                         if (err) {
-                                                            //logger.log(err);
+                                                           // logger.log(err);
                                                             callback(err, '');
-
                                                         }
                                                         else {
                                                             callback('', response);

@@ -1,6 +1,6 @@
 {
   "name": "sophiatx-alexandria-api",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "JavaScript API for accessing SophiaTX blockchain",
   "main": "lib/index.js",
   "scripts": {
@@ -58,8 +58,7 @@
     "detect-node": "^2.0.3",
     "ecurve": "^1.0.5",
     "fetch": "^1.1.0",
-    "graylog": "^0.1.5",
-    "graylog2": "^0.2.1",
+    "gelf": "^2.0.1",
     "lodash": "^4.16.4",
     "pug": "^2.0.3",
     "randombytes": "^2.0.6",
