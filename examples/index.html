@@ -145,7 +145,13 @@
 //      console.log(err, response);
 //  });
 //sponsoring account
- sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
+     sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
+         console.log(err, response);
+     });
+
+ //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
+ var args = { block_num : 16 };
+ sophia.api.callPlugin('block_api','get_block',args,function(err, response){
      console.log(err, response);
  });
 //     // generates separate public key for each of the roles

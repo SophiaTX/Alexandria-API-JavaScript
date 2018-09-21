@@ -171,7 +171,34 @@ class Sophia extends EventEmitter {
             callback(e, null);
         }
     }
+    /**
+     * @param method -  method name
+     * @param params - arguments
+     * @param callback - callback function
+     * @returns {object}
+     */
+    callDaemon(method, params, callback) {
+        try {
+            if (this._transportType !== 'http') {
 
+                //logger.log('RPC methods can only be called when using http transport');
+                callback(new Error('RPC methods can only be called when using http transport'));
+
+                return;
+            }
+            const id = ++this.seqNo;
+
+            jsonRpc('http://devnet.sophiatx.com:9193', {method, params, id})
+                .then(res => {
+                    callback(null, res);
+                }, err => {
+                    callback(err, null);
+                });
+        }
+        catch (e) {
+            callback(e, null);
+        }
+    }
     // signedCall(method, params, account, key, callback) {
     //     if (this._transportType !== 'http') {
     //         callback(new Error('RPC methods can only be called when using http transport'));
@@ -764,6 +791,25 @@ sophia.accountExist=function(accountName,callback) {
         else {
             callback('', response);
         }
+    });
+};
+/**
+ * call random functions from daemon
+ * @param pluginName
+ * @param methodName
+ * @param args
+ * @param callback
+ * @return {Object}
+ */
+sophia.callPlugin=function(pluginName,methodName,args,callback) {
+    return sophia.callDaemon(pluginName+'.'+methodName, args, (err, response) => {
+
+        if (err)
+            callback(err, '');
+        else {
+            callback('', response);
+        }
+
     });
 };
 /**

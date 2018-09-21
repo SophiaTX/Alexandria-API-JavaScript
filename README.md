@@ -297,3 +297,10 @@ Voting
     console.log(err,response);
  });
  ```
+ Daemon Methods
+ ==============
+ ```js
+ sophia.api.callPlugin(pluginName,methodName,arguments,function(err, response){
+      console.log(err, response);
+  });
+```
