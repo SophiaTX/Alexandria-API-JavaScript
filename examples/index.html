@@ -10,8 +10,8 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
  //Sophia Connection
- sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
- //sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
+ //sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
+ sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
   //sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
  //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
@@ -144,10 +144,10 @@
 //  sophia.api.getVestingBalance('abc',function(err, response){
 //      console.log(err, response);
 //  });
-// //sponsoring account
-//  sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
-//      console.log(err, response);
-//  });
+//sponsoring account
+ sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
+     console.log(err, response);
+ });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
