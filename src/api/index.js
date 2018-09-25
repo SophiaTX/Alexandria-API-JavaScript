@@ -1,48 +1,19 @@
 import EventEmitter from 'events';
-import Promise from 'bluebird';
 import config from '../config';
 import transports from './transports';
-import {
-    camelCase
-} from '../utils';
+const dgram= require ('dgram');
 import {
     jsonRpc
 } from './transports/http';
-
+import gelf from '../logging';
 const auth = require('../auth');
 class Sophia extends EventEmitter {
 
     constructor(options = {}) {
         super(options);
-        //this._setTransport(options);
-        //this._setLogger(options);
         this.options = options;
         this.seqNo = 0; // used for rpc calls
-        // methods.forEach(method => {
-        //     const methodName = method.method_name || camelCase(method.method);
-        //     const methodParams = method.params || [];
-        //
-        //     this[`${methodName}With`] = (options, callback) => {
-        //         return this.send(method.api, {
-        //             method: method.method,
-        //             params: methodParams.map(param => options[param])
-        //         }, callback);
-        //     };
-        //
-        //     this[methodName] = (...args) => {
-        //         const options = methodParams.reduce((memo, param, i) => {
-        //             memo[param] = args[i]; // eslint-disable-line no-param-reassign
-        //             return memo;
-        //         }, {});
-        //         const callback = args[methodParams.length];
-        //         return this[`${methodName}With`](options, callback);
-        //     };
-        //
-        //     this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
-        //     this[`${methodName}Async`] = Promise.promisify(this[methodName]);
-        // });
-        /*this.callAsync = Promise.promisify(this.call);
-        this.signedCallAsync = Promise.promisify(this.signedCall);*/
+
     }
 
     _setTransport(options) {
@@ -152,7 +123,7 @@ class Sophia extends EventEmitter {
         try {
             if (this._transportType !== 'http') {
 
-                //logger.log('RPC methods can only be called when using http transport');
+                gelf.emitError('RPC methods can only be called when using http transport');
                 callback(new Error('RPC methods can only be called when using http transport'));
 
                 return;
@@ -163,7 +134,9 @@ class Sophia extends EventEmitter {
                 .then(res => {
                     callback(null, res);
                 }, err => {
+                    gelf.emitError(err);
                     callback(err, null);
+
                 });
         }
         catch (e) {

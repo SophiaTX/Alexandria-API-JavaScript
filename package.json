@@ -4,7 +4,7 @@
   "description": "JavaScript API for accessing SophiaTX blockchain",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run build-browser && npm run build-node",
+    "build": "npm run build-node",//npm run build-browser && npm run build-node
     "build-browser": "rm -rf dist && NODE_ENV=production node ./node_modules/webpack/bin/webpack.js && gzip -k -f ./dist/*.js && du -h ./dist/*",
     "build-node": "mkdir -p ./lib && cp -r ./src/* ./lib/ && babel ./src --out-dir ./lib",
     "prepare": "npm run build"
@@ -56,6 +56,7 @@
     "cross-fetch": "^1.1.1",
     "debug": "^2.6.8",
     "detect-node": "^2.0.3",
+    "dgram": "^1.0.1",
     "ecurve": "^1.0.5",
     "fetch": "^1.1.0",
     "gelf": "^2.0.1",
