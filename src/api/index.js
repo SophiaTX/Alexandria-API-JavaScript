@@ -1,7 +1,6 @@
 import EventEmitter from 'events';
 import Promise from 'bluebird';
 import config from '../config';
-import methods from './methods';
 import transports from './transports';
 import {
     camelCase
@@ -19,29 +18,29 @@ class Sophia extends EventEmitter {
         //this._setLogger(options);
         this.options = options;
         this.seqNo = 0; // used for rpc calls
-        methods.forEach(method => {
-            const methodName = method.method_name || camelCase(method.method);
-            const methodParams = method.params || [];
-
-            this[`${methodName}With`] = (options, callback) => {
-                return this.send(method.api, {
-                    method: method.method,
-                    params: methodParams.map(param => options[param])
-                }, callback);
-            };
-
-            this[methodName] = (...args) => {
-                const options = methodParams.reduce((memo, param, i) => {
-                    memo[param] = args[i]; // eslint-disable-line no-param-reassign
-                    return memo;
-                }, {});
-                const callback = args[methodParams.length];
-                return this[`${methodName}With`](options, callback);
-            };
-
-            this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
-            this[`${methodName}Async`] = Promise.promisify(this[methodName]);
-        });
+        // methods.forEach(method => {
+        //     const methodName = method.method_name || camelCase(method.method);
+        //     const methodParams = method.params || [];
+        //
+        //     this[`${methodName}With`] = (options, callback) => {
+        //         return this.send(method.api, {
+        //             method: method.method,
+        //             params: methodParams.map(param => options[param])
+        //         }, callback);
+        //     };
+        //
+        //     this[methodName] = (...args) => {
+        //         const options = methodParams.reduce((memo, param, i) => {
+        //             memo[param] = args[i]; // eslint-disable-line no-param-reassign
+        //             return memo;
+        //         }, {});
+        //         const callback = args[methodParams.length];
+        //         return this[`${methodName}With`](options, callback);
+        //     };
+        //
+        //     this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
+        //     this[`${methodName}Async`] = Promise.promisify(this[methodName]);
+        // });
         /*this.callAsync = Promise.promisify(this.call);
         this.signedCallAsync = Promise.promisify(this.signedCall);*/
     }
@@ -383,7 +382,7 @@ sophia.updateAccount=function(accountName,jsonMeta,owner,active, memoKey,private
  * @returns {object}
  */
 sophia.deleteAccount=function(accountName,privateKey,callback){
-    return sophia.call('delete_account',[accountName],(err,response)=>{
+    return sophia.call('delete_account',accountName,(err,response)=>{
         if(err)
             callback(err,'');
         else {
@@ -632,7 +631,7 @@ sophia.info=function(callback) {
  * @return {Object}
  */
 sophia.help=function(callback) {
-    return sophia.call('help', [], (err, response) => {
+    return sophia.call('help',[], (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -755,7 +754,7 @@ sophia.getAccount=function(name,callback) {
  * @return {Object}
  */
 sophia.getTransaction=function(trxId,callback) {
-    return sophia.call('get_transaction', [trxId], (err, response) => {
+    return sophia.call('get_transaction', trxId, (err, response) => {
         if (err)
             callback(err, '');
         else {

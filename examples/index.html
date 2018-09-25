@@ -70,10 +70,14 @@
 // sophia.api.about(function(err, response){
 //   console.log(err, response);
 // });
-//   //Get help to work with the blockchain, this returns all the method and necessary details about the blockchain its functionalities.
+//   //Get help to work with the blockchain, this returns recent updates about the blockchain.
 // sophia.api.info(function(err, response){
 //     console.log(err, response);
 // });
+//  //   //Get help to work with the blockchain, this returns all the method and necessary details about the blockchain its functionalities.
+//  sophia.api.help(function(err, response){
+//      console.log(err, response);
+//  });
 //   //Get details about the block using block_id
 // sophia.api.getBlock('1983',function(err, response){
 //     console.log(err, response);
@@ -121,11 +125,15 @@
 //        console.log(err, response);
 //    });
 //    //Get feed history
-//   sophia.api.getFeedHistory('USD',function(err, response){
-//       console.log(err, response);
-//   });
+//  sophia.api.getFeedHistory('USD',function(err, response){
+//      console.log(err, response);
+//  });
 //   //Get ActiveKey related to the account
 //  sophia.api.getActiveAuthority('ArkTree1',function(err, response){
+//      console.log(err, response);
+//  });
+//    //Get MemoKey related to the account
+//  sophia.api.getMemoKey('ArkTree1',function(err, response){
 //      console.log(err, response);
 //  });
 //  // Get OwnerKey related to the account
@@ -144,16 +152,16 @@
 //  sophia.api.getVestingBalance('abc',function(err, response){
 //      console.log(err, response);
 //  });
-//sponsoring account
-     sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
-         console.log(err, response);
-     });
-
- //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
- var args = { block_num : 16 };
- sophia.api.callPlugin('block_api','get_block',args,function(err, response){
-     console.log(err, response);
- });
+// //sponsoring account
+//      sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
+//          console.log(err, response);
+//      });
+//
+//  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
+//  var args = { block_num : 16 };
+//  sophia.api.callPlugin('block_api','get_block',args,function(err, response){
+//      console.log(err, response);
+//  });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not

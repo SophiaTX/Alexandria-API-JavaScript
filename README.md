@@ -49,9 +49,15 @@ sophia.api.about(function(err, response){
   console.log(err, response);
 });
 ```
-Get help to work with the blockchain, this returns all the method and necessary details about the blockchain and its methods.
+Get the recent updates on the blockchain.
 ```js
 sophia.api.info(function(err, response){
+    console.log(err, response);
+});
+```
+Get help to work with the blockchain, this returns all the method and necessary details about the blockchain its functionalities.
+```js
+sophia.api.help(function(err, response){
     console.log(err, response);
 });
 ```
@@ -94,7 +100,12 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
- 
+Get MemoKey related to the account
+```js
+sophia.api.getMemoKey(accountName,function(err, response){
+    console.log(err, response);
+});
+ ```
  Get OwnerKey related to the account
  ```js
  sophia.api.getOwnerAuthority(accountName,function(err, response){
