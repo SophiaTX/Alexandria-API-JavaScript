@@ -754,7 +754,7 @@ sophia.getAccount=function(name,callback) {
  * @return {Object}
  */
 sophia.getTransaction=function(trxId,callback) {
-    return sophia.call('get_transaction', trxId, (err, response) => {
+    return sophia.call('get_transaction', [trxId], (err, response) => {
         if (err)
             callback(err, '');
         else {
