@@ -382,7 +382,7 @@ sophia.updateAccount=function(accountName,jsonMeta,owner,active, memoKey,private
  * @returns {object}
  */
 sophia.deleteAccount=function(accountName,privateKey,callback){
-    return sophia.call('delete_account',accountName,(err,response)=>{
+    return sophia.call('delete_account',[accountName],(err,response)=>{
         if(err)
             callback(err,'');
         else {
