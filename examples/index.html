@@ -11,8 +11,8 @@
 <script>
  //Sophia Connection
  //sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
- sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
-  //sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
+ //sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
+ //sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
  //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
  //  sophia.api.createAccount('initminer','test45747','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
@@ -108,22 +108,22 @@
 //      console.log(err, response);
 //  });
 //  // Get transaction history of an account
-//  sophia.api.getAccountHistory('abc','65000','1000',function(err, response){
+//  sophia.api.getAccountHistory('matej','1','1',function(err, response){
 //     console.log(response);
 //  });
 //
-//    // // Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
-//    sophia.api.getAccountHistoryByType('abc','witness_update','46000','1000',function(err, response){
-//        console.log(err, response);
-//    });
+   // // Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account etc.)
+   sophia.api.getAccountHistoryByType('matej', 'transfer', '-1', '10000',function(err, response){
+       console.log(err, response);
+   });
 //   sophia.api.getAccountTransferHistory('matej','12','10',function(err, response){
 //       console.log(err, response);
 //   });
 //
-   // Get transaction details using transaction id
-   sophia.api.getTransaction('d22331d7f6027df7baded84a70305d6504f92226',function(err, response){
-       console.log(err, response);
-   });
+//    // Get transaction details using transaction id
+//    sophia.api.getTransaction('d22331d7f6027df7baded84a70305d6504f92226',function(err, response){
+//        console.log(err, response);
+//    });
 //    //Get feed history
 //  sophia.api.getFeedHistory('USD',function(err, response){
 //      console.log(err, response);

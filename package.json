@@ -4,7 +4,7 @@
   "description": "JavaScript API for accessing SophiaTX blockchain",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run build-node",//npm run build-browser && npm run build-node
+    "build": "npm run build-node",
     "build-browser": "rm -rf dist && NODE_ENV=production node ./node_modules/webpack/bin/webpack.js && gzip -k -f ./dist/*.js && du -h ./dist/*",
     "build-node": "mkdir -p ./lib && cp -r ./src/* ./lib/ && babel ./src --out-dir ./lib",
     "prepare": "npm run build"
@@ -61,6 +61,7 @@
     "fetch": "^1.1.0",
     "gelf": "^2.0.1",
     "lodash": "^4.16.4",
+    "node-gelf": "^1.0.2",
     "pug": "^2.0.3",
     "randombytes": "^2.0.6",
     "secure-random": "^1.1.1",
