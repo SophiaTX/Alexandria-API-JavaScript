@@ -122,7 +122,7 @@ class Sophia extends EventEmitter {
         try {
             if (this._transportType !== 'http') {
 
-                gelf.emitError(new Error('RPC methods can only be called when using http transport'));
+                //gelf.emitError(new Error('RPC methods can only be called when using http transport'));
                 callback(new Error('RPC methods can only be called when using http transport'));
 
                 return;

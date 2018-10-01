@@ -5,7 +5,7 @@ sophia1.setOptions({ url: 'http://195.48.9.209:9093' });
 sophia1.createAccount('initminer','test45747477ww12455657689101891019','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK','SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',
     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
         console.log(err,response);
-});
+    });
 // console.log(sophia1.auth.getKeyPair('sanjiv','abcde'));
 // sophia1.api.sophia.about(function(err, response){
 //     console.log(err, response);
