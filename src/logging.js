@@ -1,5 +1,5 @@
 const Gelf = require('gelf');
-//const ip=require('ip');
+const ip=require('ip');
 const gelf = new Gelf({
      graylogPort: 12201,
     graylogHostname:'35.159.11.184',
@@ -22,10 +22,9 @@ gelf.ErrorMessage= function(error,endpoint){
     "full_message": error.toString(),
     "timestamp": Date.now() / 1000,
     "level": error.code,
-
-
+    "client_id":ip.address()
     };
-    //"client_id":ip.address()
+
     return message;
 };
 // const message = {
