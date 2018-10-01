@@ -133,7 +133,10 @@ class Sophia extends EventEmitter {
                 .then(res => {
                     callback(null, res);
                 }, err => {
-                    gelf.emitError(err);
+                    let message=gelf.ErrorMessage(err, this.options.uri);
+                    console.log(message);
+                    gelf.emit('gelf.log',message);
+
                     callback(err, null);
 
                 });
@@ -498,6 +501,7 @@ sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
             if (response.length > 0) {
                 response.forEach(r => {
                     let operationName = r[r.length - 1].op[r.length - 2];
+                    //console.log(operationName);
                     if (operationName === type) {
                         callback('', r[r.length - 1]);
                     }

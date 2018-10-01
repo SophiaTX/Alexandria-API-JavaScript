@@ -1,4 +1,5 @@
 const Gelf = require('gelf');
+//const ip=require('ip');
 const gelf = new Gelf({
      graylogPort: 12201,
     graylogHostname:'35.159.11.184',
@@ -12,19 +13,29 @@ const gelf = new Gelf({
 gelf.on('error', (err) => {
     console.log('ouch!', err);
 });
-const message = {
-    "version": "1.0",
-    "host": "www",
-    "short_message": "Short message",
-    "full_message": "Backtrace here\n\nmore stuff",
+gelf.ErrorMessage= function(error,endpoint){
+    const message = {
+        "version": "1.0",
+        "facility":"AlexandriaJS",
+        "host":endpoint,
+    "short_message": error.name,
+    "full_message": error.toString(),
     "timestamp": Date.now() / 1000,
-    "level": 1,
-    "facility": "payment-backend",
-    "line": 356,
-    "_user_id": 42,
-    "_something_else": "foo"
+    "level": error.code,
+
+
+    };
+    //"client_id":ip.address()
+    return message;
 };
-gelf.emit('gelf.log', message);
+// const message = {
+//     "short_message": "Short message",
+//     "full_message": "Backtrace here\n\nmore stuff",
+//     "timestamp": Date.now() / 1000,
+//     "level": 1,
+//     "line": 356,
+// };
+// gelf.emit('gelf.log', message);
 // gelf.send('error', (err, response) => {
 //     console.log('ouch!', response);
 //     gelf.sendMessage("hello",(err,response)=>{
