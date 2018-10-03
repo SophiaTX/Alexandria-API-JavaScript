@@ -188,8 +188,13 @@ Auth.signTransaction = function (trx, key,digest) {
     if (trx.signatures) {
         signatures = [].concat(trx.signatures);
     }
-	var sig = signature.signHash(digest, key);
-	signatures.push(sig.toHex());
+    var sig;
+    try{
+        sig=signature.signHash(digest, key);
+        signatures.push(sig.toHex());
+    }catch(e){
+        throw new Error(e);
+    }
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
 

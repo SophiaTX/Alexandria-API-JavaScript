@@ -139,6 +139,9 @@ class Sophia extends EventEmitter {
 
             jsonRpc(this.options.uri, {method, params, id})
                 .then(res => {
+                    if(res.hasOwnProperty('Error')){
+                        this.logError(err);
+                    }
                     callback(null, res);
                 }, err => {
                     this.logError(err);
@@ -225,6 +228,7 @@ class Sophia extends EventEmitter {
         let chainId;
         let transaction;
         let createtransaction;
+        let signedTransaction;
         try {
             return this.call('calculate_fee', [operation, 'SPHTX'], (err, response) => {
                 if (err)
@@ -246,7 +250,13 @@ class Sophia extends EventEmitter {
                                         else {
                                             createtransaction = response;
                                                     var digest = auth.CreateDigest(createtransaction, chainId);
-                                                    this.call('broadcast_transaction', [auth.signTransaction(createtransaction, privateKey, digest)], (err, response) => {
+                                                    try{
+                                                        signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
+                                                    }
+                                                    catch(e){
+                                                        callback(e,'');
+                                                    }
+                                                    this.call('broadcast_transaction', [], (err, response) => {
                                                         if (err) {
                                                             callback(err, '');
                                                         }
