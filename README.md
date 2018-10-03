@@ -88,7 +88,8 @@ Check if the account still exists
      console.log(err, response);
  });
  ```
- Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, create_account,account_delete,withdraw_vesting,etc.)
+ Get Account History filtered using its type (transfer, transfer_to_vesting, witness_update, account_create, account_delete,account_update, 
+ withdraw_vesting, vote, witness_update, transfer_to_vesting, account_witness_vote, account_witness_proxy, custom_json, custom_binary, etc.)
  ```js
  sophia.api.getAccountHistoryByType(accountName,type,from,limit,function(err, response){
       console.log(err, response);

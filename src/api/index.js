@@ -524,12 +524,17 @@ sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
             callback(err, '');
         else {
             if (response.length > 0) {
+                let valueArray=[];
                 response.forEach(r => {
                     let operationName = r[r.length - 1].op[r.length - 2];
                     if (operationName === type) {
-                        callback('', r[r.length - 1]);
+
+                        valueArray.push(r[r.length - 1]);
+
                     }
+
                 });
+                callback('', valueArray);
             }else{
                 callback('',response);
             }
