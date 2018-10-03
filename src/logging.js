@@ -1,18 +1,20 @@
 const Gelf = require('gelf');
 const ip=require('ip');
 const gelf = new Gelf({
-     graylogPort: 12201,
-    graylogHostname:'35.159.11.184',
+    graylogPort: 12201,
     connection: 'wan',
     maxChunkSizeWan: 1420,
     maxChunkSizeLan: 8154
 });
+gelf.setHost=function(uri){
+    gelf.config.graylogHostname=uri;
+};
 // gelf.on('message', function (gelf) {
 //      console.log(gelf.level, gelf.short_message, gelf.long_message);
 //  });
-gelf.on('error', (err) => {
-    console.log('ouch!', err);
-});
+// gelf.on('error', (err) => {
+//     console.log('ouch!', err);
+// });
 gelf.ErrorMessage= function(error,endpoint){
     const message = {
         "version": "1.0",

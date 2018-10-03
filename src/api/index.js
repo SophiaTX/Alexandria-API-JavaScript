@@ -15,6 +15,13 @@ class Sophia extends EventEmitter {
 
     }
 
+    logError(err){
+        let message=gelf.ErrorMessage(err, this.options.uri);
+        gelf.emit('gelf.log',message,(err)=>{
+            if(err)
+                console.log(err);
+        });
+    }
     _setTransport(options) {
         if (options.url && options.url.match('^((http|https)?:\/\/)')) {
             options.uri = options.url;
@@ -50,27 +57,28 @@ class Sophia extends EventEmitter {
     }
 
     _setLogger(options) {
+        gelf.setHost(options.logUri);
         console.log('in logger options');
-        if (options.hasOwnProperty('logger')) {
-            console.log('Yes');
-            switch (typeof options.logger) {
-                case 'function':
-                    this.__logger = {
-                        log: options.logger
-                    };
-                    break;
-                case 'object':
-                    if (typeof options.logger.log !== 'function') {
-                        throw new Error('setOptions({logger:{}}) must have a property .log of type function');
-                    }
-                    this.__logger = options.logger;
-                    break;
-                case 'undefined':
-                    if (this.__logger) break;
-                default:
-                    this.__logger = false;
-            }
-        }
+        // if (options.hasOwnProperty('logger')) {
+        //     console.log('Yes');
+        //     switch (typeof options.logger) {
+        //         case 'function':
+        //             this.__logger = {
+        //                 log: options.logger
+        //             };
+        //             break;
+        //         case 'object':
+        //             if (typeof options.logger.log !== 'function') {
+        //                 throw new Error('setOptions({logger:{}}) must have a property .log of type function');
+        //             }
+        //             this.__logger = options.logger;
+        //             break;
+        //         case 'undefined':
+        //             if (this.__logger) break;
+        //         default:
+        //             this.__logger = false;
+        //     }
+        // }
     }
 
     log(logLevel) {
@@ -133,12 +141,8 @@ class Sophia extends EventEmitter {
                 .then(res => {
                     callback(null, res);
                 }, err => {
-                    let message=gelf.ErrorMessage(err, this.options.uri);
-                    console.log(message);
-                    gelf.emit('gelf.log',message);
-
+                    this.logError(err);
                     callback(err, null);
-
                 });
         }
         catch (e) {
@@ -166,6 +170,7 @@ class Sophia extends EventEmitter {
                 .then(res => {
                     callback(null, res);
                 }, err => {
+                    this.logError(err);
                     callback(err, null);
                 });
         }
@@ -217,7 +222,6 @@ class Sophia extends EventEmitter {
      */
 
     startBroadcasting(operation, privateKey, callback) {
-        let signedTransaction;
         let chainId;
         let transaction;
         let createtransaction;
@@ -242,10 +246,8 @@ class Sophia extends EventEmitter {
                                         else {
                                             createtransaction = response;
                                                     var digest = auth.CreateDigest(createtransaction, chainId);
-                                                    signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
-                                                    this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+                                                    this.call('broadcast_transaction', [auth.signTransaction(createtransaction, privateKey, digest)], (err, response) => {
                                                         if (err) {
-                                                           // logger.log(err);
                                                             callback(err, '');
                                                         }
                                                         else {
