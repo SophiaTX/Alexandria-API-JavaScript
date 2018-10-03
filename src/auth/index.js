@@ -193,7 +193,7 @@ Auth.signTransaction = function (trx, key,digest) {
         sig=signature.signHash(digest, key);
         signatures.push(sig.toHex());
     }catch(e){
-        console.log(e);
+        throw new Error(e);
     }
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
