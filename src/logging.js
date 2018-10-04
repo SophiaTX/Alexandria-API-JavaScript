@@ -17,9 +17,9 @@ gelf.setHost=function(uri){
 // });
 gelf.ErrorMessage= function(error,endpoint){
     const message = {
-        "version": "1.0",
-        "facility":"AlexandriaJS",
-        "host":endpoint,
+    "version": "1.0",
+    "facility":"AlexandriaJS",
+    "host":endpoint,
     "short_message": error.name,
     "full_message": error.toString(),
     "timestamp": Date.now() / 1000,

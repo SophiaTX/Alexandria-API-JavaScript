@@ -236,7 +236,7 @@ class Sophia extends EventEmitter {
                 else {
                     this.call('add_fee', [operation, response], (err, response) => {
                         if (err)
-                            callback(err, '');
+                            this.logError(e);
                         else {
                             transaction=response;
                             this.call('about', [operation, response], (err, response) => {
@@ -249,14 +249,15 @@ class Sophia extends EventEmitter {
                                             callback(err, '');
                                         else {
                                             createtransaction = response;
-                                                    var digest = auth.CreateDigest(createtransaction, chainId);
-                                                    try{
-                                                        signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
-                                                    }
-                                                    catch(e){
-                                                        callback(e,'');
-                                                    }
-                                                    this.call('broadcast_transaction', [], (err, response) => {
+                                            var digest = auth.CreateDigest(createtransaction, chainId);
+                                            try{
+                                                signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
+                                            }
+                                            catch(e){
+                                                this.logError(e);
+                                                callback(e,'');
+                                            }
+                                                    this.call('broadcast_transaction', [signedTransaction], (err, response) => {
                                                         if (err) {
                                                             callback(err, '');
                                                         }
@@ -333,7 +334,6 @@ sophia.createAccount= function(creator, seed, privateKey, jsonMeta, owner, activ
     return sophia.call('create_account', [creator, seed, jsonMeta, owner, active, memoKey], function (err, response) {
         if (err)
         {
-            //logger.log(err);
             callback(err, '');
         }
         else {
