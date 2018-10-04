@@ -269,6 +269,7 @@ class Sophia extends EventEmitter {
                                             var digest = auth.CreateDigest(createtransaction, chainId);
                                             try{
                                                 signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
+
                                             }
                                             catch(e){
                                                 callback(e,'');
@@ -279,7 +280,9 @@ class Sophia extends EventEmitter {
                                                             callback(err, '');
                                                         }
                                                         else {
+
                                                             callback('', response);
+
                                                         }
                                                     });
                                                 }
@@ -355,6 +358,7 @@ sophia.createAccount= function(creator, seed, privateKey, jsonMeta, owner, activ
             callback(err, '');
         }
         else {
+
             sophia.startBroadcasting(response, privateKey, callback);
         }
     });
@@ -988,6 +992,9 @@ sophia.makeCustomBinaryOperation=function(appId, from, to, data, privateKey, cal
     });
 };
 
+sophia.getTransactionId=function(transaction){
+   return auth.CreateTxId(transaction);
+};
 
 module.exports = sophia;
 exports.Sophia = Sophia;

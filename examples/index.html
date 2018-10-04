@@ -10,15 +10,15 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
  //Sophia Connection
- sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
+ //sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
  //sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
-  //sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
+  sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
- //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-  sophia.api.createAccount('initminer','test45747','5JKHcAHiZnPVMzzeSGrWc6PhkjFZsP82Pf36CVaz8W2WmMP4L1w','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
-      'SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',function(err,response){
-       console.log(err,response);
-  });
+ // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
+ //  sophia.api.createAccount('initminer','test45747','5JKHcAHiZnPVMzzeSGrWc6PhkjFZsP82Pf36CVaz8W2WmMP4L1w','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
+ //      'SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',function(err,response){
+ //       console.log(err,response);
+ //  });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
 //
 //  //Delete account using user's PrivateKey
@@ -194,6 +194,8 @@
 //  //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
 // console.log(sophia.auth.decrypt('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
 //  ,'C1nxfKaK8fHxD2TB6JSru1knJJq5Dz6im2SD8pqV8JhS'));
+//  let transaction={"ref_block_num":24354,"ref_block_prefix":1983344465,"expiration":"2018-10-04T08:52:15","operations":[["account_witness_vote",{"fee":"0.000000 SPHTX","account":"initminer","witness":"matej","approve":false}]],"extensions":[],"signatures":["2051595eea752de7507032caa28667c50862f3f17baa0a3de70358eaa56a4b5cc06707f42a771b6b7cecd7ca00a13f19da125a632b0df92e641daae284e34a3c41"],"transaction_id":"e2df91500607706e9c8c682ff65cc2da9bfa5887","block_num":483107,"transaction_num":0};
+//  console.log(sophia.api.getTransactionId(transaction));
 </script>
 </body>
 </html>

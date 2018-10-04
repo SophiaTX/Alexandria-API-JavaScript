@@ -227,6 +227,10 @@ Accounts
      console.log(err,response);
  });
  ```
+ Get transaction id using transaction object as an argument.
+ ```js
+   console.log(sophia.api.getTransactionId(transaction));
+  ```
  Transfer amount (in the form of "amount currencySymbol, 10.000 SPHTX") to Vesting.
   ```js
   sophia.api.transferToVesting(from, to, amount,privateKey,function(err,response){

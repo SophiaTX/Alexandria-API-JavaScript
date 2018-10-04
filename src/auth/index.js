@@ -183,6 +183,14 @@ Auth.CreateDigest=function(trx, chainid){
     var buf = transaction.toBuffer(trx);
     return hash.sha256(Buffer.concat([cid,buf])).toString('hex');
 };
+Auth.CreateTxId=function(trx){
+    var buf = transaction.toBuffer(trx);
+    let digest=hash.sha256(buf).toString('hex');
+    let result=new Uint8Array(20);
+    result=digest;
+    return result.slice(0,40);
+
+};
 Auth.signTransaction = function (trx, key,digest) {
     var signatures = [];
     if (trx.signatures) {
