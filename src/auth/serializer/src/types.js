@@ -874,7 +874,7 @@ Types.map = function(key_st_operation, value_st_operation){
                 value_st_operation.toObject(o[1], debug)
             ]);
         }
-        return result
+        return result;
     }
     };
 };

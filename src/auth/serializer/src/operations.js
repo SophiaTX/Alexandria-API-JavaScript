@@ -271,12 +271,17 @@ let account_update = new Serializer(
         json_metadata: string
     }
 );
-
+// let price=new Serializer(
+//     "price",{
+//         base:asset,
+//         quote:asset
+//     }
+// );
 let chain_properties = new Serializer(
     "chain_properties", {
         account_creation_fee: asset,
         maximum_block_size: uint32,
-        sbd_interest_rate: uint16
+        price_feeds: map((string),(price))
     }
 );
 
@@ -289,7 +294,20 @@ let witness_update = new Serializer(
         props: chain_properties,
     }
 );
-
+let witness_stop=new Serializer(
+    "witness_stop",{
+        fee:asset,
+        owner:string
+    }
+);
+let witness_set_properties=new Serializer(
+    "witness_set_properties",
+    {
+        fee:asset,
+        owner:string,
+        props:map((string), (string))
+    }
+);
 let account_witness_vote = new Serializer(
     "account_witness_vote", {
         fee: asset,
@@ -724,67 +742,115 @@ let sponsor_fees= new Serializer(
     }
 
 );
-operation.st_operations = [
+
+// operation.st_operations = [
+//     transfer,
+//     transfer_to_vesting,
+//     withdraw_vesting,
+//     vote,
+//     account_create,
+//     account_update,
+//     account_delete,
+//     witness_update,
+//     comment,
+//     account_witness_vote,
+//     account_witness_proxy,
+//     limit_order_create,
+//     custom,
+//     custom_json,
+//     custom_binary,
+//     limit_order_cancel,
+//     feed_publish,
+//     convert,
+//     pow,
+//     report_over_production,
+//     delete_comment,
+//     comment_options,
+//     set_withdraw_vesting_route,
+//     limit_order_create2,
+//     challenge_authority,
+//     prove_authority,
+//     request_account_recovery,
+//     recover_account,
+//     change_recovery_account,
+//     escrow_transfer,
+//     sponsor_fees,
+//     escrow_dispute,
+//     escrow_release,
+//     pow2,
+//     escrow_approve,
+//     transfer_to_savings,
+//     transfer_from_savings,
+//     cancel_transfer_from_savings,
+//     decline_voting_rights,
+//     reset_account,
+//     set_reset_account,
+//     claim_reward_balance,
+//     delegate_vesting_shares,
+//     account_create_with_delegation,
+//     fill_convert_request,
+//     author_reward,
+//     curation_reward,
+//     comment_reward,
+//     liquidity_reward,
+//     interest,
+//     fill_vesting_withdraw,
+//     fill_order,
+//     shutdown_witness,
+//     fill_transfer_from_savings,
+//     hardfork,
+//     comment_payout_update,
+//     return_vesting_delegation,
+//     comment_benefactor_reward
+// ];
+operation.st_operations=[
     transfer,
     transfer_to_vesting,
     withdraw_vesting,
-    vote,
+    feed_publish,
+
     account_create,
     account_update,
     account_delete,
+
     witness_update,
-    comment,
+    witness_stop,
     account_witness_vote,
     account_witness_proxy,
-    limit_order_create,
+    witness_set_properties,
+
+
     custom,
     custom_json,
     custom_binary,
-    limit_order_cancel,
-    feed_publish,
-    convert,
-    pow,
-    report_over_production,
-    delete_comment,
-    comment_options,
-    set_withdraw_vesting_route,
-    limit_order_create2,
-    challenge_authority,
-    prove_authority,
+
     request_account_recovery,
     recover_account,
     change_recovery_account,
     escrow_transfer,
-    sponsor_fees,
     escrow_dispute,
     escrow_release,
-    pow2,
     escrow_approve,
-    transfer_to_savings,
-    transfer_from_savings,
-    cancel_transfer_from_savings,
-    decline_voting_rights,
+
     reset_account,
     set_reset_account,
-    claim_reward_balance,
-    delegate_vesting_shares,
-    account_create_with_delegation,
-    fill_convert_request,
-    author_reward,
-    curation_reward,
-    comment_reward,
-    liquidity_reward,
+
+    // application_create,
+    // application_update,
+    // application_delete,
+    // buy_application,
+    // cancel_application_buying,
+    // transfer_from_promotion_pool,
+    // sponsor_fees_operation,
+    /// virtual operations below this point
+
     interest,
     fill_vesting_withdraw,
-    fill_order,
     shutdown_witness,
-    fill_transfer_from_savings,
     hardfork,
-    comment_payout_update,
-    return_vesting_delegation,
-    comment_benefactor_reward
+    // producer_reward,
+    // promotion_pool_withdraw
 ];
-
 let transaction = new Serializer(
     "transaction", {
         ref_block_num: uint16,
@@ -809,6 +875,8 @@ const encrypted_memo = new Serializer(
         check: uint32,
         encrypted: string_binary}
 );
+
+
 /*
 
 // Make sure all tests pass
