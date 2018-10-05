@@ -176,12 +176,13 @@ Auth.normalizeBrainKey=function(brain_key){
 	catch (err) {
 		console.log(err);
     }
-
 };
 Auth.CreateDigest=function(trx, chainid){
     var cid = new Buffer(chainid, 'hex');
     var buf = transaction.toBuffer(trx);
-    return hash.sha256(Buffer.concat([cid,buf])).toString('hex');
+    console.log(buf.toString('hex'));
+    let digest=hash.sha256(Buffer.concat([cid,buf])).toString('hex');
+    return digest;
 };
 Auth.CreateTxId=function(trx){
     var buf = transaction.toBuffer(trx);

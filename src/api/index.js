@@ -267,6 +267,13 @@ class Sophia extends EventEmitter {
                                         else {
                                             createtransaction = response;
                                             var digest = auth.CreateDigest(createtransaction, chainId);
+                                            console.log(digest);
+                                            this.call('get_transaction_digest', [createtransaction], (err, response) => {
+                                                if (err)
+                                                    console.log(err);
+                                                    else{
+                                                        console.log(response);
+                                                }});
                                             try{
                                                 signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
 

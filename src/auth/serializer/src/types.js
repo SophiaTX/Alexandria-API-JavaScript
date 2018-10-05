@@ -834,14 +834,15 @@ Types.map = function(key_st_operation, value_st_operation){
     },
 
     appendByteBuffer(b, object){
-        this.validate(object);
+        //this.validate(object);
         b.writeVarint32(object.length);
         for (var i = 0, o; i < object.length; i++) {
             o = object[i];
             key_st_operation.appendByteBuffer(b, o[0]);
             value_st_operation.appendByteBuffer(b, o[1]);
+            b.writeUint8(0);
         }
-        return;
+        return ;
     },
     fromObject(object){
         v.required(object);
@@ -853,7 +854,7 @@ Types.map = function(key_st_operation, value_st_operation){
                 value_st_operation.fromObject(o[1])
             ]);
         }
-        return this.validate(result)
+        return this.validate(result);
     },
     toObject(object, debug = {}){
         if (debug.use_default && object === undefined) {

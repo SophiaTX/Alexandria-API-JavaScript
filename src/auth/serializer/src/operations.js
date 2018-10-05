@@ -45,11 +45,11 @@ const {
     time_point_sec,
     optional,
     asset,
-} = types
+} = types;
 
-const future_extensions = types.void
-const hardfork_version_vote = types.void
-const version = types.void
+const future_extensions = types.void;
+const hardfork_version_vote = types.void;
+const version = types.void;
 
 // Place-holder, their are dependencies on "operation" .. The final list of
 // operations is not avialble until the very end of the generated code.
@@ -271,12 +271,7 @@ let account_update = new Serializer(
         json_metadata: string
     }
 );
-// let price=new Serializer(
-//     "price",{
-//         base:asset,
-//         quote:asset
-//     }
-// );
+
 let chain_properties = new Serializer(
     "chain_properties", {
         account_creation_fee: asset,
@@ -305,7 +300,7 @@ let witness_set_properties=new Serializer(
     {
         fee:asset,
         owner:string,
-        props:map((string), (string))
+        props:map(string, string)
     }
 );
 let account_witness_vote = new Serializer(
@@ -733,6 +728,15 @@ let account_delete = new Serializer(
         account: string
     }
 );
+let application_create= new Serializer(
+    "application_create",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);
 let sponsor_fees= new Serializer(
     "sponsor_fees",{
         fee:asset,
@@ -742,25 +746,90 @@ let sponsor_fees= new Serializer(
     }
 
 );
+let application_delete= new Serializer(
+    "application_delete",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
 
+);
+let application_update= new Serializer(
+    "application_update",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);let buy_application= new Serializer(
+    "buy_application",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);let cancel_application_buying= new Serializer(
+    "cancel_application_buying",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);let transfer_from_promotion_pool= new Serializer(
+    "transfer_from_promotion_pool",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);let sponsor_fees_operation= new Serializer(
+    "sponsor_fees_operation",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);let producer_reward= new Serializer(
+    "producer_reward",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);let promotion_pool_withdraw= new Serializer(
+    "promotion_pool_withdraw",{
+        fee:asset,
+        sponsor:string,
+        sponsored:string,
+        is_sponsoring:bool
+    }
+
+);
 // operation.st_operations = [
 //     transfer,
 //     transfer_to_vesting,
 //     withdraw_vesting,
-//     vote,
+//     feed_publish,
 //     account_create,
 //     account_update,
 //     account_delete,
 //     witness_update,
-//     comment,
+//     witness_stop,
 //     account_witness_vote,
 //     account_witness_proxy,
-//     limit_order_create,
+//     witness_set_properties,
 //     custom,
 //     custom_json,
 //     custom_binary,
 //     limit_order_cancel,
-//     feed_publish,
+//     vote,
 //     convert,
 //     pow,
 //     report_over_production,
@@ -835,22 +904,24 @@ operation.st_operations=[
     reset_account,
     set_reset_account,
 
-    // application_create,
-    // application_update,
-    // application_delete,
-    // buy_application,
-    // cancel_application_buying,
-    // transfer_from_promotion_pool,
-    // sponsor_fees_operation,
+    application_create,
+    application_update,
+    application_delete,
+    buy_application,
+    cancel_application_buying,
+    transfer_from_promotion_pool,
+    sponsor_fees_operation,
+
     /// virtual operations below this point
 
     interest,
     fill_vesting_withdraw,
     shutdown_witness,
     hardfork,
-    // producer_reward,
-    // promotion_pool_withdraw
+    producer_reward,
+    promotion_pool_withdraw
 ];
+
 let transaction = new Serializer(
     "transaction", {
         ref_block_num: uint16,
