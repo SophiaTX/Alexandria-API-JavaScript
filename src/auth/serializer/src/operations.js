@@ -45,11 +45,11 @@ const {
     time_point_sec,
     optional,
     asset,
-} = types
+} = types;
 
-const future_extensions = types.void
-const hardfork_version_vote = types.void
-const version = types.void
+const future_extensions = types.void;
+const hardfork_version_vote = types.void;
+const version = types.void;
 
 // Place-holder, their are dependencies on "operation" .. The final list of
 // operations is not avialble until the very end of the generated code.
@@ -61,7 +61,7 @@ module.exports.operation = operation;
 const Serializer=function(operation_name, serilization_types_object){
     const s = new SerializerImpl(operation_name, serilization_types_object);
     return module.exports[operation_name] = s;
-}
+};
 
 const beneficiaries = new Serializer("beneficiaries", {
     account: string,
@@ -281,7 +281,7 @@ let chain_properties = new Serializer(
     "chain_properties", {
         account_creation_fee: asset,
         maximum_block_size: uint32,
-        price_feeds: map((string),(price))
+        price_feeds: map(string,price),
     }
 );
 
@@ -292,6 +292,7 @@ let witness_update = new Serializer(
         url: string,
         block_signing_key: public_key,
         props: chain_properties,
+
     }
 );
 let witness_stop=new Serializer(
@@ -305,7 +306,10 @@ let witness_set_properties=new Serializer(
     {
         fee:asset,
         owner:string,
-        props:map((string), (string))
+        props:map((string), (bytes())),
+        extensions: set(static_variant([
+            future_extensions
+        ])),
     }
 );
 let account_witness_vote = new Serializer(
