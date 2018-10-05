@@ -251,6 +251,7 @@ Accounts
  ```
 Witness
 =================
+
 Get list of Witnesses or miners
 ```js
 sophia.api.listWitnesses(startFromWitnessName,count,function(err, response){
