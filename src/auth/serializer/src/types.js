@@ -1,21 +1,19 @@
-
-
 // Low-level types that make up operations
 
 import {normalize} from "../../ecc/src/brain_key";
 
 const v = require('./validation');
-const ObjectId = require('./object_id')
+const ObjectId = require('./object_id');
 const fp = require('./fast_parser');
-const chain_types = require('./ChainTypes')
+const chain_types = require('./ChainTypes');
 
 import { PublicKey, Address, ecc_config } from "../../ecc";
 import { fromImpliedDecimal } from "./number_utils";
 
-const Types = {}
-module.exports = Types
+const Types = {};
+module.exports = Types;
 
-const HEX_DUMP = process.env.npm_config__graphene_serializer_hex_dump
+const HEX_DUMP = process.env.npm_config__graphene_serializer_hex_dump;
 
 /**
 * Asset symbols contain the following information
@@ -30,40 +28,40 @@ const HEX_DUMP = process.env.npm_config__graphene_serializer_hex_dump
 */
 Types.asset = {
     fromByteBuffer(b){
-        let amount = b.readInt64()
-        let precision = b.readUint8()
-        let b_copy = b.copy(b.offset, b.offset + 7)
-        let symbol = new Buffer(b_copy.toBinary(), "binary").toString().replace(/\x00/g, "")
+        let amount = b.readInt64();
+        let precision = b.readUint8();
+        let b_copy = b.copy(b.offset, b.offset + 7);
+        let symbol = new Buffer(b_copy.toBinary(), "binary").toString().replace(/\x00/g, "");
         b.skip(7);
         // "1.000 SPHTX" always written with full precision
-        let amount_string = fromImpliedDecimal(amount, precision)
-        return amount_string + " " + symbol
+        let amount_string = fromImpliedDecimal(amount, precision);
+        return amount_string + " " + symbol;
     },
     appendByteBuffer(b, object){
-        object = object.trim()
+        object = object.trim();
         if( ! /^[0-9]+\.?[0-9]* [A-Za-z0-9]+$/.test(object))
-            throw new Error("Expecting amount like '99.000 SYMBOL', instead got '" + object + "'")
+            throw new Error("Expecting amount like '99.000 SYMBOL', instead got '" + object + "'");
         let [ amount, symbol ] = object.split(" ");
         if(symbol.length > 6)
-            throw new Error("Symbols are not longer than 6 characters " + symbol + "-"+ symbol.length)
+            throw new Error("Symbols are not longer than 6 characters " + symbol + "-"+ symbol.length);
         //b.writeInt64(v.to_long(amount.replace(".","")));
         b.writeInt64(v.to_long(amount.replace(".","")));
         //let dot = amount.indexOf("."); // 0.000
         //let precision = dot === -1 ? 0 : amount.length - dot - 1;
         //b.writeUint8(precision)
-         b.append(symbol.toUpperCase(), 'binary')
+         b.append(symbol.toUpperCase(), 'binary');
         for(let i = 0; i < 8 - symbol.length; i++)
-            b.writeUint8(0)
+            b.writeUint8(0);
         return;
     },
     fromObject(object){
-        return object
+        return object;
     },
     toObject(object, debug = {}){
         if (debug.use_default && object === undefined) { return "0.000 SPHTX"; }
-        return object
+        return object;
     }
-}
+};
 
 Types.uint8 = {
 
@@ -285,7 +283,7 @@ Types.bytes = function(size){
     appendByteBuffer(b, object){
         v.required(object);
         if(typeof object === "string")
-            object = new Buffer(object, "hex")
+            object = new Buffer(object, "hex");
 
         if (size === undefined) {
             b.writeVarint32(object.length);
@@ -296,7 +294,7 @@ Types.bytes = function(size){
     fromObject(object){
         v.required(object);
         if( Buffer.isBuffer(object) )
-            return object
+            return object;
 
         return new Buffer(object, 'hex');
     },
@@ -313,7 +311,7 @@ Types.bytes = function(size){
 
 Types.bool =
     {fromByteBuffer(b){
-        return b.readUint8() === 1
+        return b.readUint8() === 1;
     },
     appendByteBuffer(b, object){
         // supports boolean or integer
@@ -321,11 +319,11 @@ Types.bool =
         return;
     },
     fromObject(object){
-        return JSON.parse(object) ? true : false
+        return JSON.parse(object) ? true : false;
     },
     toObject(object, debug = {}){
         if (debug.use_default && object === undefined) { return false; }
-        return JSON.parse(object) ? true : false
+        return JSON.parse(object) ? true : false;
     }
 };
 
@@ -360,8 +358,8 @@ Types.array = function(st_operation){
         return sortOperation(result, st_operation);
     },
     appendByteBuffer(b, object){
-        v.required(object)
-        object = sortOperation(object, st_operation)
+        v.required(object);
+        object = sortOperation(object, st_operation);
         b.writeVarint32(object.length);
         for (var i = 0, o; i < object.length; i++) {
             o = object[i];
@@ -369,8 +367,8 @@ Types.array = function(st_operation){
         }
     },
     fromObject(object){
-        v.required(object)
-        object = sortOperation(object, st_operation)
+        v.required(object);
+        object = sortOperation(object, st_operation);
         var result = [];
         for (var i = 0, o; i < object.length; i++) {
             o = object[i];
@@ -382,8 +380,8 @@ Types.array = function(st_operation){
         if (debug.use_default && object === undefined) {
             return [ st_operation.toObject(object, debug) ];
         }
-        v.required(object)
-        object = sortOperation(object, st_operation)
+        v.required(object);
+        object = sortOperation(object, st_operation);
 
         var result = [];
         for (var i = 0, o; i < object.length; i++) {
@@ -399,25 +397,25 @@ Types.time_point_sec = {
     fromByteBuffer(b){ return b.readUint32(); },
     appendByteBuffer(b, object){
         if(typeof object !== "number")
-            object = Types.time_point_sec.fromObject(object)
+            object = Types.time_point_sec.fromObject(object);
 
         b.writeUint32(object);
         return;
     },
     fromObject(object){
-        v.required(object)
+        v.required(object);
 
         if(typeof object === "number")
-            return object
+            return object;
 
         if(object.getTime)
             return Math.floor( object.getTime() / 1000 );
 
         if(typeof object !== "string")
-            throw new Error("Unknown date type: " + object)
+            throw new Error("Unknown date type: " + object);
 
         if(typeof object === "string" && !/Z$/.test(object))
-            object = object + "Z"
+            object = object + "Z";
 
         return Math.floor( new Date(object).getTime() / 1000 );
     },
@@ -425,19 +423,19 @@ Types.time_point_sec = {
         if (debug.use_default && object === undefined)
             return (new Date(0)).toISOString().split('.')[0];
 
-        v.required(object)
+        v.required(object);
 
         if(typeof object === "string")
-            return object
+            return object;
 
         if(object.getTime)
-            return object.toISOString().split('.')[0]
+            return object.toISOString().split('.')[0];
 
         var int = parseInt(object);
         v.require_range(0,0xFFFFFFFF,int, `uint32 ${object}`);
         return (new Date( int * 1000 )).toISOString().split('.')[0];
     }
-}
+};
 
 Types.set = function(st_operation){
     return {validate(array){
@@ -521,7 +519,7 @@ Types.fixed_array = function(count, st_operation) {
       var i, j, ref;
       if (count !== 0) {
         v.required(object);
-        object = sortOperation(object, st_operation)
+        object = sortOperation(object, st_operation);
       }
       for (i = j = 0, ref = count; j < ref; i = j += 1) {
         st_operation.appendByteBuffer(b, object[i]);
@@ -605,7 +603,7 @@ var id_type = function(reserved_spaces, object_type){
 };
 
 Types.protocol_id_type = function(name){
-    v.required(name, "name")
+    v.required(name, "name");
     return id_type(chain_types.reserved_spaces.protocol_ids, name);
 };
 
@@ -651,18 +649,18 @@ Types.vote_id =
     appendByteBuffer(b, object){
         v.required(object);
         if(object === "string")
-            object = Types.vote_id.fromObject(object)
+            object = Types.vote_id.fromObject(object);
 
-        var value = object.id << 8 | object.type
+        var value = object.id << 8 | object.type;
         b.writeUint32(value);
         return;
     },
     fromObject(object){
         v.required(object, "(type vote_id)");
         if(typeof object === "object") {
-            v.required(object.type, "type")
-            v.required(object.id, "id")
-            return object
+            v.required(object.type, "type");
+            v.required(object.id, "id");
+            return object;
         }
         v.require_test(/^[0-9]+:[0-9]+$/, object, `vote_id format ${object}`);
         var [type, id] = object.split(':');
@@ -676,13 +674,13 @@ Types.vote_id =
         }
         v.required(object);
         if(typeof object === "string")
-            object = Types.vote_id.fromObject(object)
+            object = Types.vote_id.fromObject(object);
 
         return object.type + ":" + object.id;
     },
     compare(a, b) {
-        if(typeof a !== "object") a = Types.vote_id.fromObject(a)
-        if(typeof b !== "object") b = Types.vote_id.fromObject(b)
+        if(typeof a !== "object") a = Types.vote_id.fromObject(a);
+        if(typeof b !== "object") b = Types.vote_id.fromObject(b);
         return parseInt(a.id) - parseInt(b.id);
     }
 };
@@ -735,19 +733,19 @@ Types.static_variant = function(_st_operations){
         nosort: true,
         st_operations: _st_operations,
     opTypeId(value) {
-        let pos = 0, type_id
+        let pos = 0, type_id;
         if(typeof value === "number")
-            type_id = value
+            type_id = value;
         else {
             for(let op of this.st_operations) {
                 if(op.operation_name === value) {
-                    type_id = pos
-                    break
+                    type_id = pos;
+                    break;
                 }
-                pos++
+                pos++;
             }
         }
-        return type_id
+        return type_id;
     },
     fromByteBuffer(b){
         var type_id = b.readVarint32();
@@ -794,7 +792,7 @@ Types.static_variant = function(_st_operations){
         ];
     },
     compare(a, b) {
-        return strCmp(this.opTypeId(a[0]), this.opTypeId(b[0]))
+        return strCmp(this.opTypeId(a[0]), this.opTypeId(b[0]));
     }
     };
 };
@@ -867,7 +865,7 @@ Types.map = function(key_st_operation, value_st_operation){
         }
         v.required(object);
         object = this.validate(object);
-        var result = []
+        var result = [];
         for (var i = 0, o; i < object.length; i++) {
             o = object[i];
             result.push([
@@ -884,7 +882,7 @@ Types.public_key = {
     toPublic(object){
         if (object.resolve !== undefined) { object = object.resolve; }
         return object == null ? object :
-            object.Q ? object : PublicKey.fromStringOrThrow(object)
+            object.Q ? object : PublicKey.fromStringOrThrow(object);
     },
     fromByteBuffer(b){
         return fp.public_key(b);
@@ -904,11 +902,11 @@ Types.public_key = {
             return ecc_config.get('address_prefix') + "859gxfnXyUriMgUeThh1fWv3oqcpLFyHa3TfFYC4PK2HqhToVM";
         }
         v.required(object);
-        return object.toString()
+        return object.toString();
     },
     compare(a, b) {
         // sort ascending
-        return 1 * strCmp(a.toString(), b.toString())
+        return 1 * strCmp(a.toString(), b.toString());
     }
 };
 
@@ -936,12 +934,12 @@ Types.address =
     },
     compare(a, b) {
         // sort decending
-        return -1 * strCmp(a.toString(), b.toString())
+        return -1 * strCmp(a.toString(), b.toString());
     }
-}
+};
 
-let strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
-let firstEl = el => Array.isArray(el) ? el[0] : el
+let strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0;
+let firstEl = el => Array.isArray(el) ? el[0] : el;
 let sortOperation = (array, st_operation) => {
     // console.log('operation.nosort', st_operation.nosort)
     return st_operation.nosort ? array :
@@ -952,5 +950,5 @@ let sortOperation = (array, st_operation) => {
         // A binary string compare does not work. Performanance is very good so HEX is used..  localeCompare is another option.
         Buffer.isBuffer(firstEl(a)) && Buffer.isBuffer(firstEl(b)) ? strCmp(firstEl(a).toString("hex"), firstEl(b).toString("hex")) :
         strCmp(firstEl(a).toString(), firstEl(b).toString())
-    )
-}
+    );
+};
