@@ -6,9 +6,9 @@ sophia1.setOptions({ url: 'http://195.48.9.209:9093' });
 //     'SPH7GvbxZTntaqCnNSsuai1Dguejh23RKJHmu2uuR869BLbM3yWPK',function(err,response){
 //         console.log(err,response);
 // });
-sophia1.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"],["bdfbdbdbebeberbe", "0140420f00000000005350485458000000a0860100000000005553440000000000"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
-    console.log(err, response);
-});
+// sophia1.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"],["bdfbdbdb_ebeberbe", "0140420f00000000005350485458000000a0860100000000005553440000000000"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
+//     console.log(err, response);
+// });
 // console.log(sophia1.auth.getKeyPair('sanjiv','abcde'));
 // sophia1.api.sophia.about(function(err, response){
 //     console.log(err, response);

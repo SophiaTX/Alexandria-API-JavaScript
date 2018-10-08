@@ -267,16 +267,16 @@ class Sophia extends EventEmitter {
                                             callback(err, '');
                                         else {
                                             createtransaction = response;
-                                            /*this.call('get_transaction_digest', [createtransaction], (err, response) => {
-                                                if (err) {
-
-                                                    callback(err, '');
-                                                }
-                                                else {
-
-                                                    console.log(response);
-
-                                                }});*/
+                                            // this.call('get_transaction_digest', [createtransaction], (err, response) => {
+                                            //     if (err) {
+                                            //
+                                            //         callback(err, '');
+                                            //     }
+                                            //     else {
+                                            //
+                                            //         console.log(response);
+                                            //
+                                            //     }});
                                             var digest = auth.CreateDigest(createtransaction, chainId);
                                             // console.log(digest);
                                             try{

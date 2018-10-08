@@ -216,7 +216,7 @@ Types.uint64 =
     }
     };
 
-Types.string =
+Types.account_name_type =
     {fromByteBuffer(b){
         return new Buffer(b.readVString(), 'utf8');
     },
@@ -243,6 +243,25 @@ Types.string =
         if (debug.use_default && object === undefined) { return ""; }
         return object.toString('utf8');
     }
+    };
+
+Types.string =
+    {fromByteBuffer(b){
+            return new Buffer(b.readVString(), 'utf8');
+        },
+        appendByteBuffer(b, object){
+            v.required(object);
+            b.writeVString(object.toString());
+            return;
+        },
+        fromObject(object){
+            v.required(object);
+            return new Buffer(object, 'utf8');
+        },
+        toObject(object, debug = {}){
+            if (debug.use_default && object === undefined) { return ""; }
+            return object.toString('utf8');
+        }
     };
 
 Types.string_binary =
