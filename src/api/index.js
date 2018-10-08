@@ -9,6 +9,7 @@ import {
     jsonRpc
 } from './transports/http';
 
+
 const auth = require('../auth');
 class Sophia extends EventEmitter {
 
@@ -266,18 +267,18 @@ class Sophia extends EventEmitter {
                                             callback(err, '');
                                         else {
                                             createtransaction = response;
-                                            // this.call('get_transaction_digest', [createtransaction], (err, response) => {
-                                            //     if (err) {
-                                            //
-                                            //         callback(err, '');
-                                            //     }
-                                            //     else {
-                                            //
-                                            //         console.log(response);
-                                            //
-                                            //     }});
+                                            this.call('get_transaction_digest', [createtransaction], (err, response) => {
+                                                if (err) {
+
+                                                    callback(err, '');
+                                                }
+                                                else {
+
+                                                    console.log(response);
+
+                                                }});
                                             var digest = auth.CreateDigest(createtransaction, chainId);
-                                            //console.log(digest);
+                                            console.log(digest);
                                             try{
                                                 signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
 
@@ -512,7 +513,6 @@ sophia.withdrawVesting=function(from,vestingShares,privateKey,callback){
  * @returns {object}
  */
 sophia.updateWitness=function(accountName, url, blockSigningKey, accountCreationFee,maximumBlockSizeLimit,prizeFeeds,private_key,callback){
-
     let props={
         account_creation_fee:accountCreationFee,
         maximum_block_size:maximumBlockSizeLimit,
