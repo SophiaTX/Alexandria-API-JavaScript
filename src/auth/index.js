@@ -179,9 +179,15 @@ Auth.normalizeBrainKey=function(brain_key){
 
 };
 Auth.CreateDigest=function(trx, chainid){
-    var cid = new Buffer(chainid, 'hex');
-    var buf = transaction.toBuffer(trx);
-    console.log(Buffer.concat([cid,buf]).toString('hex'));
+	try{
+        var cid = new Buffer(chainid, 'hex');
+        var buf = transaction.toBuffer(trx);
+        //console.log(Buffer.concat([cid,buf]).toString('hex'));
+
+	}
+	catch(e){
+		throw new Error('Can not create transaction digest '+e);
+	}
     return hash.sha256(Buffer.concat([cid,buf])).toString('hex');
 };
 Auth.CreateTxId=function(trx){

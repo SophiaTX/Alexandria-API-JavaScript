@@ -70,7 +70,7 @@ export default class WsTransport extends Transport {
         deferral.reject = (val) => {
           reject(val);
           callback(val);
-        }
+        };
       });
 
       if (this.options.useAppbaseApi) {

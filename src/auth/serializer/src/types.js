@@ -36,6 +36,7 @@ Types.asset = {
         // "1.000 SPHTX" always written with full precision
         let amount_string = fromImpliedDecimal(amount, precision);
         return amount_string + " " + symbol;
+
     },
     appendByteBuffer(b, object){
         object = object.trim();
@@ -216,7 +217,7 @@ Types.uint64 =
     }
     };
 
-Types.string =
+Types.account_name_type =
     {fromByteBuffer(b){
         return new Buffer(b.readVString(), 'utf8');
     },
@@ -244,7 +245,50 @@ Types.string =
         return object.toString('utf8');
     }
     };
-
+Types.symbol_type =
+    {
+        fromByteBuffer(b){
+            let b_copy = b.copy(b.offset, b.offset + 7);
+            let symbol = new Buffer(b_copy.toBinary(), "binary").toString().replace(/\x00/g, "");
+            b.skip(7);
+            return symbol;
+        },
+        appendByteBuffer(b, object){
+            object = object.trim();
+            let  symbol  = object;
+            if(symbol.length > 6)
+                throw new Error("Symbols are not longer than 6 characters " + symbol + "-"+ symbol.length);
+            b.append(symbol.toUpperCase(), 'binary');
+            for(let i = 0; i < 8 - symbol.length; i++)
+                b.writeUint8(0);
+            return;
+        },
+        fromObject(object){
+            return object;
+        },
+        toObject(object, debug = {}){
+            if (debug.use_default && object === undefined) { return "SPHTX"; }
+            return object;
+        }
+    };
+Types.string =
+    {fromByteBuffer(b){
+            return new Buffer(b.readVString(), 'utf8');
+        },
+        appendByteBuffer(b, object){
+            v.required(object);
+            b.writeVString(object.toString());
+            return;
+        },
+        fromObject(object){
+            v.required(object);
+            return new Buffer(object, 'utf8');
+        },
+        toObject(object, debug = {}){
+            if (debug.use_default && object === undefined) { return ""; }
+            return object.toString('utf8');
+        }
+    };
 Types.string_binary =
     {fromByteBuffer(b){
         var b_copy;
@@ -816,7 +860,7 @@ Types.map = function(key_st_operation, value_st_operation){
                 dup_map[o[0]] = true;
             }
         }
-        return sortOperation(array, key_st_operation);
+        return array; //sortOperation(array, key_st_operation);
     },
 
     fromByteBuffer(b){
@@ -832,15 +876,14 @@ Types.map = function(key_st_operation, value_st_operation){
     },
 
     appendByteBuffer(b, object){
-        //this.validate(object);
+        this.validate(object);
         b.writeVarint32(object.length);
         for (var i = 0, o; i < object.length; i++) {
             o = object[i];
             key_st_operation.appendByteBuffer(b, o[0]);
             value_st_operation.appendByteBuffer(b, o[1]);
-            b.writeUint8(0);
         }
-        return ;
+        return;
     },
     fromObject(object){
         v.required(object);
