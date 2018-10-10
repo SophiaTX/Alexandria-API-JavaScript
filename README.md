@@ -270,6 +270,15 @@ sophia.api.getWitness(witnessName,function(err, response){
     console.log(err, response);
 });
 ```
+Update witness is the function to update an existing account as a witness contender it needs prize feed update as an argument, 
+prizeFeed example (```[["USD",{"base":"1 USD","quote":"0.187331 SPHTX"}]]```) can be used for testing,
+blockSigningKey (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
+To become a witness the user must have at least 250,000 SPHTX tokens in her vesting account.
+```js
+  sophia.api.updateWitness(accountName, descriptionUrl, blockSigningKey, accountCreationFee, maximumBlockSizeLimit, prizeFeed, privateKey,function(err,response){
+  console.log(err,response);
+  });
+```
 Voting
 =================
 
