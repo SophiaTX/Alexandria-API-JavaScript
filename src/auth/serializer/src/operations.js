@@ -38,7 +38,7 @@ const {
     //id_type,
     //varint32, uint8, int64, fixed_array, object_id_type, vote_id, address,
     uint16, uint32, int16, uint64,
-    string, string_binary, bytes, bool, array, account_name_type,
+    string, string_binary, bytes, bool, array, account_name_type,symbol_type,
     // protocol_id_type,
     static_variant, map, set,
     public_key,
@@ -267,7 +267,7 @@ let chain_properties = new Serializer(
     "chain_properties", {
         account_creation_fee: asset,
         maximum_block_size: uint32,
-        price_feeds: map(string,price)
+        price_feeds: map(symbol_type,price)
     }
 );
 let witness_update = new Serializer(
@@ -277,7 +277,6 @@ let witness_update = new Serializer(
         url: string,
         block_signing_key: public_key,
         props: chain_properties,
-
     }
 );
 let witness_stop=new Serializer(
@@ -551,8 +550,8 @@ let cancel_transfer_from_savings = new Serializer(
 let custom_binary = new Serializer(
     "custom_binary", {
         fee:asset,
-        sender:string,
-        recipients:set(string),
+        sender:account_name_type,
+        recipients:set(account_name_type),
         app_id:uint64,
         data: bytes()
     }
