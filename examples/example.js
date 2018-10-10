@@ -1,8 +1,8 @@
 let sophia1=require('../lib/api');
 let sophia2=require('../lib/auth');
 //Sophia Connection
-//sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
- sophia1.setOptions({url: 'http://devnet.sophiatx.com:9195' });
+sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
+ //sophia1.setOptions({url: 'http://devnet.sophiatx.com:9195' });
 //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
 // sophia1.createAccount('yofVXV_6Rdaun-yWM7U1I0m8G0w','test101018','5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
 //      'SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',function(err,response){
@@ -145,11 +145,11 @@ let sophia2=require('../lib/auth');
 //          console.log(err, response);
 //      });
 //
- //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
- var args = { block_num : 16 };
- sophia1.callPlugin('block_api','get_block',args,function(err, response){
-     console.log(err, response);
- });
+//  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
+//  var args = { block_num : 16 };
+//  sophia1.callPlugin('block_api','get_block',args,function(err, response){
+//      console.log(err, response);
+//  });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
@@ -171,7 +171,7 @@ let sophia2=require('../lib/auth');
 //   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
 //  To become a witness user should have atleast 250,000 SPHTX in their vesting account.
 // let prizeFeed=[["EUR",{base:"1 EUR",quote:"56.877 SPHTX"}],["CHF",{base:"1 CHF",quote:"58.877 SPHTX"}]];
-// sophia.api.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
+// sophia1.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
 //     prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
 //         console.log(err,response);
 //     });

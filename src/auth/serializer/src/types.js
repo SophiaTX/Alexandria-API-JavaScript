@@ -248,20 +248,27 @@ Types.account_name_type =
 Types.symbol_type =
     {
         fromByteBuffer(b){
-            return new Buffer(b.readVString(), 'utf8');
+            let b_copy = b.copy(b.offset, b.offset + 7);
+            let symbol = new Buffer(b_copy.toBinary(), "binary").toString().replace(/\x00/g, "");
+            b.skip(7);
+            return symbol;
         },
         appendByteBuffer(b, object){
-            v.required(object);
-            b.writeCString(object.toString());
+            object = object.trim();
+            let  symbol  = object;
+            if(symbol.length > 6)
+                throw new Error("Symbols are not longer than 6 characters " + symbol + "-"+ symbol.length);
+            b.append(symbol.toUpperCase(), 'binary');
+            for(let i = 0; i < 8 - symbol.length; i++)
+                b.writeUint8(0);
             return;
         },
         fromObject(object){
-            v.required(object);
-            return new Buffer(object, 'utf8');
+            return object;
         },
         toObject(object, debug = {}){
-            if (debug.use_default && object === undefined) { return ""; }
-            return object.toString('utf8');
+            if (debug.use_default && object === undefined) { return "SPHTX"; }
+            return object;
         }
     };
 Types.string =
