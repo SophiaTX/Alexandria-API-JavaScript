@@ -1,9 +1,7 @@
 import EventEmitter from 'events';
 import config from '../config';
 import transports from './transports';
-import {
-    jsonRpc
-} from './transports/http';
+import {jsonRpc} from './transports/http';
 import gelf from '../logging';
 const auth = require('../auth');
 class Sophia extends EventEmitter {
