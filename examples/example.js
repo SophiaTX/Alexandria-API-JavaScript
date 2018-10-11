@@ -170,11 +170,11 @@ let sophia2=require('../lib/auth');
 // //Update witness is the function to create a witness contender, prize feed example ([["USD",{"base":"1 USD","quote":"10 SPHTX"}]]) can be used for testing,
 //   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
 //  To become a witness user should have atleast 250,000 SPHTX in their vesting account.
-let prizeFeed=[["EUR",{base:"1 EUR",quote:"56.877 SPHTX"}],["CHF",{base:"1 CHF",quote:"58.877 SPHTX"}]];
-sophia1.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
-    prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
-        console.log(err,response);
-    });
+// let prizeFeed=[["EUR",{base:"1 EUR",quote:"56.877 SPHTX"}],["CHF",{base:"1 CHF",quote:"58.877 SPHTX"}]];
+// sophia1.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
+//     prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
+//         console.log(err,response);
+//     });
 // sophia.api.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
 //      console.log(err, response);
 //  });

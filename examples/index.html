@@ -11,7 +11,7 @@
 <script>
  //Sophia Connection
  //sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
- sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
+ sophia.api.setOptions({url: 'http://devnet.sophiatx.com:9195' });
  // sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
  // //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
@@ -152,10 +152,10 @@
 //  sophia.api.getVestingBalance('abc',function(err, response){
 //      console.log(err, response);
 //  });
-// //sponsoring account
-//      sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
-//          console.log(err, response);
-//      });
+//sponsoring account
+     sophia.api.sponsorAccountFees('yofVXV_6Rdaun-yWM7U1I0m8G0w','K2F_dnhaRXbSMJLAsCe6FJhmOKU','true','5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx',function(err, response){
+         console.log(err, response);
+     });
 //
 //  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
 //  var args = { block_num : 16 };
@@ -182,11 +182,11 @@
 // //Update witness is the function to create a witness contender, prize feed example ([["USD",{"base":"1 USD","quote":"10 SPHTX"}]]) can be used for testing,
 //   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
 //  To become a witness user should have atleast 250,000 SPHTX in their vesting account.
- let prizeFeed=[["EUR",{base:"1 EUR",quote:"56.877 SPHTX"}],["CHF",{base:"1 CHF",quote:"58.877 SPHTX"}]];
- sophia.api.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
-     prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
-         console.log(err,response);
-     });
+//  let prizeFeed=[["EUR",{base:"1 EUR",quote:"56.877 SPHTX"}],["CHF",{base:"1 CHF",quote:"58.877 SPHTX"}]];
+//  sophia.api.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
+//      prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
+//          console.log(err,response);
+//      });
 // sophia.api.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
 //      console.log(err, response);
 //  });
