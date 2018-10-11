@@ -834,7 +834,7 @@ operation.st_operations=[
     buy_application,
     cancel_application_buying,
     transfer_from_promotion_pool,
-    sponsor_fees_operation,
+    sponsor_fees,
 
     /// virtual operations below this point
 

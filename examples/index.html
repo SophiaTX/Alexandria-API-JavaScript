@@ -10,7 +10,7 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
  //Sophia Connection
- sophia.api.setOptions({transport: 'http', uri: 'https://dev-walletapi.sophiatx.com'});
+ sophia.api.setOptions({transport: 'http', uri: 'http://devnet.sophiatx.com:9195'});
  //sophia.api.setOptions({url: 'http://﻿34.244.93.54:9195' });
  // sophia.api.setOptions({url: 'http://﻿socket1.sophiatx.com:9195' });
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
@@ -153,10 +153,9 @@
 //      console.log(err, response);
 //  });
 // //sponsoring account
-//      sophia.api.sponsorAccountFees('s5G5X1XpmpqScNJxvdncPI2KgNw','EuQKN6Czvl9s4rpU52_ot1q1NIM','true','5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz',function(err, response){
-//          console.log(err, response);
-//      });
-//
+//  sophia.api.sponsorAccountFees('yofVXV_6Rdaun-yWM7U1I0m8G0w','K2F_dnhaRXbSMJLAsCe6FJhmOKU','true','5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx',function(err, response){
+//      console.log(err, response);
+//  });
 //  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
 //  var args = { block_num : 16 };
 //  sophia.api.callPlugin('block_api','get_block',args,function(err, response){
@@ -187,9 +186,9 @@
 //      prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
 //          console.log(err,response);
 //      });
-sophia.api.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"],["exchange_rate", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
-     console.log(err, response);
- });
+// sophia.api.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"],["exchange_rate", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
+//      console.log(err, response);
+//  });
 //    //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
 // console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
 //  ,'Hello World of JS'));
