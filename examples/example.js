@@ -4,8 +4,8 @@ let sophia2=require('../lib/auth');
 //sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
  sophia1.setOptions({url: 'http://devnet.sophiatx.com:9195' });
 //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-// sophia1.createAccount('yofVXV_6Rdaun-yWM7U1I0m8G0w','test101018','5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
-//      'SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',function(err,response){
+// sophia1.createAccount('initminer','waifei','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
+//      'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
 //       console.log(err,response);
 //  });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
@@ -20,7 +20,7 @@ let sophia2=require('../lib/auth');
 //     console.log(err,response);
 // });
 //   //Transfer an amount (in the form of "amount currencySymbol, 10.000 SPHTX") to other account with a memo (receipt/details) attached to the transfer using Sender's Priavtekey.
-// sophia1.transfer('yofVXV_6Rdaun-yWM7U1I0m8G0w', 'K2F_dnhaRXbSMJLAsCe6FJhmOKU', '1.000 SPHTX', 'transfer to testing', '5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx',function(err,response){
+// sophia1.transfer('initminer', 'kcELPA6j3SjShc3CRmjCwk9yf-w', '1000.000 SPHTX', 'transfer to testing', '5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err,response){
 //     console.log(err,response);
 //  });
 //     //Set a proxy account for doing votes on behalf of first account.
@@ -36,7 +36,7 @@ let sophia2=require('../lib/auth');
 //      console.log(err,response);
 //  });
 //     //Vote for a witness using witness name and voter's PrivateKey
-//  sophia1.voteForWitness('yofVXV_6Rdaun-yWM7U1I0m8G0w', 'initminer', true,'5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx',function(err,response){
+//  sophia1.voteForWitness('FAxz63F9p8JBhkXza7JlQ1yIgvI', 'initminer', true,'5JuMwaA1F4WzfhPLgDE7TUHyZsevUqmigEYQ6QobfyTKSa2Lyw8',function(err,response){
 //      console.log(err,response);
 //   });
 //    //Send binary data to the list of recipients
@@ -129,11 +129,11 @@ let sophia2=require('../lib/auth');
 //      console.log(err, response);
 //  });
 //     //Get account balance of an account
-//       sophia.api.getAccountBalance('abc',function(err, response){
-//           console.log(err, response);
-//       });
-//  // Get account name using the seed(Any data string including uppercase,lowercase and numbers) used to create the account.
-//   sophia1.getAccountNameFromSeed('test101018',function(err, response){
+// sophia1.getAccountBalance('kcELPA6j3SjShc3CRmjCwk9yf-w',function(err, response){
+//     console.log(err, response);
+// });
+// Get account name using the seed(Any data string including uppercase,lowercase and numbers) used to create the account.
+//   sophia1.getAccountNameFromSeed('waifei',function(err, response){
 //         console.log(err, response);
 //    });
 //   //Get vesting balance of the account
@@ -146,16 +146,16 @@ let sophia2=require('../lib/auth');
 //      });
 //
 //  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
-//  var args = { block_num : 16 };
-//  sophia1.callPlugin('block_api','get_block',args,function(err, response){
-//      console.log(err, response);
-//  });
+// var args = { holder: 'matej' };
+// sophia1.callPlugin('track_and_trace','get_holdings',args,function(err, response){
+//     console.log(err, response);
+// });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
 // console.log(sophia.utils.validateAccountName('dan home ace'));
 //    // generates public key and private key pair
-// console.log(sophia.auth.getKeyPair('sanjiv','abcde'));
+// console.log(sophia2.getKeyPair('waifei','malesiya'));
 //     //checks the format of Public key and decides if it is valid with prefix
 // console.log(sophia.auth.isPubkey('SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','SPH'));
 //     //checks the format of Private key and decides if it is valid
@@ -170,11 +170,11 @@ let sophia2=require('../lib/auth');
 // //Update witness is the function to create a witness contender, prize feed example ([["USD",{"base":"1 USD","quote":"10 SPHTX"}]]) can be used for testing,
 //   //block_key (publicKey format) is used to sign all the blocks. It also needs a description url, where the willing user can put detail about herself.
 //  To become a witness user should have atleast 250,000 SPHTX in their vesting account.
-// let prizeFeed=[["EUR",{base:"1 EUR",quote:"56.877 SPHTX"}],["CHF",{base:"1 CHF",quote:"58.877 SPHTX"}]];
+// let prizeFeed=[["USD",{base: '1 USD', quote: '0.0706 SPHTX'}]];
 // sophia1.updateWitness('sanjiv','http://abc.com','SPH6ixMvJ79yR23tZgN7vF7N55z4yJMhFiAWnTtCYXjEVZUoTnBFn','1.5000 SPHTX',1024670,
 //     prizeFeed,'5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8',function(err,response){
 //         console.log(err,response);
-//     });
+// });
 // sophia.api.startBroadcasting(JSON.parse('["witness_set_properties",{"fee": "0.000000 SPHTX", "owner": "initminer", "props":[["key", "5350483738773348315455614b43797362463870325a5131324d75747271334e4a7a7234317a4d5056514c45547950393463566258"]]}]'),'5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w',function(err, response){
 //      console.log(err, response);
 //  });

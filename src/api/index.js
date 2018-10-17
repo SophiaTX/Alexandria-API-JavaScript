@@ -291,9 +291,12 @@ class Sophia extends EventEmitter {
                                                         if (err) {
                                                            // logger.log(err);
                                                             callback(err, '');
+
                                                         }
                                                         else {
                                                             callback('', response);
+
+
                                                         }
                                                     });
                                                 }

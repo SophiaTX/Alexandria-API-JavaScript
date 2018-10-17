@@ -33,20 +33,26 @@ Types.asset = {
         let b_copy = b.copy(b.offset, b.offset + 7);
         let symbol = new Buffer(b_copy.toBinary(), "binary").toString().replace(/\x00/g, "");
         b.skip(7);
+
         // "1.000 SPHTX" always written with full precision
         let amount_string = fromImpliedDecimal(amount, precision);
         return amount_string + " " + symbol;
+
 
     },
     appendByteBuffer(b, object){
         object = object.trim();
         if( ! /^[0-9]+\.?[0-9]* [A-Za-z0-9]+$/.test(object))
-            throw new Error("Expecting amount like '99.000 SYMBOL', instead got '" + object + "'");
+            throw new Error("Expecting amount like '99.000000 SYMBOL', instead got '" + object + "'");
+
         let [ amount, symbol ] = object.split(" ");
+
         if(symbol.length > 6)
             throw new Error("Symbols are not longer than 6 characters " + symbol + "-"+ symbol.length);
-        //b.writeInt64(v.to_long(amount.replace(".","")));
-        b.writeInt64(v.to_long(amount.replace(".","")));
+       // console.log(amount);
+          let fixedamount=parseFloat(amount).toFixed(6);
+         // console.log(fixedamount);
+        b.writeInt64(v.to_long(fixedamount.replace(".","")));
         //let dot = amount.indexOf("."); // 0.000
         //let precision = dot === -1 ? 0 : amount.length - dot - 1;
         //b.writeUint8(precision)
