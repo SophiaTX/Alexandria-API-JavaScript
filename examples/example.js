@@ -2,12 +2,12 @@ let sophia1=require('../lib/api');
 let sophia2=require('../lib/auth');
 //Sophia Connection
 //sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
- sophia1.setOptions({url: 'http://devnet.sophiatx.com:9195' });
+sophia1.setOptions({url: 'http://devnet.sophiatx.com:9195' });
 //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-// sophia1.createAccount('initminer','waifei','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
-//      'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
-//       console.log(err,response);
-//  });
+sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
+     'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
+      console.log(err,response);
+ });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
 //
 //  //Delete account using user's PrivateKey

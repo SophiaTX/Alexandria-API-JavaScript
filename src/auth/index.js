@@ -156,7 +156,7 @@ Auth.isPubkey = function(pubkey, address_prefix) {
 Auth.createSignature=function(transaction, privateKey){
 	try {
         var data=signature.signHash(transaction, privateKey);
-        console.log(data);
+        //console.log(data);
         return data.toHex();
      }
     catch(error){
@@ -182,7 +182,7 @@ Auth.CreateDigest=function(trx, chainid){
 	try{
         var cid = new Buffer(chainid, 'hex');
         var buf = transaction.toBuffer(trx);
-        console.log(Buffer.concat([cid,buf]).toString('hex'));
+        //console.log(Buffer.concat([cid,buf]).toString('hex'));
 
 	}
 	catch(e){

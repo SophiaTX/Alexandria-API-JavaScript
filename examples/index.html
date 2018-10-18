@@ -67,9 +67,9 @@
 //          console.log(err,response);
 //       });
 //       //Get the information about the blockchain
-// sophia.api.about(function(err, response){
- //   console.log(err, response);
- // });
+sophia.api.about(function(err, response){
+   console.log(err, response.chain_id);
+ });
 //   //Get help to work with the blockchain, this returns recent updates about the blockchain.
 // sophia.api.info(function(err, response){
 //     console.log(err, response);

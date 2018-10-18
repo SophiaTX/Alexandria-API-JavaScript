@@ -1,10 +1,8 @@
 import EventEmitter from 'events';
-import Promise from 'bluebird';
+
 import config from '../config';
 import transports from './transports';
-import {
-    camelCase
-} from '../utils';
+
 import {
     jsonRpc
 } from './transports/http';
@@ -19,31 +17,8 @@ class Sophia extends EventEmitter {
         //this._setLogger(options);
         this.options = options;
         this.seqNo = 0; // used for rpc calls
-        // methods.forEach(method => {
-        //     const methodName = method.method_name || camelCase(method.method);
-        //     const methodParams = method.params || [];
-        //
-        //     this[`${methodName}With`] = (options, callback) => {
-        //         return this.send(method.api, {
-        //             method: method.method,
-        //             params: methodParams.map(param => options[param])
-        //         }, callback);
-        //     };
-        //
-        //     this[methodName] = (...args) => {
-        //         const options = methodParams.reduce((memo, param, i) => {
-        //             memo[param] = args[i]; // eslint-disable-line no-param-reassign
-        //             return memo;
-        //         }, {});
-        //         const callback = args[methodParams.length];
-        //         return this[`${methodName}With`](options, callback);
-        //     };
-        //
-        //     this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
-        //     this[`${methodName}Async`] = Promise.promisify(this[methodName]);
-        // });
-        /*this.callAsync = Promise.promisify(this.call);
-        this.signedCallAsync = Promise.promisify(this.signedCall);*/
+
+
     }
 
     _setTransport(options) {
@@ -81,7 +56,7 @@ class Sophia extends EventEmitter {
     }
 
     _setLogger(options) {
-        console.log('in logger options');
+        //console.log('in logger options');
         if (options.hasOwnProperty('logger')) {
             console.log('Yes');
             switch (typeof options.logger) {
@@ -244,6 +219,59 @@ class Sophia extends EventEmitter {
 
     startBroadcasting(operation, privateKey, callback) {
         let signedTransaction;
+        let createtransaction;
+        try {
+            return this.call('create_simple_transaction', [operation], (err, response) => {
+                if (err)
+                    callback(err, '');
+                else {
+                    createtransaction = response;
+                    // this.call('get_transaction_digest', [createtransaction], (err, response) => {
+                    //     if (err) {
+                    //
+                    //         callback(err, '');
+                    //     }
+                    //     else {
+                    //
+                    //         console.log(response);
+                    //     }
+                    // });
+
+                    try {
+                        //console.log(config.get('chainId'));
+                        var digest = auth.CreateDigest(createtransaction, config.get('chainId'));
+                        //console.log(digest);
+                        signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
+
+                    }
+                    catch (e) {
+                        callback(e, '');
+                    }
+                    this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+                        if (err) {
+                            // logger.log(err);
+                            callback(err, '');
+
+                        }
+                        else {
+                            callback('', response);
+
+
+                        }
+                    });
+                }
+            });
+        }
+        catch (ex) {
+            callback(ex, null);
+        }
+    }
+    /**
+     * broadcast transaction with manual addFees
+     */
+
+    startBroadcastingDaemonMethods(operation, privateKey, callback){
+        let signedTransaction;
         let chainId;
         let transaction;
         let createtransaction;
@@ -256,7 +284,7 @@ class Sophia extends EventEmitter {
                         if (err)
                             callback(err, '');
                         else {
-                            transaction=response;
+                            transaction = response;
                             this.call('about', [operation, response], (err, response) => {
                                 if (err)
                                     callback(err, '');
@@ -267,55 +295,56 @@ class Sophia extends EventEmitter {
                                             callback(err, '');
                                         else {
                                             createtransaction = response;
-                                            this.call('get_transaction_digest', [createtransaction], (err, response) => {
-                                                if (err) {
+                                            // this.call('get_transaction_digest', [createtransaction], (err, response) => {
+                                            //     if (err) {
+                                            //
+                                            //         callback(err, '');
+                                            //     }
+                                            //     else {
+                                            //
+                                            //         console.log(response);
+                                            //
+                                            //     }});
 
+                                            try {
+                                                var digest = auth.CreateDigest(createtransaction, chainId);
+                                                //console.log(digest);
+                                                signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
+
+                                            }
+                                            catch (e) {
+                                                callback(e, '');
+                                            }
+                                            this.call('broadcast_transaction', [signedTransaction], (err, response) => {
+                                                if (err) {
+                                                    // logger.log(err);
                                                     callback(err, '');
                                                 }
                                                 else {
-
-                                                    console.log(response);
-
-                                                }});
-
-                                            try{
-                                                var digest = auth.CreateDigest(createtransaction, chainId);
-                                                console.log(digest);
-                                                signedTransaction=auth.signTransaction(createtransaction, privateKey, digest);
-
-                                            }
-                                            catch(e){
-                                                callback(e,'');
-                                            }
-                                                    this.call('broadcast_transaction', [signedTransaction], (err, response) => {
-                                                        if (err) {
-                                                           // logger.log(err);
-                                                            callback(err, '');
-
-                                                        }
-                                                        else {
-                                                            callback('', response);
-
-
-                                                        }
-                                                    });
+                                                    callback('', response);
                                                 }
-                                            });
-                                        }
                                             });
                                         }
                                     });
                                 }
-
-
+                            });
+                        }
                     });
+                }
+
+
+            });
 
         }
         catch (ex) {
             callback(ex, null);
         }
+
     }
 }
+
+
+
     // broadcastTransactionSynchronousWith(options, callback) {
     // const trx = options.trx;
     // return this.send(
@@ -350,6 +379,9 @@ sophia.setOptions=function(options) {
     sophia._setLogger(options);
     sophia._setTransport(options);
     sophia.transport.setOptions(options);
+    sophia.about(function(err, response){
+        config.set('chainId',response.chain_id);
+    });
 };
 /**
  * Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey

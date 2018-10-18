@@ -1,4 +1,5 @@
 import each from 'lodash/each';
+
 const defaultConfig = require('../config.json');
 
 class Config {
@@ -6,6 +7,7 @@ class Config {
     each(c, (value, key) => {
       this[key] = value;
     });
+
   }
 
   get(k) {
