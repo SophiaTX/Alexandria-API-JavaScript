@@ -1,4 +1,5 @@
 {
   "transport": "http",
-  "address_prefix": "SPH"
+  "address_prefix": "SPH",
+  "chainId":"000000000000000000000000000000000000000000"
 }

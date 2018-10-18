@@ -156,7 +156,7 @@ Auth.isPubkey = function(pubkey, address_prefix) {
 Auth.createSignature=function(transaction, privateKey){
 	try {
         var data=signature.signHash(transaction, privateKey);
-        console.log(data);
+        //console.log(data);
         return data.toHex();
      }
     catch(error){

@@ -28,7 +28,7 @@ npm run build
 ```
 
 
-or,  use the new updated sophiatx-alexandria-api 1.0.1, npm module to run the project
+or,  use the new updated sophiatx-alexandria-api, npm module to run the project
 
 ````
 npm install sophiatx-alexandria-api --save
