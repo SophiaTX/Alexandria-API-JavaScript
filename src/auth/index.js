@@ -16,6 +16,7 @@ const signature = require('./ecc/src/signature');
 var Auth = {};
 var signed_transaction = operations.signed_transaction;
 var transaction = operations.transaction;
+/** ---- base58 AES --**/
 /**
  * @param privatekey of sender
  * @param publickey of receiver
@@ -33,6 +34,26 @@ Auth.encrypt = function (privatekey, publickey, message) {
  */
 Auth.decrypt = function (privatekey, publickey, message) {
     var messagestring = bs58.decode(message);
+    return (0, _aes.decrypt)(privatekey, publickey, messagestring).toString();
+};
+/** ---- base64 AES --**/
+/**
+ * @param privatekey of sender
+ * @param publickey of receiver
+ * @param message
+ * @returns {*}
+ */
+Auth.encrypt64 = function (privatekey, publickey, message) {
+    return (0, _aes.encrypt)(privatekey, publickey, message).toString('base64');
+};
+/**
+ * @param privatekey of receiver
+ * @param publickey of sender
+ * @param message encrypted
+ * @returns {*}
+ */
+Auth.decrypt64 = function (privatekey, publickey, message) {
+    var messagestring = new Buffer(message, 'base64');
     return (0, _aes.decrypt)(privatekey, publickey, messagestring).toString();
 };
 /**
