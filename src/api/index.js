@@ -163,7 +163,7 @@ class Sophia extends EventEmitter {
             }
             const id = ++this.seqNo;
 
-            jsonRpc('http://devnet.sophiatx.com:9193', {method, params, id})
+            jsonRpc('http://stagenet.sophiatx.com:9193', {method, params, id})
                 .then(res => {
                     callback(null, res);
                 }, err => {
