@@ -158,10 +158,10 @@ sophia.api.about(function(err, response){
 //      });
 //
 //  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
-//  var args = { block_num : 16 };
-//  sophia.api.callPlugin('block_api','get_block',args,function(err, response){
-//      console.log(err, response);
-//  });
+ var args = { block_num : 16 };
+ sophia.api.callPlugin('block_api','get_block',args,function(err, response){
+     console.log(err, response);
+ });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not

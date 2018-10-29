@@ -2,12 +2,12 @@ let sophia1=require('../lib/api');
 let sophia2=require('../lib/auth');
 //Sophia Connection
 //sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
-sophia1.setOptions({url: 'http://devnet.sophiatx.com:9195' });
+sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9193' });
 //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
-sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
-     'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
-      console.log(err,response);
- });
+// sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
+//      'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
+//       console.log(err,response);
+//  });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
 //
 //  //Delete account using user's PrivateKey
@@ -40,9 +40,9 @@ sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy
 //      console.log(err,response);
 //   });
 //    //Send binary data to the list of recipients
-//   let to=['K2F_dnhaRXbSMJLAsCe6FJhmOKU','jpmv9Of3CBm-cz1TZ7pNgZGEv5o','rumGMWVHCxedjhSHMBQYk3o9LVD'];
+//   let to=['K2F_dnhaRXbSMJLAsCe6FJhmOKU','78hdrwwwgooglecomappli'];
 //   let data='SGVsbG8=';
-//   sophia1.makeCustomBinaryOperation(2, 'yofVXV_6Rdaun-yWM7U1I0m8G0w', to, data, '5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx', function(err,response){
+//   sophia1.makeCustomBinaryOperation(2, 'sanjiv', to, data, '5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8', function(err,response){
 //       console.log(err, response);
 //   });
 //       //Send JSON data to the list of recipients
@@ -51,11 +51,11 @@ sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy
 //    sophia1.makeCustomJSONOperation(2, 'yofVXV_6Rdaun-yWM7U1I0m8G0w', to, data, '5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx', function(err,response){
 //        console.log(err,response);
 //     });
-//          //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
-//      sophia1.getReceivedDocuments(2, 'K2F_dnhaRXbSMJLAsCe6FJhmOKU', 'by_recipient', new Date().getUTCDay()-10, '10', function(err,response){
+//      //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
+//      sophia1.getReceivedDocuments(2, '78hdrwwwgooglecomappli', 'by_recipient', new Date().getUTCDay()-10, '10', function(err,response){
 //          console.log(err,response);
 //       });
-//       //Get the information about the blockchain
+// //Get the information about the blockchain
 // sophia1.about(function(err, response){
 //   console.log(err, response);
 // });
@@ -145,11 +145,11 @@ sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy
 //          console.log(err, response);
 //      });
 //
-//  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
-// var args = { holder: 'matej' };
-// sophia1.callPlugin('track_and_trace','get_holdings',args,function(err, response){
-//     console.log(err, response);
-// });
+// sophia1.setOptions({url: 'http://devnet.sophiatx.com:9193' });
+var args = { holder: 'matej' };
+sophia1.callPlugin('track_and_trace','get_holdings',args,function(err, response){
+    console.log(err, response);
+});
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
