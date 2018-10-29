@@ -2,14 +2,13 @@ let sophia1=require('../lib/api');
 let sophia2=require('../lib/auth');
 //Sophia Connection
 //sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
-sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9193' });
+sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9195' });
 //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
 // sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
 //      'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
 //       console.log(err,response);
 //  });
 //  console.log(sophia.auth.isWif('5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1y'));
-//
 //  //Delete account using user's PrivateKey
 //   sophia.api.deleteAccount('test4574','5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF',function(err,response){
 //       console.log(err,response);
@@ -55,7 +54,7 @@ sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9193' });
 //      sophia1.getReceivedDocuments(2, '78hdrwwwgooglecomappli', 'by_recipient', new Date().getUTCDay()-10, '10', function(err,response){
 //          console.log(err,response);
 //       });
-// //Get the information about the blockchain
+//Get the information about the blockchain
 // sophia1.about(function(err, response){
 //   console.log(err, response);
 // });
@@ -146,10 +145,10 @@ sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9193' });
 //      });
 //
 // sophia1.setOptions({url: 'http://devnet.sophiatx.com:9193' });
-var args = { holder: 'matej' };
-sophia1.callPlugin('track_and_trace','get_holdings',args,function(err, response){
-    console.log(err, response);
-});
+// var args = { holder: 'matej' };
+// sophia1.callPlugin('track_and_trace','get_holdings',args,function(err, response){
+//     console.log(err, response);
+// });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
@@ -179,10 +178,10 @@ sophia1.callPlugin('track_and_trace','get_holdings',args,function(err, response)
 //      console.log(err, response);
 //  });
 //    //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
-// console.log(sophia.auth.encrypt('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
-//  ,'Hello World of JS'));
+//  console.log(sophia2.encrypt64('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
+//   ,'Hello World of JS'));
 //  //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
-// console.log(sophia.auth.decrypt('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
-//  ,'C1nxfKaK8fHxD2TB6JSru1knJJq5Dz6im2SD8pqV8JhS'));
+// console.log(sophia2.decrypt64('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
+//  ,'o6SF4CDofxxzOMg2k3l35Xvj1fsPq6uqweuSlzleVKU='));
 //  let transaction={"ref_block_num":24354,"ref_block_prefix":1983344465,"expiration":"2018-10-04T08:52:15","operations":[["account_witness_vote",{"fee":"0.000000 SPHTX","account":"initminer","witness":"matej","approve":false}]],"extensions":[],"signatures":["2051595eea752de7507032caa28667c50862f3f17baa0a3de70358eaa56a4b5cc06707f42a771b6b7cecd7ca00a13f19da125a632b0df92e641daae284e34a3c41"],"transaction_id":"e2df91500607706e9c8c682ff65cc2da9bfa5887","block_num":483107,"transaction_num":0};
 //  console.log(sophia.api.getTransactionId(transaction));
