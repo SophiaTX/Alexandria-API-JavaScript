@@ -2,7 +2,6 @@ let sophia1=require('../lib/api');
 let sophia2=require('../lib/auth');
 //Sophia Connection
 //sophia1.setOptions({ url: 'http://﻿127.0.0.1:9195' });
-sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9195' });
 //Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
 // sophia1.createAccount('initminer','test5678651','5JKHcAHiZnPVMzzeSGrWcRPhkjFZsPy2Pf36CVaz8W2WmMP4L1w','{}','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo','SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',
 //      'SPH8k1nMRRLhuLzS17xM6pzZWW1Msbz42wCgxBqMtVY8f1ZsFqBVo',function(err,response){
@@ -39,25 +38,26 @@ sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9195' });
 //      console.log(err,response);
 //   });
 //    //Send binary data to the list of recipients
-//   let to=['K2F_dnhaRXbSMJLAsCe6FJhmOKU','78hdrwwwgooglecomappli'];
-//   let data='SGVsbG8=';
-//   sophia1.makeCustomBinaryOperation(2, 'sanjiv', to, data, '5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8', function(err,response){
+//    let to=['K2F_dnhaRXbSMJLAsCe6FJhmOKU','78hdrwwwgooglecomappli'];
+//   let data='SGVsbG878=';
+//   sophia1.makeCustomBinaryOperation(2098877, 'sanjiv', to, data, '5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8', function(err,response){
 //       console.log(err, response);
 //   });
 //       //Send JSON data to the list of recipients
-//   let to=['K2F_dnhaRXbSMJLAsCe6FJhmOKU'];
-//   let data='{"author":"cde"}';
-//    sophia1.makeCustomJSONOperation(2, 'yofVXV_6Rdaun-yWM7U1I0m8G0w', to, data, '5HpSFkogryJQXNM4RtuvqDJtQEVDyTHwUS26bhLfhGuToifCRyx', function(err,response){
+//   let to=['matej'];
+//   let data='{ "command": { "name": "AcceptDocument", "data": { "documentId": "c22c3b1a-3606-48a9-bf76-38512b34e3bf", "note": "Test note" } } }';
+//    sophia1.makeCustomJSONOperation(209957, 'sanjiv', to, JSON.stringify(data), '5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8', function(err,response){
 //        console.log(err,response);
 //     });
-//      //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
-//      sophia1.getReceivedDocuments(2, '78hdrwwwgooglecomappli', 'by_recipient', new Date().getUTCDay()-10, '10', function(err,response){
-//          console.log(err,response);
-//       });
+ //  Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
+ //     sophia1.getReceivedDocuments(209957, 'matej', 'by_sender', '2018-09-30T09:35:13.85251Z', '1000', function(err,response){
+ //         console.log(err,response);
+ //      });
 //Get the information about the blockchain
 // sophia1.about(function(err, response){
 //   console.log(err, response);
 // });
+
 //   //Get help to work with the blockchain, this returns recent updates about the blockchain.
 // sophia.api.info(function(err, response){
 //     console.log(err, response);
@@ -75,13 +75,13 @@ sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9195' });
 //     console.log(err, response);
 // });
 //   //Get account details
-//   sophia1.getAccount('K2F_dnhaRXbSMJLAsCe6FJhmOKU', function(err, response){
+//   sophia1.getAccount('sanjiv', function(err, response){
 //         console.log(err, response);
 //     });
-//   //Get list of Witnesses or miners
-// sophia1.listWitnesses('initminer','10',function(err, response){
-//     console.log(err, response);
-// });
+  //Get list of Witnesses or miners
+sophia1.listWitnesses('initminer','10',function(err, response){
+    console.log(err, response);
+});
 //     //Get list of Witnesses by votes
 //   sophia.api.listWitnessesByVote('martyn','10',function(err, response){
 //       console.log(err, response);
@@ -180,8 +180,9 @@ sophia1.setOptions({ url: 'http://stagenet.sophiatx.com:9195' });
 //    //use privateKey of sender's account and publicKey of receiver's account to encrypt the message
 //  console.log(sophia2.encrypt64('5KMk75baVwnjmKoEaKxioxNy4BXjLzfbCVqUdE1yUo48tgzU5FF','SPH8Xg6cEbqPCY8jrWFccgbCq5Fjw1okivwwmLDDgqQCQeAk7jedu'
 //   ,'Hello World of JS'));
-//  //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
+ //use publicKey of sender's account and privateKey of receiver's account to decrypt the message
 // console.log(sophia2.decrypt64('5JPwY3bwFgfsGtxMeLkLqXzUrQDMAsqSyAZDnMBkg7PDDRhQgaV','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi'
 //  ,'o6SF4CDofxxzOMg2k3l35Xvj1fsPq6uqweuSlzleVKU='));
 //  let transaction={"ref_block_num":24354,"ref_block_prefix":1983344465,"expiration":"2018-10-04T08:52:15","operations":[["account_witness_vote",{"fee":"0.000000 SPHTX","account":"initminer","witness":"matej","approve":false}]],"extensions":[],"signatures":["2051595eea752de7507032caa28667c50862f3f17baa0a3de70358eaa56a4b5cc06707f42a771b6b7cecd7ca00a13f19da125a632b0df92e641daae284e34a3c41"],"transaction_id":"e2df91500607706e9c8c682ff65cc2da9bfa5887","block_num":483107,"transaction_num":0};
 //  console.log(sophia.api.getTransactionId(transaction));
+
