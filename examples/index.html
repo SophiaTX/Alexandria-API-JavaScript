@@ -10,7 +10,6 @@
 <!--<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>-->
 <script>
  //Sophia Connection
-
  //sophia.api.setOptions({url: 'http://﻿127.0.0.1:9195' });
 // Create account using seed(Any data string including uppercase,lowercase and numbers), creator as Witness's name, Witness's PrivateKey and user's PublicKey as ActiveKey
 //   sophia.api.createAccount('test45747','test45747','5JKHcAHiZnPVMzzeSGrWc6PhkjFZsP82ffPf36CVaz8W2WmMP4L1w','{}','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi','SPH5o2V32evStYJwAgewNmsvtk7n178CygWmwdEVR6uyThATBwVwi',
@@ -56,18 +55,18 @@
 //   });
 //       //Send JSON data to the list of recipients
 //   let to=['45fR5HHoV2XA7NyvKdc3CK4WrixE','martyn'];
-//   let data='{"author":"cde"}';
-//    sophia.api.makeCustomJSONOperation(2, 'PcQ-byG-3OczM99qg1m_6zU9ArAA', to, data, '5K14hP7ziUNqZbp75o4oW885259T1SbCinZskXhz3XnA2ymR1Wz', function(err,response){
+//   let data="{'testKey':'te-st'}";
+//    sophia.api.makeCustomJSONOperation(209957, 'sanjiv', to, JSON.stringify(data), '5KUbCiBJac8omkwgftfkp8hUCgh5k2H3mgoqMDN7bfzDLLEK2i8', function(err,response){
 //        console.log(err,response);
 //     });
-//          //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
-//      sophia.api.getReceivedDocuments(2, 'PcQ-byG-3OczM99qg1m_6zU9ArAA', 'by_sender', '2018-08-22T13:39:34', '10', function(err,response){
-//          console.log(err,response);
-//       });
+      //   //Get the list of received documents, it can be searched by by_sender, by_recipient,by_sender_datetime,by_recipient_datetime.
+     // sophia.api.getReceivedDocuments(2003456, 'sgpdatareceiver001', 'by_recipient', '2018-08-22T13:39:34', '1000', function(err,response){
+     //     console.log(err,response.data);
+     //  });
 //       //Get the information about the blockchain
-sophia.api.about(function(err, response){
-   console.log(err, response.chain_id);
- });
+// sophia.api.about(function(err, response){
+//    console.log(err, response.chain_id);
+//  });
 //   //Get help to work with the blockchain, this returns recent updates about the blockchain.
 // sophia.api.info(function(err, response){
 //     console.log(err, response);
@@ -89,10 +88,10 @@ sophia.api.about(function(err, response){
 //         console.log(err, response);
 //         alert(err)
 //     });
-// //   //Get list of Witnesses or miners
-// sophia.api.listWitnesses('initminer','10',function(err, response){
-//     console.log(err, response);
-// });
+//   //Get list of Witnesses or miners
+sophia.api.listWitnesses('initminer','10',function(err, response){
+    console.log(err, response);
+});
 //     //Get list of Witnesses by votes
 //   sophia.api.listWitnessesByVote('martyn','10',function(err, response){
 //       console.log(err, response);
@@ -156,10 +155,10 @@ sophia.api.about(function(err, response){
 //      });
 //
 //  //sophia.api.setOptions({url: 'http://﻿devnet.sophiatx.com:9193' });
- var args = { block_num : 16 };
- sophia.api.callPlugin('block_api','get_block',args,function(err, response){
-     console.log(err, response);
- });
+//  var args = { block_num : 16 };
+//  sophia.api.callPlugin('block_api','get_block',args,function(err, response){
+//      console.log(err, response);
+//  });
 //     // generates separate public key for each of the roles
 // console.log(sophia.auth.generatePublicKey('sanjiv','abcde'));
 //     // validates account name if it can be set or not
