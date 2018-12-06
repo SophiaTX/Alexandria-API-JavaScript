@@ -1,6 +1,6 @@
 {
   "name": "sophiatx-alexandria-api",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "JavaScript API for accessing SophiaTX blockchain",
   "main": "lib/index.js",
   "scripts": {
