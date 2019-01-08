@@ -221,11 +221,11 @@ class Sophia extends EventEmitter {
         let signedTransaction;
         let createtransaction;
         try {
-            return this.call('alexandria_api.create_simple_transaction', {operation}, (err, response) => {
+            return this.call('alexandria_api.create_simple_transaction', operation, (err, response) => {
                 if (err)
                     callback(err, '');
                 else {
-                    createtransaction = response;
+                    createtransaction = response.simple_tx;
                     // this.call('get_transaction_digest', [createtransaction], (err, response) => {
                     //     if (err) {
                     //
@@ -236,27 +236,22 @@ class Sophia extends EventEmitter {
                     //         console.log(response);
                     //     }
                     // });
-
                     try {
                         //console.log(config.get('chainId'));
                         var digest = auth.CreateDigest(createtransaction, config.get('chainId'));
                         //console.log(digest);
                         signedTransaction = auth.signTransaction(createtransaction, privateKey, digest);
-
                     }
                     catch (e) {
                         callback(e, '');
                     }
-                    this.call('alexandria_api.broadcast_transaction', {signedTransaction}, (err, response) => {
+                    this.call('alexandria_api.broadcast_transaction', signedTransaction, (err, response) => {
                         if (err) {
                             // logger.log(err);
                             callback(err, '');
-
                         }
                         else {
                             callback('', response);
-
-
                         }
                     });
                 }
