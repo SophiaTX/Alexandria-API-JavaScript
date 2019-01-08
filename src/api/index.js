@@ -436,7 +436,7 @@ sophia.deleteAccount=function(accountName,privateKey,callback){
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
@@ -451,11 +451,11 @@ sophia.deleteAccount=function(accountName,privateKey,callback){
  * @returns {object}
  */
 sophia.transfer=function(from, to, amount, memo,privateKey,callback){
-    return sophia.call('alexandria_api.transfer',{from, to, amount, memo},(err,response)=>{
+    return sophia.call('alexandria_api.transfer',{from:from, to:to, amount:amount, memo:memo},(err,response)=>{
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
@@ -486,11 +486,11 @@ sophia.transferToVesting=function(from, to, amount,privateKey,callback){
  * @returns {object}
  */
 sophia.setVotingProxy=function(accountToModify,proxy,private_key,callback){
-    return sophia.call('set_voting_proxy',[accountToModify, proxy],(err,response)=>{
+    return sophia.call('set_voting_proxy',{account_to_modify:accountToModify, proxy:proxy},(err,response)=>{
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,private_key,callback);
+            sophia.startBroadcasting(response.op,private_key,callback);
         }
     });
 };
@@ -504,11 +504,11 @@ sophia.setVotingProxy=function(accountToModify,proxy,private_key,callback){
  * @returns {object}
  */
 sophia.voteForWitness=function(accountToVoteWith, accountToVoteFor, approve=true,private_key,callback){
-    return sophia.call('vote_for_witness',[accountToVoteWith, accountToVoteFor, approve],(err,response)=>{
+    return sophia.call('vote_for_witness',{voting_account:accountToVoteWith, witness_to_vote_for:accountToVoteFor, approve:approve},(err,response)=>{
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,private_key,callback);
+            sophia.startBroadcasting(response.op,private_key,callback);
         }
     });
 };
@@ -521,11 +521,11 @@ sophia.voteForWitness=function(accountToVoteWith, accountToVoteFor, approve=true
  * @returns {object}
  */
 sophia.withdrawVesting=function(from,vestingShares,privateKey,callback){
-    return sophia.call('withdraw_vesting',[from,vestingShares],(err,response)=>{
+    return sophia.call('withdraw_vesting',{from:from,vesting_shares:vestingShares},(err,response)=>{
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
