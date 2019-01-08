@@ -11,7 +11,7 @@ class Serializer {
         if(this.types)
             this.keys = Object.keys(this.types)
 
-        Serializer.printDebug = true
+        Serializer.printDebug = true;
     }
 
     fromByteBuffer(b) {
@@ -156,12 +156,12 @@ class Serializer {
         let encoding
         if(Buffer.isBuffer(valA) && Buffer.isBuffer(valB)) {
             // A binary string compare does not work.  If localeCompare is well supported that could replace HEX.  Performanance is very good so comparing HEX works.
-            encoding = "hex"
+            encoding = "hex";
         }
 
         let strA = valA.toString(encoding)
         let strB = valB.toString(encoding)
-        return strA > strB ? 1 : strA < strB ? -1 : 0
+        return strA > strB ? 1 : strA < strB ? -1 : 0;
     }
 
     // <helper_functions>

@@ -221,7 +221,7 @@ class Sophia extends EventEmitter {
         let signedTransaction;
         let createtransaction;
         try {
-            return this.call('alexandria_api.create_simple_transaction', operation, (err, response) => {
+            return this.call('alexandria_api.create_simple_transaction', {op:operation}, (err, response) => {
                 if (err)
                     callback(err, '');
                 else {
@@ -245,7 +245,7 @@ class Sophia extends EventEmitter {
                     catch (e) {
                         callback(e, '');
                     }
-                    this.call('alexandria_api.broadcast_transaction', signedTransaction, (err, response) => {
+                    this.call('alexandria_api.broadcast_transaction', {tx:signedTransaction}, (err, response) => {
                         if (err) {
                             // logger.log(err);
                             callback(err, '');
@@ -310,7 +310,7 @@ class Sophia extends EventEmitter {
                                             catch (e) {
                                                 callback(e, '');
                                             }
-                                            this.call('alexandria_api.broadcast_transaction', [signedTransaction], (err, response) => {
+                                            this.call('alexandria_api.broadcast_transaction', {signedTransaction}, (err, response) => {
                                                 if (err) {
                                                     // logger.log(err);
                                                     callback(err, '');
@@ -375,7 +375,7 @@ sophia.setOptions=function(options) {
     sophia._setTransport(options);
     sophia.transport.setOptions(options);
     sophia.about(function(err, response){
-        config.set('chainId',response.chain_id);
+        config.set('chainId',response.about.chain_id);
     });
 };
 /**
@@ -392,7 +392,7 @@ sophia.setOptions=function(options) {
  */
 sophia.createAccount= function(creator, seed, privateKey, jsonMeta, owner, active, memoKey, callback) {
 
-    return sophia.call('alexandria_api.create_account', {creator, seed, jsonMeta, owner, active, memoKey}, function (err, response) {
+    return sophia.call('alexandria_api.create_account', {creator:creator, name_seed:seed, json_meta:jsonMeta, owner:owner, active:active, memo:memoKey}, function (err, response) {
         if (err)
         {
             //logger.log(err);
@@ -400,7 +400,7 @@ sophia.createAccount= function(creator, seed, privateKey, jsonMeta, owner, activ
         }
         else {
 
-            sophia.startBroadcasting(response, privateKey, callback);
+            sophia.startBroadcasting(response.op, privateKey, callback);
         }
     });
 };
