@@ -416,11 +416,11 @@ sophia.createAccount= function(creator, seed, privateKey, jsonMeta, owner, activ
  * @returns {object}
  */
 sophia.updateAccount=function(accountName,jsonMeta,owner,active, memoKey,privateKey,callback){
-    return sophia.call('alexandria_api.update_account',{accountName, jsonMeta, owner, active, memoKey},(err,response)=>{
+    return sophia.call('alexandria_api.update_account',{account_name:accountName, json_meta:jsonMeta, owner:owner, active:active, memo:memoKey},(err,response)=>{
         if(err)
             callback(err,null);
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
@@ -432,7 +432,7 @@ sophia.updateAccount=function(accountName,jsonMeta,owner,active, memoKey,private
  * @returns {object}
  */
 sophia.deleteAccount=function(accountName,privateKey,callback){
-    return sophia.call('alexandria_api.delete_account',{accountName},(err,response)=>{
+    return sophia.call('alexandria_api.delete_account',{account_name:accountName},(err,response)=>{
         if(err)
             callback(err,'');
         else {
@@ -469,11 +469,11 @@ sophia.transfer=function(from, to, amount, memo,privateKey,callback){
  * @returns {object}
  */
 sophia.transferToVesting=function(from, to, amount,privateKey,callback){
-    return sophia.call('transfer_to_vesting',[from, to, amount],(err,response)=>{
+    return sophia.call('alexandria_api.transfer_to_vesting',{from:from, to:to, amount:amount},(err,response)=>{
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
@@ -486,7 +486,7 @@ sophia.transferToVesting=function(from, to, amount,privateKey,callback){
  * @returns {object}
  */
 sophia.setVotingProxy=function(accountToModify,proxy,private_key,callback){
-    return sophia.call('set_voting_proxy',{account_to_modify:accountToModify, proxy:proxy},(err,response)=>{
+    return sophia.call('alexandria_api.set_voting_proxy',{account_to_modify:accountToModify, proxy:proxy},(err,response)=>{
         if(err)
             callback(err,'');
         else {
@@ -504,7 +504,7 @@ sophia.setVotingProxy=function(accountToModify,proxy,private_key,callback){
  * @returns {object}
  */
 sophia.voteForWitness=function(accountToVoteWith, accountToVoteFor, approve=true,private_key,callback){
-    return sophia.call('vote_for_witness',{voting_account:accountToVoteWith, witness_to_vote_for:accountToVoteFor, approve:approve},(err,response)=>{
+    return sophia.call('alexandria_api.vote_for_witness',{voting_account:accountToVoteWith, witness_to_vote_for:accountToVoteFor, approve:approve},(err,response)=>{
         if(err)
             callback(err,'');
         else {
@@ -521,7 +521,7 @@ sophia.voteForWitness=function(accountToVoteWith, accountToVoteFor, approve=true
  * @returns {object}
  */
 sophia.withdrawVesting=function(from,vestingShares,privateKey,callback){
-    return sophia.call('withdraw_vesting',{from:from,vesting_shares:vestingShares},(err,response)=>{
+    return sophia.call('alexandria_api.withdraw_vesting',{from:from,vesting_shares:vestingShares},(err,response)=>{
         if(err)
             callback(err,'');
         else {
@@ -549,11 +549,11 @@ sophia.updateWitness=function(accountName, url, blockSigningKey, accountCreation
         maximum_block_size:maximumBlockSizeLimit,
         price_feeds:prizeFeeds,
     };
-    return sophia.call('update_witness',[accountName, url, blockSigningKey, props],(err,response)=>{
+    return sophia.call('alexandria_api.update_witness',{witness_account_name:accountName, url:url, block_signing_key:blockSigningKey, pros:props},(err,response)=>{
         if(err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,private_key,callback);
+            sophia.startBroadcasting(response.op,private_key,callback);
         }
     });
 };
@@ -568,7 +568,7 @@ sophia.updateWitness=function(accountName, url, blockSigningKey, accountCreation
  * @return {Object}
  */
 sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
-    return sophia.call('get_account_history', [accountName, from, limit], (err, response) => {
+    return sophia.call('alexandria_api.get_account_history', {account:accountName, from:from, limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -599,7 +599,7 @@ sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
  * @return {Object}
  */
 sophia.getAccountTransferHistory=function(accountName,from, limit,callback) {
-    return sophia.call('get_account_history', [accountName, from, limit], (err, response) => {
+    return sophia.call('alexandria_api.get_account_history', {account:accountName, from:from, limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -643,7 +643,7 @@ sophia.getAccountTransferHistory=function(accountName,from, limit,callback) {
  * @return {Object}
  */
 sophia.getAccountHistory=function(accountName,from, limit,callback) {
-    return sophia.call('get_account_history', [accountName, from, limit], (err, response) => {
+    return sophia.call('alexandria_api.get_account_history', {account:accountName, start:from, limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -700,7 +700,7 @@ sophia.help=function(callback) {
  * @return {Object}
  */
 sophia.getWitness=function(nameOfTheWitness,callback) {
-    return sophia.call('alexandria_api.get_witness', {nameOfTheWitness}, (err, response) => {
+    return sophia.call('alexandria_api.get_witness', {owner_account:nameOfTheWitness}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -716,7 +716,7 @@ sophia.getWitness=function(nameOfTheWitness,callback) {
  * @return {Object}
  */
 sophia.listWitnesses=function(name,limit,callback) {
-    return sophia.call('alexandria_api.list_witnesses', {name,limit}, (err, response) => {
+    return sophia.call('alexandria_api.list_witnesses', {start:name,limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -732,7 +732,7 @@ sophia.listWitnesses=function(name,limit,callback) {
  * @return {Object}
  */
 sophia.listWitnessesByVote=function(name,limit,callback) {
-    return sophia.call('alexandria_api.list_witnesses_by_vote', {name,limit}, (err, response) => {
+    return sophia.call('alexandria_api.list_witnesses_by_vote', {name:name,limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -747,7 +747,7 @@ sophia.listWitnessesByVote=function(name,limit,callback) {
  * @return {Object}
  */
 sophia.getBlock=function(blockNum,callback) {
-    return sophia.call('alexandria_api.get_block', {blockNum}, (err, response) => {
+    return sophia.call('alexandria_api.get_block', {block_num:blockNum}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -763,7 +763,7 @@ sophia.getBlock=function(blockNum,callback) {
  * @return {Object}
  */
 sophia.getOpsInBlock=function(blockNum,onlyVirtual,callback) {
-    return sophia.call('alexandria_api.get_ops_in_block', {blockNum,onlyVirtual}, (err, response) => {
+    return sophia.call('alexandria_api.get_ops_in_block', {block_num:blockNum,only_virtual:onlyVirtual}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -778,7 +778,7 @@ sophia.getOpsInBlock=function(blockNum,onlyVirtual,callback) {
  * @return {Object}
  */
 sophia.getFeedHistory=function(symbol,callback) {
-    return sophia.call('alexandria_api.get_feed_history', {symbol}, (err, response) => {
+    return sophia.call('alexandria_api.get_feed_history', {symbol:symbol}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -793,7 +793,7 @@ sophia.getFeedHistory=function(symbol,callback) {
  * @return {Object}
  */
 sophia.getAccount=function(name,callback) {
-    return sophia.call('alexandria_api.get_account', {name}, (err, response) => {
+    return sophia.call('alexandria_api.get_account', {account_name:name}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -808,7 +808,7 @@ sophia.getAccount=function(name,callback) {
  * @return {Object}
  */
 sophia.getTransaction=function(trxId,callback) {
-    return sophia.call('alexandria_api.get_transaction', {trxId}, (err, response) => {
+    return sophia.call('alexandria_api.get_transaction', {tx_id:trxId}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -823,7 +823,7 @@ sophia.getTransaction=function(trxId,callback) {
  * @return {Object}
  */
 sophia.getAccountNameFromSeed=function(seed,callback) {
-    return sophia.call('alexandria_api.get_account_name_from_seed', {seed}, (err, response) => {
+    return sophia.call('alexandria_api.get_account_name_from_seed', {seed:seed}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -838,7 +838,7 @@ sophia.getAccountNameFromSeed=function(seed,callback) {
  * @return {Object}
  */
 sophia.accountExist=function(accountName,callback) {
-    return sophia.call('alexandria_api.account_exist', {accountName}, (err, response) => {
+    return sophia.call('alexandria_api.account_exist', {account_name:accountName}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -872,7 +872,7 @@ sophia.callPlugin=function(pluginName,methodName,args,callback) {
  * @return {Object}
  */
 sophia.getActiveAuthority=function(accountName,callback) {
-    return sophia.call('alexandria_api.get_active_authority', {accountName}, (err, response) => {
+    return sophia.call('alexandria_api.get_active_authority', {account_name:accountName}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -887,7 +887,7 @@ sophia.getActiveAuthority=function(accountName,callback) {
  * @return {Object}
  */
 sophia.getOwnerAuthority=function(accountName,callback) {
-    return sophia.call('alexandria_api.get_owner_authority', {accountName}, (err, response) => {
+    return sophia.call('alexandria_api.get_owner_authority', {account_name:accountName}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -902,7 +902,7 @@ sophia.getOwnerAuthority=function(accountName,callback) {
  * @return {Object}
  */
 sophia.getMemoKey=function(accountName,callback) {
-    return sophia.call('alexandria_api.get_memo_key', {accountName}, (err, response) => {
+    return sophia.call('alexandria_api.get_memo_key', {account_name:accountName}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -917,7 +917,7 @@ sophia.getMemoKey=function(accountName,callback) {
  * @return {Object}
  */
 sophia.getAccountBalance=function(accountName,callback) {
-    return sophia.call('alexandria_api.get_account_balance', {accountName}, (err, response) => {
+    return sophia.call('alexandria_api.get_account_balance', {account_name:accountName}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -932,7 +932,7 @@ sophia.getAccountBalance=function(accountName,callback) {
  * @return {Object}
  */
 sophia.getVestingBalance=function(accountName,callback) {
-    return sophia.call('alexandria_api.get_vesting_balance', {accountName}, (err, response) => {
+    return sophia.call('alexandria_api.get_vesting_balance', {account_name:accountName}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -950,7 +950,7 @@ sophia.getVestingBalance=function(accountName,callback) {
  * @return {Object}
  */
 sophia.sponsorAccountFees=function(sponsoring_account, sponsored_account, is_sponsoring, privateKey, callback) {
-    return sophia.call('alexandria_api.sponsor_account_fees', {sponsoring_account, sponsored_account, is_sponsoring}, (err, response) => {
+    return sophia.call('alexandria_api.sponsor_account_fees', {sopnsoring_account:sponsoring_account, sponsored_account:sponsored_account, is_sponsoring:is_sponsoring}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -970,7 +970,7 @@ sophia.sponsorAccountFees=function(sponsoring_account, sponsored_account, is_spo
  * @return {Object}
  */
 sophia.getReceivedDocuments=function(appId, accountName, searchType, start, count, callback) {
-    return sophia.call('alexandria_api.get_received_documents', {appId, accountName, searchType, start, count}, (err, response) => {
+    return sophia.call('alexandria_api.get_received_documents', {app_id:appId, account_name:accountName, search_type:searchType, start:start, count:count}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -1004,11 +1004,11 @@ sophia.getReceivedDocuments=function(appId, accountName, searchType, start, coun
  * @return {Object}
  */
 sophia.makeCustomJSONOperation=function( appId, from, to, data, privateKey, callback) {
-    return sophia.call('alexandria_api.make_custom_json_operation', {appId, from, to, data}, (err, response) => {
+    return sophia.call('alexandria_api.make_custom_json_operation', {app_id:appId, from:from, to:to, json:data}, (err, response) => {
         if (err)
             callback(err, '');
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
@@ -1023,11 +1023,11 @@ sophia.makeCustomJSONOperation=function( appId, from, to, data, privateKey, call
  * @return {Object}
  */
 sophia.makeCustomBinaryOperation=function(appId, from, to, data, privateKey, callback) {
-    return sophia.call('alexandria_api.make_custom_binary_operation', {appId, from, to, data}, (err, response) => {
+    return sophia.call('alexandria_api.make_custom_binary_operation', {app_id:appId, from:from, to:to, data:data}, (err, response) => {
         if (err)
             callback(err,'');
         else {
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
