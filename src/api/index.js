@@ -251,7 +251,7 @@ class Sophia extends EventEmitter {
                             callback(err, '');
                         }
                         else {
-                            callback('', response);
+                            callback('', response.tx);
                         }
                     });
                 }
@@ -375,7 +375,7 @@ sophia.setOptions=function(options) {
     sophia._setTransport(options);
     sophia.transport.setOptions(options);
     sophia.about(function(err, response){
-        config.set('chainId',response.about.chain_id);
+        config.set('chainId',response.chain_id);
     });
 };
 /**
@@ -647,7 +647,7 @@ sophia.getAccountHistory=function(accountName,from, limit,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.account_history);
         }
     });
 };
@@ -661,7 +661,7 @@ sophia.about=function(callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.about);
         }
     });
 };
@@ -675,7 +675,7 @@ sophia.info=function(callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.info);
         }
     });
 };
@@ -689,7 +689,7 @@ sophia.help=function(callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.help);
         }
     });
 };
@@ -720,7 +720,7 @@ sophia.listWitnesses=function(name,limit,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.witnesses);
         }
     });
 };
@@ -736,7 +736,7 @@ sophia.listWitnessesByVote=function(name,limit,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.witnesses_by_vote);
         }
     });
 };
@@ -747,7 +747,7 @@ sophia.listWitnessesByVote=function(name,limit,callback) {
  * @return {Object}
  */
 sophia.getBlock=function(blockNum,callback) {
-    return sophia.call('alexandria_api.get_block', {block_num:blockNum}, (err, response) => {
+    return sophia.call('alexandria_api.get_block', {num:blockNum}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -782,7 +782,7 @@ sophia.getFeedHistory=function(symbol,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.feed_history);
         }
     });
 };
@@ -812,7 +812,7 @@ sophia.getTransaction=function(trxId,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.tx);
         }
     });
 };
@@ -827,7 +827,7 @@ sophia.getAccountNameFromSeed=function(seed,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.account_name);
         }
     });
 };
@@ -842,7 +842,7 @@ sophia.accountExist=function(accountName,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.account_exists);
         }
     });
 };
@@ -876,7 +876,7 @@ sophia.getActiveAuthority=function(accountName,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.active_authority);
         }
     });
 };
@@ -891,7 +891,7 @@ sophia.getOwnerAuthority=function(accountName,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.owner_authority);
         }
     });
 };
@@ -906,7 +906,7 @@ sophia.getMemoKey=function(accountName,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.memo_key);
         }
     });
 };
@@ -921,7 +921,7 @@ sophia.getAccountBalance=function(accountName,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.account);
         }
     });
 };
@@ -936,7 +936,7 @@ sophia.getVestingBalance=function(accountName,callback) {
         if (err)
             callback(err, '');
         else {
-            callback('', response);
+            callback('', response.vesting_balance);
         }
     });
 };
@@ -955,7 +955,7 @@ sophia.sponsorAccountFees=function(sponsoring_account, sponsored_account, is_spo
             callback(err, '');
         else {
             //callback('', response);
-            sophia.startBroadcasting(response,privateKey,callback);
+            sophia.startBroadcasting(response.op,privateKey,callback);
         }
     });
 };
@@ -977,7 +977,7 @@ sophia.getReceivedDocuments=function(appId, accountName, searchType, start, coun
             if (response.length > 0) {
                 response.forEach(r => {
                     let simplifieddata=JSON.stringify(r[r.length - 1].data);
-                        let result = '{"app_id": ' + r[r.length - 1].app_id + ',' +
+                        let result = '{ "app_id":"'  + r[r.length - 1].app_id + ',' +
                             '                          "binary": "' + r[r.length - 1].binary + '",' +
                             '                         "recipients": "' +r[r.length - 1].recipients+ '",' +
                             '                     "sender": "' + r[r.length - 1].sender + '",' +
@@ -988,7 +988,7 @@ sophia.getReceivedDocuments=function(appId, accountName, searchType, start, coun
 
                 });
             }else{
-                callback('',response);
+                callback('',response.received_documents);
             }
         }
     });
