@@ -603,8 +603,8 @@ sophia.getAccountTransferHistory=function(accountName,from, limit,callback) {
         if (err)
             callback(err, '');
         else {
-            if (response.length > 0) {
-                response.forEach(r => {
+            if (response.account_history.length > 0) {
+                response.account_history.forEach(r => {
                     let operationName = r[r.length - 1].op[r.length - 2];
 
                     if (operationName === 'transfer') {
