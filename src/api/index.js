@@ -568,13 +568,13 @@ sophia.updateWitness=function(accountName, url, blockSigningKey, accountCreation
  * @return {Object}
  */
 sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
-    return sophia.call('alexandria_api.get_account_history', {account:accountName, from:from, limit:limit}, (err, response) => {
+    return sophia.call('alexandria_api.get_account_history', {account:accountName, start:from, limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
-            if (response.length > 0) {
+            if (response.account_history.length > 0) {
                 let valueArray=[];
-                response.forEach(r => {
+                response.account_history.forEach(r => {
                     let operationName = r[r.length - 1].op[r.length - 2];
                     if (operationName === type) {
 
@@ -598,8 +598,8 @@ sophia.getAccountHistoryByType=function(accountName,type,from, limit,callback) {
  * @param callback - callback function
  * @return {Object}
  */
-sophia.getAccountTransferHistory=function(accountName,from, limit,callback) {
-    return sophia.call('alexandria_api.get_account_history', {account:accountName, from:from, limit:limit}, (err, response) => {
+sophia.getAccountTransferHistory=function(accountName, from, limit, callback) {
+    return sophia.call('alexandria_api.get_account_history', {account:accountName, start:from, limit:limit}, (err, response) => {
         if (err)
             callback(err, '');
         else {
@@ -974,18 +974,19 @@ sophia.getReceivedDocuments=function(appId, accountName, searchType, start, coun
         if (err)
             callback(err, '');
         else {
-            if (response.length > 0) {
-                response.forEach(r => {
+            if (response.received_documents.length > 0) {
+                response.received_documents.forEach(r => {
                     let simplifieddata=JSON.stringify(r[r.length - 1].data);
-                        let result = '{ "app_id":"'  + r[r.length - 1].app_id + ',' +
+                        let result = '{ "app_id":"'  + r[r.length - 1].app_id + '",' +
+                            '                          "ID": "' + r[r.length - 1].id + '",' +
                             '                          "binary": "' + r[r.length - 1].binary + '",' +
+
                             '                         "recipients": "' +r[r.length - 1].recipients+ '",' +
                             '                     "sender": "' + r[r.length - 1].sender + '",' +
                             '                     "data": ' + simplifieddata + ',' +
                             '                    "received": "' + r[r.length - 1].received + '"}';
                         let objectResult = JSON.parse(result);
                         callback('', objectResult);
-
                 });
             }else{
                 callback('',response.received_documents);
