@@ -234,4 +234,5 @@ Auth.signTransaction = function (trx, key,digest) {
     return signed_transaction.toObject(Object.assign(trx, { signatures: signatures }));
 };
 
+
 module.exports = Auth;

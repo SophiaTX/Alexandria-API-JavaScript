@@ -854,6 +854,16 @@ let transaction = new Serializer(
         extensions: set(future_extensions)
     }
 );
+let group_operation=new Serializer("group_op",{
+    version:uint32,
+    type:string, //"add" "disband" "update"
+    description:string,
+    new_group_name:optional(account_name_type),
+
+user_list:optional(set(account_name_type)),
+senders_pubkey:public_key,
+new_key:map(public_key,bytes())
+});
 
 //# -------------------------------
 //#  Generated code end  S T O P

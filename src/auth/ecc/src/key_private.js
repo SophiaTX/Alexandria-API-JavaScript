@@ -88,8 +88,9 @@ function PrivateKey(d) {
         let P = KBP.multiply(BigInteger.fromBuffer(r))
         let S = P.affineX.toBuffer({size: 32})
         // SHA512 used in ECIES
-        return hash.sha512(S)
+        return hash.sha512(S);
     }
+
     /**
       @arg {string} name - child key name.
       @return {PrivateKey}

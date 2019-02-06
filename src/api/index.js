@@ -2,13 +2,14 @@ import EventEmitter from 'events';
 
 import config from '../config';
 import transports from './transports';
+var operations = require('../auth/serializer/src/operations');
 
 import {
     jsonRpc
 } from './transports/http';
-
-
-const auth = require('../auth');
+import * as KeyPrivate from "../../lib/auth/ecc/src/key_private";
+const ecc=require('../auth/ecc');
+const auth=require('../auth');
 class Sophia extends EventEmitter {
 
     constructor(options = {}) {
@@ -1035,6 +1036,69 @@ sophia.makeCustomBinaryOperation=function(appId, from, to, data, privateKey, cal
 
 sophia.getTransactionId=function(transaction){
    return auth.CreateTxId(transaction);
+};
+//---------------------------------------------------------------multiparty encryption
+
+
+const db = require("mongoose");
+db.connect('mongodb://localhost:27017/mpmdb',{useNewUrlParser:true});
+const groups=db.model('groups',{admin:String,
+    groupName:String,
+    groupKey:String,
+    members:String});
+var group_op=operations.group_operation;
+
+
+
+
+sophia.suggestGroupName=function(description){
+    var seed=description+KeyPrivate.fromSeed(description);
+    var data= ecc.hash.ripemd160(seed);
+    return data.toString('base64');
+};
+sophia.createRandomKey=function(){
+    return auth.toWif(KeyPrivate.fromSeed(Math.random().toString()));
+};
+sophia.createGroup=function(adminName,description,members,callback){
+    return sophia.getAccount(adminName,function(err,res){
+        if(err)
+            return callback(err);
+        else
+        {
+            var admin=res.account[0];
+            var group_name=sophia.suggestGroupName(description);
+            var admin_name=adminName;
+            var groupKey=sophia.createRandomKey();
+            var pk=admin.memo_key;
+            var membersArray=members;
+            var newGroupArray={
+                admin:pk,
+                groupName:group_name,
+                groupKey:groupKey,
+                members:membersArray
+            };
+            membersArray.forEach(function(r){
+                console.log(r);
+                var group_object={
+                    version:1,
+                    type:"add",
+                    description:description,
+                    new_group_name:admin_name,
+                    user_list:membersArray,
+                    senders_pubkey:pk,
+                    new_key:groupKey
+                };
+                group_op.toObject(group_object);
+            });
+            const group=new groups(newGroupArray);
+            group.save().then(()=>console.log('new group created'));
+            groups.findOne(function(err,obj) {
+                return callback(obj);
+            });
+        }
+
+    });
+
 };
 
 module.exports = sophia;
