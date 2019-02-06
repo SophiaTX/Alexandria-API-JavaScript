@@ -1,38 +1,6 @@
-
-// This file is merge updated from steemd's js_operation_serializer program.
-/*
-
-./js_operation_serializer |
-sed 's/void/future_extensions/g'|
-sed 's/steemit_protocol:://g'|
-sed 's/14static_variantIJNS_12fixed_stringINSt3__14pairIyyEEEEEEE/string/g'|
-sed 's/steemit_future_extensions/future_extensions/g'|
-sed 's/steemit_protocol_//g' > tmp.coffee
-
-*/
-// coffee tmp.coffee # fix errors until you see: `ChainTypes is not defined`
-
-/*
-
-   remove these 7 lines from tmp.coffee:
-
-static_variant [
-    pow2
-    equihash_pow
-] = static_variant [
-    pow2
-    equihash_pow
-]
-
-*/
-
-// npm i -g decaffeinate
-// decaffeinate tmp.coffee
-
-// Merge tmp.js - See "Generated code follows" below
-
 import types from "./types";
 import SerializerImpl from "./serializer";
+
 
 const {
     //id_type,
@@ -54,6 +22,7 @@ const version = types.void;
 // Place-holder, their are dependencies on "operation" .. The final list of
 // operations is not avialble until the very end of the generated code.
 // See: operation.st_operations = ...
+
 const operation = static_variant();
 module.exports.operation = operation;
 
@@ -96,6 +65,7 @@ let asset = new Serializer(
 Replace: authority.prototype.account_authority_map
 With: map((string), (uint16))
 */
+
 let signed_transaction = new Serializer(
     "signed_transaction", {
         ref_block_num: uint16,
@@ -854,15 +824,29 @@ let transaction = new Serializer(
         extensions: set(future_extensions)
     }
 );
-let group_operation=new Serializer("group_op",{
-    version:uint32,
-    type:string, //"add" "disband" "update"
-    description:string,
-    new_group_name:optional(account_name_type),
 
-user_list:optional(set(account_name_type)),
-senders_pubkey:public_key,
-new_key:map(public_key,bytes())
+let group_meta=new Serializer(
+
+    "group_meta",
+{
+    sender:optional(public_key),
+    recipient:optional(public_key),
+    iv:optional(string),
+    data:bytes()
+
+}
+
+    );
+
+let group_operation=new Serializer(
+    "group_operation",{
+        version:uint32,
+        type:string, //"add" "disband" "update"
+        description:string,
+        new_group_name:optional(account_name_type),
+        user_list:optional(set(account_name_type)),
+        senders_pubkey:public_key,
+        new_key:map(public_key,bytes())
 });
 
 //# -------------------------------

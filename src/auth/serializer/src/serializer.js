@@ -191,6 +191,7 @@ class Serializer {
     toBuffer(object){
         return new Buffer(this.toByteBuffer(object).toBinary(), 'binary');
     }
+
 }
 
 module.exports = Serializer
