@@ -815,6 +815,7 @@ operation.st_operations=[
     producer_reward,
     promotion_pool_withdraw
 ];
+
 let transaction = new Serializer(
     "transaction", {
         ref_block_num: uint16,
@@ -826,17 +827,19 @@ let transaction = new Serializer(
 );
 
 let group_meta=new Serializer(
-
-    "group_meta",
-{
+    "group_meta", {
     sender:optional(public_key),
     recipient:optional(public_key),
     iv:optional(string),
     data:bytes()
 
-}
+});
+let create_group_return=new Serializer(
+    "create_group_return", {
+        group_name:account_name_type,
+        operation_payloads:map(account_name_type,group_meta)
 
-    );
+    });
 
 let group_operation=new Serializer(
     "group_operation",{
@@ -848,6 +851,13 @@ let group_operation=new Serializer(
         senders_pubkey:public_key,
         new_key:map(public_key,bytes())
 });
+let message_wrapper=new Serializer(
+    "message_wrapper", {
+        type:uint32,
+        message_data:optional(bytes()),
+        operation_data:optional(group_operation)
+
+    });
 
 //# -------------------------------
 //#  Generated code end  S T O P
