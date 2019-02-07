@@ -1093,17 +1093,10 @@ sophia.createGroup=function(adminName, privateKey, description, members, callbac
             let operation_payloads=[];
             let accounts;
             membersArray.forEach(function(r) {
-                sophia.call('alexandria_api.get_account', {account_name:r}, (err, response) => {
-                    if (err) {
-
-                        callback(err, '');
-                    }
-                    else {
-
-                        callback('', response);
-                    }
-                   });
-
+                    sophia.call('alexandria_api.get_account', {account_name:r}, (err, response) => {
+                        accounts=response;
+                    });
+                    console.log(accounts);
                     let group_object = {
                         version: 1,
                         type: "add",
@@ -1138,6 +1131,10 @@ sophia.createGroup=function(adminName, privateKey, description, members, callbac
     });
 
 };
-
+sophia.getGroup=function(groupName,callback){
+    groups.findOne({groupName:groupName},(err,obj) =>{
+         return callback(obj);
+         });
+};
 module.exports = sophia;
 exports.Sophia = Sophia;
