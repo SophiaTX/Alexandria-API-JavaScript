@@ -860,7 +860,6 @@ let message_wrapper=new Serializer(
     });
 let group_object=new Serializer(
     "group_object",{
-        id:string,
         group_name:account_name_type,
         current_group_name:account_name_type,
         description: string,
