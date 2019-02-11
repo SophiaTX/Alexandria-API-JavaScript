@@ -858,7 +858,17 @@ let message_wrapper=new Serializer(
         operation_data:optional(group_operation)
 
     });
-
+let group_object=new Serializer(
+    "group_object",{
+        id:string,
+        group_name:account_name_type,
+        current_group_name:account_name_type,
+        description: string,
+        members:set(account_name_type),
+        admin:account_name_type,
+        group_key:string,
+        current_seq:uint32
+    });
 //# -------------------------------
 //#  Generated code end  S T O P
 //# -------------------------------

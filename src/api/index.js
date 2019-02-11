@@ -9,6 +9,8 @@ import * as KeyPrivate from "../auth/ecc/src/key_private";
 const operations = require('../auth/serializer/src/operations');
 const ecc=require('../auth/ecc');
 const auth=require('../auth');
+const assert = require('assert');
+
 class Sophia extends EventEmitter {
 
     constructor(options = {}) {
@@ -1040,16 +1042,24 @@ sophia.getTransactionId=function(transaction){
 
 
 const db = require("mongoose");
-db.connect('mongodb://localhost:27017/mpmdbv1',{useNewUrlParser:true});
+db.connect('mongodb://localhost:27017/mpmdbv2',{useNewUrlParser:true});
 var group_operation = operations.group_operation;
 var group_create_return=operations.create_group_return;
-const groups=db.model(
-    'groups',{
-
-    group_name:String,
-        operation_payloads:Array
+// const group_op=db.model(
+//     'group_op',{
+//         group_name:String,
+//         operation_payloads:Array
+//     });
+var group_obj = operations.group_object;
+const group_object=db.model(
+    'group_object',{
+        group_name:String,
+        current_group_name:String,
+        description:String,
+        members:Array,
+        admin:String,
+        group_key:String
     });
-
 sophia.suggestGroupName=function(description){
     var seed=description+KeyPrivate.fromSeed(description);
     var data= ecc.hash.ripemd160(seed);
@@ -1069,7 +1079,34 @@ sophia.encodeAndPack=function(privateKey, publicKey, operation){
     let encoded_message=sophia.encode_message(message_content.toString(),privateKey, publicKey);
     return encoded_message;
 };
+sophia.getGroup=function(groupName,callback){
+    return group_object.findOne({'group_name': groupName},(err,obj) =>{
+        if(err) return callback(err,'');
+        else return callback('',obj);
+    });
 
+};
+sophia.getGroupName=function(groupName,callback){
+    return group_object.findOne({'group_name': groupName},(err,obj) =>{
+        if(err) return callback(err,'');
+        else return callback('',obj);
+    });
+
+};
+sophia.listMyGroups=function(start,count,callback){
+    return group_object.findOne({'group_name': groupName},(err,obj) =>{
+        if(err) return callback(err,'');
+        else return callback('',obj);
+    });
+
+};
+sophia.listMyMessages=function(groupName,start,count,callback){
+    return group_object.findOne({'group_name': groupName},(err,obj) =>{
+        if(err) return callback(err,'');
+        else return callback('',obj);
+    });
+
+};
 sophia.createGroup=function(adminName, privateKey, description, members, callback){
 
     return sophia.call('alexandria_api.get_account', {account_name:adminName}, (err, res) => {
@@ -1083,30 +1120,35 @@ sophia.createGroup=function(adminName, privateKey, description, members, callbac
             let pk = admin.memo_key;
             let membersArray = members;
             let operation_payloads = [];
-
             for (let i=0;i<membersArray.length;i++){
-
             sophia.call('alexandria_api.get_account', {account_name: membersArray[i]}, (err, response) => {
                 if (err) return callback(err);
                 else {
-                    let group_object = {
+                    let group_operation = {
                         version: 1,
                         type: "add",
                         description: description,
-                        new_group_name: admin_name,
+                        new_group_name: group_name,
                         user_list: membersArray,
                         senders_pubkey: pk,
                         new_key: [[response.account[0].memo_key, groupKey]]
                     };
-                    let data = sophia.encodeAndPack(privateKey, response.account[0].memo_key, group_operation.toObject(group_object));
+                    let groupObjectInstance = {
+                        group_name:group_name,
+                        current_group_name:group_name,
+                        description: description,
+                        members:membersArray,
+                        admin:membersArray[i],
+                        group_key:[[response.account[0].memo_key, groupKey]],
+
+                    };
+                    let data = sophia.encodeAndPack(privateKey, response.account[0].memo_key, group_operation.toObject(group_operation));
                     let group_meta = {
                         sender: pk,
                         recipient: response.account[0].memo_key,
                         data: data
                     };
-
                     operation_payloads.push([membersArray[i], group_meta]);
-
                     if(i===membersArray.length-1) {
                         let ret = {
                             group_name: group_name,
@@ -1114,16 +1156,15 @@ sophia.createGroup=function(adminName, privateKey, description, members, callbac
                         };
                         let retObjects=group_create_return.toObject(ret);
                         console.log(retObjects);
-                        let group=new groups(retObjects);
+                        let groupObjects=group_obj.toObject(groupObjectInstance);
+                        let group=new group_object(groupObjects);
                         group.save().then(()=>{
                             console.log('new group created');
                         });
-
                         groups.findOne({'group_name': group_name},function(err,obj) {
                             return callback('',obj);
                         });
                     }
-
 
                 }
 
@@ -1136,10 +1177,94 @@ sophia.createGroup=function(adminName, privateKey, description, members, callbac
     });
 
 };
-sophia.getGroup=function(groupName,callback){
-    return groups.findOne({'group_name': groupName},(err,obj) =>{
-        if(err) return callback(err,'');
-        else return callback('',obj);
+sophia.addGroupParticipants=function(groupName,newMembers,admin,privateKey,callback){
+    let g_ob=groups.findOne({'group_name': groupName},function(err,obj) {
+        if(err) return err;
+        else{
+            console.log(obj);
+            // assert.equal(obj===null,'{ operation_payloads: [ [ \'martyn\', [Object] ], [ \'matej\', [Object] ] ],\n' +
+            //     '  _id: 5c5d548435a74bcc395e7d8e,\n' +
+            //     '  group_name: \'tkd5D4zaqjS1q1AMtB/5Wj1xZWQ=\',\n' +
+            //     '  __v: 0 }','group not found');
+            // assert.equal(obj.admin === admin,true,'you are not the admin');
+            if(obj)
+            return obj;
+        }
+
+    });
+    return sophia.call('alexandria_api.get_account', {account_name:g_ob.adminName}, (err, res) => {
+        if(err)
+            return callback(err);
+        else {
+            let admin = res.account[0];
+            let group_name = sophia.suggestGroupName(g_ob.description);
+            let admin_name = admin.name;
+            let groupKey = sophia.createRandomKey();
+            let pk = admin.memo_key;
+            let membersArray = g_ob.members;
+            membersArray.push(newMembers);
+            let ret=[];
+            for (let i=0;i<membersArray.length;i++){
+
+                sophia.call('alexandria_api.get_account', {account_name: membersArray[i]}, (err, response) => {
+                    if (err) return callback(err);
+                    else {
+                        let group_object_add = {
+                            version: 1,
+                            type: "add",
+                            description: g_ob.description,
+                            new_group_name: group_name,
+                            user_list: membersArray,
+                            senders_pubkey: pk,
+                            new_key: [[response.account[0].memo_key, groupKey]] //check for encrypted key
+                        };
+                        let data = sophia.encodeAndPack(privateKey, response.account[0].memo_key, group_operation.toObject(group_object_add));
+                        let group_meta = {
+                            sender: pk,
+                            recipient: response.account[0].memo_key,
+                            data: data
+                        };
+
+                        ret.push([membersArray[i], group_meta]);
+
+                        let group_object_update = {
+                            version: 1,
+                            type: "update",
+                            description: g_ob.description,
+                            new_group_name: group_name,
+                            user_list: membersArray,
+                            senders_pubkey: pk,
+                            new_key: [[response.account[0].memo_key, groupKey]] //check for encrypted key
+                        };
+                        let data_update = sophia.encodeAndPack(privateKey, response.account[0].memo_key, group_operation.toObject(group_object_update));
+                        let group_meta_update = {
+                            sender: pk,
+                            recipient: response.account[0].memo_key,
+                            data: data_update
+                        };
+
+                        if(i===membersArray.length-1) {
+                            ret.push([group_name, group_meta_update]);
+                            console.log(ret);
+                            let group=new groups(ret);
+                            group.save().then(()=>{
+                                console.log('new group created');
+                            });
+
+                            groups.findOne({'group_name': group_name},function(err,obj) {
+                                return callback('',obj);
+                            });
+                        }
+
+
+                    }
+
+                });
+
+            }
+
+        }
+
     });
 
 };
