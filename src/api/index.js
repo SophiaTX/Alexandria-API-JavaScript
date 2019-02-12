@@ -1042,7 +1042,7 @@ sophia.getTransactionId=function(transaction){
 
 
 const db = require("mongoose");
-db.connect('mongodb://localhost:27017/mpmdbv2',{useNewUrlParser:true});
+db.connect('mongodb://localhost:27017/mpmdbv3',{useNewUrlParser:true});
 var group_operation = operations.group_operation;
 var group_create_return=operations.create_group_return;
 // const group_op=db.model(
@@ -1050,6 +1050,7 @@ var group_create_return=operations.create_group_return;
 //         group_name:String,
 //         operation_payloads:Array
 //     });
+
 var group_obj = operations.group_object;
 const group_object=db.model(
     'group_object',{
@@ -1061,7 +1062,7 @@ const group_object=db.model(
         group_key:String
     });
 sophia.suggestGroupName=function(description){
-    var seed=description+KeyPrivate.fromSeed(description);
+    var seed=Math.random().toString()+KeyPrivate.fromSeed(description);
     var data= ecc.hash.ripemd160(seed);
     return data.toString('base64');
 };
@@ -1108,7 +1109,6 @@ sophia.listMyMessages=function(groupName,start,count,callback){
 
 };
 sophia.createGroup=function(adminName, privateKey, description, members, callback){
-
     return sophia.call('alexandria_api.get_account', {account_name:adminName}, (err, res) => {
         if(err)
             return callback(err);
@@ -1226,10 +1226,16 @@ sophia.addGroupParticipants=function(groupName,newMembers,admin,privateKey,callb
                         if(i===membersArray.length-1) {
                             ret.push([group_name, group_meta_update]);
                             console.log(ret);
-                            // let group=new group_object(ret);
-                            // group.save().then(()=>{
-                            //     console.log('group renamed and more members added');
-                            // });
+                            //let group=new group_object();
+                            group_object.updateOne({'group_name':groupName},{$set:{'current_group_name':group_name,'members':membersArray,'group_key':newGroupKey}},function(err,res){
+
+                                if(err)
+                                    callback(err);
+                                else {
+                                    console.log('group renamed and more members added ' + newMembers);
+                                    callback(res);
+                                }
+                            });
                         }
                     }
                 });
@@ -1254,13 +1260,16 @@ sophia.deleteGroupParticipants=function(groupName,deleteMembers,admin,privateKey
                     let newGroupKey = sophia.createRandomKey();
                     let pk = admin.memo_key;
                     let membersArray = obj.members;
+
                     deleteMembers.forEach(function (r) {
                         membersArray.forEach(function (l) {
-                            if(membersArray[l]===r)
-                                membersArray.splice(l,1);
+                            if(l===r)
+                                membersArray.splice(membersArray.indexOf(l),1);
+
                         });
 
                     });
+                    console.log(membersArray);
                     let ret=[];
                     for (let i=0;i<membersArray.length;i++){
 
@@ -1303,9 +1312,14 @@ sophia.deleteGroupParticipants=function(groupName,deleteMembers,admin,privateKey
                                     ret.push([group_name, group_meta_update]);
                                     console.log(ret);
                                     // let group=new group_object(ret);
-                                    // group.save().then(()=>{
-                                    //     console.log('group renamed and more members added');
-                                    // });
+                                    group_object.updateOne({'group_name':groupName},{$set:{'current_group_name':group_name,'members':membersArray,'group_key':newGroupKey}},function(err,res){
+                                        if(err)
+                                            callback(err);
+                                        else {
+                                            console.log('group renamed and some members deleted ' + deleteMembers);
+                                            callback(res);
+                                        }
+                                    });
                                 }
                             }
                         });
@@ -1321,43 +1335,54 @@ sophia.updateGroup=function(groupName,description,admin,privateKey,callback){
         if(err) return err;
         else{
             return sophia.call('alexandria_api.get_account', {account_name:obj.admin}, (err, res) => {
-                if(err)
+                if (err)
                     return callback(err);
                 else {
                     let admin = res.account[0];
-                    let group_name = sophia.suggestGroupName(obj.description);
+                    let group_name = sophia.suggestGroupName(description);
                     let admin_name = admin.name;
                     let newGroupKey = sophia.createRandomKey();
                     let pk = admin.memo_key;
                     let membersArray = obj.members;
 
-                    let ret=[];
+                    let ret = [];
 
-                                let group_object_update = {
-                                    version: 1,
-                                    type: "update",
-                                    description: obj.description,
-                                    new_group_name: group_name,
-                                    user_list: membersArray,
-                                    senders_pubkey: pk,
-                                    new_key: [[res.account[0].memo_key, newGroupKey]] //check for encrypted key
-                                };
+                    let group_object_update = {
+                        version: 1,
+                        type: "update",
+                        description: obj.description,
+                        new_group_name: group_name,
+                        user_list: membersArray,
+                        senders_pubkey: pk,
+                        new_key: [[res.account[0].memo_key, newGroupKey]] //check for encrypted key
+                    };
 
-                                let data_update = sophia.encodeAndPack(privateKey, res.account[0].memo_key, group_operation.toObject(group_object_update));
-                                let group_meta_update = {
-                                    sender: pk,
-                                    recipient: res.account[0].memo_key,
-                                    data: data_update
-                                };
+                    let data_update = sophia.encodeAndPack(privateKey, res.account[0].memo_key, group_operation.toObject(group_object_update));
+                    let group_meta_update = {
+                        sender: pk,
+                        recipient: res.account[0].memo_key,
+                        data: data_update
+                    };
 
-                                    ret.push([group_name, group_meta_update]);
-                                    console.log(ret);
-                                    // let group=new group_object(ret);
-                                    // group.save().then(()=>{
-                                    //     console.log('group renamed and more members added');
-                                    // });
+                    ret.push([group_name, group_meta_update]);
+                    console.log(ret);
+                    group_object.updateOne({'group_name': groupName}, {
+                        $set: {
+                            'current_group_name': group_name,
+                            'description': description
+                        ,'group_key':newGroupKey
+                        }
+                    },
+                        function (err, res) {
+                        if (err)
+                            callback(err);
+                        else {
+                            console.log('group updated ' + groupName);
+                            callback(res);
+                        }
+                    });
 
-                            }
+                }
 
 
             });
@@ -1399,10 +1424,14 @@ sophia.disbandGroup = function (groupName,admin,privateKey,callback) {
 
                     ret.push([group_name, group_meta_disband]);
                     console.log(ret);
-                    // let group=new group_object(ret);
-                    // group.save().then(()=>{
-                    //     console.log('group renamed and more members added');
-                    // });
+                    group_object.updateOne({'group_name':groupName},{$set:{'current_group_name':group_name,'group_key':newGroupKey}},function(err,res){
+                        if(err)
+                            callback(err);
+                        else {
+                            console.log('group disbanded ' + groupName);
+                            callback(res);
+                        }
+                    });
 
                 }
 
@@ -1432,29 +1461,22 @@ sophia.sendGroupMessages = function (groupName,sender,data,privateKey,callback) 
                         message_data:data
                     };
                     let encoded_message=sophia.encode_message(messageContent.toString(),newGroupKey, pk);
-
-
                     let group_meta_sendMessage = {
                         sender: sender,
                         recipient: res.account[0].memo_key,
                         data: encoded_message
                     };
-
                     ret.push([group_name, group_meta_sendMessage]);
                     console.log(ret);
                     // let group=new group_object(ret);
                     // group.save().then(()=>{
                     //     console.log('group renamed and more members added');
                     // });
-
                 }
-
-
             });
         }
-
     });
 };
-// });
+
 module.exports = sophia;
 exports.Sophia = Sophia;
