@@ -1045,11 +1045,11 @@ const db = require("mongoose");
 db.connect('mongodb://localhost:27017/mpmdbv3',{useNewUrlParser:true});
 var group_operation = operations.group_operation;
 var group_create_return=operations.create_group_return;
-// const group_op=db.model(
-//     'group_op',{
-//         group_name:String,
-//         operation_payloads:Array
-//     });
+const message_object=db.model(
+    'message_objects',{
+        group_name:String,
+        operation_payloads:Array
+    });
 
 var group_obj = operations.group_object;
 const group_object=db.model(
@@ -1087,24 +1087,49 @@ sophia.getGroup=function(groupName,callback){
     });
 
 };
-sophia.getGroupName=function(groupName,callback){
-    return group_object.findOne({'group_name': groupName},(err,obj) =>{
+sophia.getGroupName=function(currentGroupName,callback){
+    return group_object.findOne({'current_group_name': currentGroupName},(err,obj) =>{
         if(err) return callback(err,'');
-        else return callback('',obj);
+        else return callback('',obj.group_name);
     });
 
 };
 sophia.listMyGroups=function(start,count,callback){
-    return group_object.findOne({'group_name': groupName},(err,obj) =>{
-        if(err) return callback(err,'');
-        else return callback('',obj);
-    });
+    assert(count<1000,'Count value should be less than 1000');
+    let listOfGroups=[].fill(0);
+    group_object.find({}, function(err, result) {
+        if (err) return callback(err);
+        else {
+            for(let i=0;i<result.length;i++){
+                if(result[i].group_name===start){
+                    for(let l=result.indexOf(result[i]);l<(count+result.indexOf(result[i]));l++){
+                        if(result[l]!==undefined)
+                        listOfGroups.push(result[l]);
+                    }
+                }
+            }
+            return callback(listOfGroups);
+        }
 
+    });
 };
 sophia.listMyMessages=function(groupName,start,count,callback){
-    return group_object.findOne({'group_name': groupName},(err,obj) =>{
-        if(err) return callback(err,'');
-        else return callback('',obj);
+    assert(count<1000,'Count value should be less than 1000');
+    let listOfMessages=[].fill(0);
+    message_object.find({}, function(err, result) {
+        if (err) return callback(err);
+        else {
+            for(let i=0;i<result.length;i++){
+                if(result[i].operation_payloads[0].sender===start && result[i].group_name===groupName){
+                    for(let l=result.indexOf(result[i]);l<(count+result.indexOf(result[i]));l++){
+                        if(result[l]!==undefined)
+                            listOfMessages.push(result[l]);
+                    }
+                }
+            }
+            return callback(listOfMessages);
+        }
+
     });
 
 };
@@ -1159,6 +1184,7 @@ sophia.createGroup=function(adminName, privateKey, description, members, callbac
                         let group=new group_object(groupObjects);
                         group.save().then(()=>{
                             console.log('new group created');
+                            return callback(ret);
                         });
                     }
                 }
@@ -1225,7 +1251,6 @@ sophia.addGroupParticipants=function(groupName,newMembers,admin,privateKey,callb
                         };
                         if(i===membersArray.length-1) {
                             ret.push([group_name, group_meta_update]);
-                            console.log(ret);
                             //let group=new group_object();
                             group_object.updateOne({'group_name':groupName},{$set:{'current_group_name':group_name,'members':membersArray,'group_key':newGroupKey}},function(err,res){
 
@@ -1233,7 +1258,7 @@ sophia.addGroupParticipants=function(groupName,newMembers,admin,privateKey,callb
                                     callback(err);
                                 else {
                                     console.log('group renamed and more members added ' + newMembers);
-                                    callback(res);
+                                    callback(ret);
                                 }
                             });
                         }
@@ -1310,14 +1335,14 @@ sophia.deleteGroupParticipants=function(groupName,deleteMembers,admin,privateKey
                                 };
                                 if(i===membersArray.length-1) {
                                     ret.push([group_name, group_meta_update]);
-                                    console.log(ret);
+
                                     // let group=new group_object(ret);
                                     group_object.updateOne({'group_name':groupName},{$set:{'current_group_name':group_name,'members':membersArray,'group_key':newGroupKey}},function(err,res){
                                         if(err)
                                             callback(err);
                                         else {
                                             console.log('group renamed and some members deleted ' + deleteMembers);
-                                            callback(res);
+                                            callback(ret);
                                         }
                                     });
                                 }
@@ -1365,7 +1390,7 @@ sophia.updateGroup=function(groupName,description,admin,privateKey,callback){
                     };
 
                     ret.push([group_name, group_meta_update]);
-                    console.log(ret);
+
                     group_object.updateOne({'group_name': groupName}, {
                         $set: {
                             'current_group_name': group_name,
@@ -1378,7 +1403,7 @@ sophia.updateGroup=function(groupName,description,admin,privateKey,callback){
                             callback(err);
                         else {
                             console.log('group updated ' + groupName);
-                            callback(res);
+                            callback(ret);
                         }
                     });
 
@@ -1423,13 +1448,13 @@ sophia.disbandGroup = function (groupName,admin,privateKey,callback) {
                     };
 
                     ret.push([group_name, group_meta_disband]);
-                    console.log(ret);
+
                     group_object.updateOne({'group_name':groupName},{$set:{'current_group_name':group_name,'group_key':newGroupKey}},function(err,res){
                         if(err)
                             callback(err);
                         else {
                             console.log('group disbanded ' + groupName);
-                            callback(res);
+                            callback(ret);
                         }
                     });
 
@@ -1445,12 +1470,12 @@ sophia.sendGroupMessages = function (groupName,sender,data,privateKey,callback) 
     group_object.findOne({'group_name': groupName},function(err,obj) {
         if(err) return err;
         else{
-            return sophia.call('alexandria_api.get_account', {account_name:obj.admin}, (err, res) => {
+            return sophia.call('alexandria_api.get_account', {account_name:sender}, (err, res) => {
                 if(err)
                     return callback(err);
                 else {
                     let admin = res.account[0];
-                    let group_name = sophia.suggestGroupName(obj.description);
+                    let current_group_name = obj.current_group_name;
                     let admin_name = admin.name;
                     let newGroupKey = sophia.createRandomKey();
                     let pk = admin.memo_key;
@@ -1466,12 +1491,16 @@ sophia.sendGroupMessages = function (groupName,sender,data,privateKey,callback) 
                         recipient: res.account[0].memo_key,
                         data: encoded_message
                     };
-                    ret.push([group_name, group_meta_sendMessage]);
-                    console.log(ret);
-                    // let group=new group_object(ret);
-                    // group.save().then(()=>{
-                    //     console.log('group renamed and more members added');
-                    // });
+                    ret.push([current_group_name, group_meta_sendMessage]);
+
+                    let message=new message_object({
+                        group_name:current_group_name,
+                        operation_payloads:group_meta_sendMessage
+                    });
+                    message.save().then(()=>{
+                        console.log('new message created');
+                        return callback(ret);
+                    });
                 }
             });
         }
