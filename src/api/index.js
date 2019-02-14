@@ -2,10 +2,9 @@ import EventEmitter from 'events';
 
 import config from '../config';
 import transports from './transports';
-import {
-    jsonRpc
-} from './transports/http';
+import {jsonRpc} from './transports/http';
 import * as KeyPrivate from "../auth/ecc/src/key_private";
+
 const operations = require('../auth/serializer/src/operations');
 const ecc=require('../auth/ecc');
 const auth=require('../auth');
@@ -1077,22 +1076,19 @@ sophia.encodeAndPack=function(privateKey, publicKey, operation){
         type:operation.type,
         operation_data:operation,
     };
-    let encoded_message=sophia.encode_message(message_content.toString(),privateKey, publicKey);
-    return encoded_message;
+    return sophia.encode_message(message_content.toString(), privateKey, publicKey);
 };
 sophia.getGroup=function(groupName,callback){
     return group_object.findOne({'group_name': groupName},(err,obj) =>{
         if(err) return callback(err,'');
         else return callback('',obj);
     });
-
 };
 sophia.getGroupName=function(currentGroupName,callback){
     return group_object.findOne({'current_group_name': currentGroupName},(err,obj) =>{
         if(err) return callback(err,'');
         else return callback('',obj.group_name);
     });
-
 };
 sophia.listMyGroups=function(start,count,callback){
     assert(count<1000,'Count value should be less than 1000');
